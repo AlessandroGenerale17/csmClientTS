@@ -5,15 +5,16 @@ import { fetchSnippets } from '../../store/snippets/actions';
 import { selectSnippets } from '../../store/snippets/selectors';
 import Table from '../../components/Table/';
 import Loading from '../../components/Loading';
+import { selectToken } from '../../store/user/selectors';
 
 export default function Manager() {
     const dispatch = useDispatch();
-
     const snippets = useSelector(selectSnippets);
+    const token = useSelector(selectToken);
 
     useEffect(() => {
         if (!snippets.length) dispatch(fetchSnippets);
-    }, [dispatch, snippets.length]);
+    }, [token]);
 
     if (!snippets.length) return <Loading />;
     return (

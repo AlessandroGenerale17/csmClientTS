@@ -12,20 +12,28 @@ type ParamTypes = {
     id: string;
 };
 
-export default function Lnippet() {
+export default function Snippet() {
     const id = parseInt(useParams<ParamTypes>().id);
     const dispatch = useDispatch();
+
     const snippet = useSelector(selectSnippet);
 
     useEffect(() => {
         dispatch(fetchSnippet(id));
     }, [dispatch]);
 
-
     if (!snippet || id !== snippet?.id) return <Loading />;
 
     return (
-        <div>
+        <div style={{ padding: '0.85rem', display: 'flex' }}>
+            <div style={{ flex: 2 }}>
+                <h2>{snippet.title}</h2>
+                <h2 style={{ textAlign: 'center' }}>Notes</h2>
+                <div>
+                    {/* MARKUP INPUT ON DOUBLE CLICK else MARKDOWN*/}
+                    <p>Some notes on the snippet in MD format</p>
+                </div>
+            </div>
             <Editor codeToInject={snippet.code} />
         </div>
     );

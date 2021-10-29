@@ -27,7 +27,9 @@ export const fetchSnippets = async (
     getState: () => RootState
 ) => {
     try {
-        const token = getState().user.state.token;
+        const user = getState().user.state;
+        if (!user) return;
+        const token = user.token;
         const res = await axios.get(`${apiUrl}/snippets`, configs(token));
         const snippets: Snippet[] = res.data.map(
             (snip: any): Snippet => ({

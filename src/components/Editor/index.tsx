@@ -11,6 +11,9 @@ export default function Editor(props: Props) {
     const [js, setJs] = useState<string>(props.codeToInject);
     const [theme, setTheme] = useState<boolean>(false);
 
+    // FIXME
+    const isRunnable = false;
+
     const code = new Code(450);
 
     const runCode = () => {
@@ -25,7 +28,7 @@ export default function Editor(props: Props) {
     };
 
     return (
-        <div>
+        <div style={{ border: '1px solid black', flex: 3 }}>
             <CodeMirror
                 onChange={(value, _) => {
                     console.log(_);
@@ -34,10 +37,11 @@ export default function Editor(props: Props) {
                 value={js}
                 extensions={[javascript({ jsx: true })]}
                 height={code.height}
+                width='600'
                 tabIndex={code.tabIndex}
                 theme='light'
             />
-            <button onClick={runCode}>Run</button>
+            {isRunnable && <button onClick={runCode}>Run</button>}
         </div>
     );
 }
