@@ -10,5 +10,3 @@ const reducer = combineReducers({
 });
 
 export default reducer;
-
-export type ReduxState = ReturnType<typeof reducer>;

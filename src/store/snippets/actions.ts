@@ -1,11 +1,10 @@
 import { Dispatch } from 'redux';
-import { ReduxState } from '../rootReducer';
+import { RootState } from '..';
 import axios from 'axios';
 
 import { apiUrl } from '../../configs';
 import { Snippet } from '../../types/Snippet';
 import { SnippetActions } from './types';
-
 
 const saveSnippets = (snippets: Snippet[]): SnippetActions => ({
     type: 'SAVE_SNIPPETS',
@@ -19,7 +18,7 @@ const saveSnippet = (snippet: Snippet): SnippetActions => ({
 
 export const fetchSnippets = async (
     dispatch: Dispatch,
-    getState: () => ReduxState
+    getState: () => RootState
 ) => {
     try {
         const res = await axios.get(`${apiUrl}/snippets`);
@@ -42,7 +41,7 @@ export const fetchSnippets = async (
 };
 
 export const fetchSnippet =
-    (id: number) => async (dispatch: Dispatch, getState: () => ReduxState) => {
+    (id: number) => async (dispatch: Dispatch, getState: () => RootState) => {
         try {
             console.log('dispatching action');
             const res = await axios.get(`${apiUrl}/snippets/${id}`);

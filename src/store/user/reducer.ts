@@ -1,6 +1,6 @@
 import { UserState } from './types';
 const initialState: UserState = {
-    user: null
+    state: null
 };
 
 const reducer = (state = initialState, action: any) => {
@@ -8,14 +8,11 @@ const reducer = (state = initialState, action: any) => {
         case 'LOGIN_SUCCESS':
             if (action.payload.token)
                 localStorage.setItem('token', action.payload.token);
-            return { ...state, user: { ...action.payload } };
+            return { ...state, state: { ...action.payload } };
 
         case 'LOG_OUT':
             localStorage.removeItem('token');
-            return { ...initialState, user: null };
-
-        case 'TOKEN_STILL_VALID':
-            return { ...state, user: { ...action.payload } };
+            return { ...initialState, state: null };
 
         default:
             return state;

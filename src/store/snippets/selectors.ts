@@ -1,8 +1,8 @@
-import { ReduxState } from '../rootReducer';
+import { RootState } from '..';
 import { Snippet } from '../../types/Snippet';
 
-export const selectSnippets = (reduxState: ReduxState): Snippet[] =>
+export const selectSnippets = (reduxState: RootState): Snippet[] =>
     reduxState.snippets.list;
 
-export const selectSnippet = (reduxState: ReduxState): Snippet | null =>
+export const selectSnippet = (reduxState: RootState): Snippet | null =>
     reduxState.snippets.selected;

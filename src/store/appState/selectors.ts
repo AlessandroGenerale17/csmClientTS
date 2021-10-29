@@ -1,6 +1,6 @@
-import { ReduxState } from '../rootReducer';
+import { RootState } from '..';
 
-export const selectAppLoading = (reduxState: ReduxState) =>
+export const selectAppLoading = (reduxState: RootState) =>
     reduxState.appState.loading;
-export const selectMessage = (reduxState: ReduxState) =>
+export const selectMessage = (reduxState: RootState) =>
     reduxState.appState.message;

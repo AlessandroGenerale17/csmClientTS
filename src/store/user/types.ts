@@ -20,7 +20,7 @@ type Logout = {
 export type LoggedIn = User | null;
 
 export type UserState = {
-    user: LoggedIn;
+    state: LoggedIn;
 };
 
 export type UserActions = LoginSuccess | TokenStillValid | Logout;

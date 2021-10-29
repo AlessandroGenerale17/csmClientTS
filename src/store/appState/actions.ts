@@ -1,6 +1,5 @@
 import { DEFAULT_MESSAGE_TIMEOUT } from '../../configs';
-import { AppDispatch } from '..';
-import { ReduxState } from '../rootReducer';
+import { AppDispatch, RootState } from '..';
 
 import { AppStateActions } from './types';
 
@@ -29,7 +28,7 @@ export const showMessageWithTimeout = (
     text: string,
     timeOutMilliSeconds: number
 ) => {
-    return (dispatch: AppDispatch, getState: () => ReduxState) => {
+    return (dispatch: AppDispatch, getState: () => RootState) => {
         dispatch(setMessage(variant, dismissable, text));
 
         const timeout = timeOutMilliSeconds || DEFAULT_MESSAGE_TIMEOUT;

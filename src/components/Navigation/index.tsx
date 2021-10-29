@@ -4,10 +4,12 @@ import { NavLink } from 'react-router-dom';
 import NavbarItem from './NavbarItem';
 import LoggedIn from './LoggedIn';
 import LoggedOut from './LoggedOut';
+import { useSelector } from 'react-redux';
+import { selectToken } from '../../store/user/selectors';
 
 export default function Navigation() {
-    //const token = useSelector(selectToken);
-    const token = false;
+    const token = useSelector(selectToken);
+
     const loginLogoutControls = token ? <LoggedIn /> : <LoggedOut />;
 
     return (
@@ -23,7 +25,7 @@ export default function Navigation() {
                 >
                     <NavbarItem path='/' linkText='Home' />
                     <NavbarItem path='/challenges' linkText='Challenges' />
-                    <NavbarItem path='/manager' linkText='Manager' />
+                    {token && <NavbarItem path='/manager' linkText='Manager' />}
                     {loginLogoutControls}
                 </Nav>
             </Navbar.Collapse>

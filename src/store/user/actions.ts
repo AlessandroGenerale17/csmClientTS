@@ -1,6 +1,5 @@
 import { apiUrl } from '../../configs';
 import axios from 'axios';
-import { selectToken } from './selectors';
 import {
     appLoading,
     appDoneLoading,
@@ -8,7 +7,6 @@ import {
     setMessage
 } from '../appState/actions';
 
-import { ReduxState } from '../rootReducer';
 import { AppDispatch, RootState } from '..';
 
 const loginSuccess = (userWithToken: {
@@ -22,13 +20,13 @@ const loginSuccess = (userWithToken: {
     };
 };
 
-const tokenStillValid = (userWithoutToken: {
-    email: string;
-    name: string;
-}) => ({
-    type: 'TOKEN_STILL_VALID',
-    payload: userWithoutToken
-});
+// const tokenStillValid = (userWithoutToken: {
+//     email: string;
+//     name: string;
+// }) => ({
+//     type: 'TOKEN_STILL_VALID',
+//     payload: userWithoutToken
+// });
 
 export const logOut = () => ({ type: 'LOG_OUT' });
 
@@ -90,11 +88,15 @@ export const login = (email: string, password: string) => {
 export const getUserWithStoredToken = () => {
     return async (dispatch: AppDispatch, getState: () => RootState) => {
         // get token from the state
-        const rState = getState();
-        if (!rState.user) {
-            return;
-        }
-        const token = selectToken(getState().user);
+        // const rState = getState();
+        // if (!rState.user) {
+        //     return;
+        // }
+
+        // const token = selectToken(getState());
+        // console.log('token', token);
+        const token = localStorage.getItem('token');
+        if (!token) return;
 
         dispatch(appLoading());
         try {
@@ -105,7 +107,12 @@ export const getUserWithStoredToken = () => {
             });
 
             // token is still valid
-            dispatch(tokenStillValid(response.data));
+            const user = {
+                token: token,
+                name: response.data.name,
+                email: response.data.email
+            };
+            dispatch(loginSuccess(user));
             dispatch(appDoneLoading());
         } catch (error) {
             if (error instanceof Error) {
