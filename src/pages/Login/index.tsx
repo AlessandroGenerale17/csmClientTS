@@ -13,7 +13,6 @@ export default function SignUp() {
     const [password, setPassword] = useState('');
     const dispatch = useDispatch();
     const token = useSelector(selectToken);
-    console.log(token);
     const history = useHistory();
 
     useEffect(() => {

@@ -20,7 +20,8 @@ export default function Lnippet() {
     useEffect(() => {
         dispatch(fetchSnippet(id));
     }, [dispatch]);
-    // what is the better way
+
+
     if (!snippet || id !== snippet?.id) return <Loading />;
 
     return (

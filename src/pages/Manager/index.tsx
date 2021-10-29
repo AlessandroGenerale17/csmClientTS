@@ -11,15 +11,14 @@ export default function Manager() {
 
     const snippets = useSelector(selectSnippets);
 
-    // why infinite loop?
-    // shallow cloning lol
     useEffect(() => {
         if (!snippets.length) dispatch(fetchSnippets);
-    }, [dispatch]);
+    }, [dispatch, snippets.length]);
 
     if (!snippets.length) return <Loading />;
     return (
         <div>
+            <h2>My Snippets</h2>
             <div>
                 <Table snippets={snippets} />
             </div>

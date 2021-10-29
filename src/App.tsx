@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { Switch, Route } from 'react-router-dom';
-import './App.css';
 import Home from './pages/Home/';
 import Question from './pages/Question/';
 import Navigation from './components/Navigation';
@@ -12,7 +11,8 @@ import { selectAppLoading } from './store/appState/selectors';
 import { getUserWithStoredToken } from './store/user/actions';
 import Loading from './components/Loading';
 import SignUp from './pages/Signup';
-
+import Challenges from './pages/Challenges';
+import './App.css';
 function App() {
     const dispatch = useDispatch();
     const isLoading = useSelector(selectAppLoading);
@@ -31,6 +31,7 @@ function App() {
                 <Route path='/signup' component={SignUp} />
                 <Route path='/questions' component={Question} />
                 <Route path='/manager' component={Manager} />
+                <Route path='/challenges' component={Challenges} />
                 <Route path='/snippets/:id' component={Snippet} />
             </Switch>
         </div>

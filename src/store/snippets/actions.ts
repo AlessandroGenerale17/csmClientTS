@@ -6,6 +6,12 @@ import { apiUrl } from '../../configs';
 import { Snippet } from '../../types/Snippet';
 import { SnippetActions } from './types';
 
+const configs = (token: string) => ({
+    headers: {
+        Authorization: `Bearer ${token}`
+    }
+});
+
 const saveSnippets = (snippets: Snippet[]): SnippetActions => ({
     type: 'SAVE_SNIPPETS',
     payload: snippets
@@ -21,7 +27,8 @@ export const fetchSnippets = async (
     getState: () => RootState
 ) => {
     try {
-        const res = await axios.get(`${apiUrl}/snippets`);
+        const token = getState().user.state.token;
+        const res = await axios.get(`${apiUrl}/snippets`, configs(token));
         const snippets: Snippet[] = res.data.map(
             (snip: any): Snippet => ({
                 id: snip.id,
@@ -43,7 +50,6 @@ export const fetchSnippets = async (
 export const fetchSnippet =
     (id: number) => async (dispatch: Dispatch, getState: () => RootState) => {
         try {
-            console.log('dispatching action');
             const res = await axios.get(`${apiUrl}/snippets/${id}`);
             dispatch(saveSnippet({ ...res.data }));
         } catch (err) {
