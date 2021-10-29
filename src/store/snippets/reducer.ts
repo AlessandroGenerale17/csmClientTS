@@ -1,5 +1,4 @@
 import { SnippetState, SnippetActions} from './types';
-import { SAVE_SNIPPETS, SAVE_SNIPPET} from './actions';
 
 const initialState: SnippetState = {
     list: [],
@@ -8,12 +7,12 @@ const initialState: SnippetState = {
 
 const reducer = (state = initialState, action: SnippetActions): SnippetState => {
     switch (action.type) {
-        case SAVE_SNIPPET: 
+        case 'SAVE_SNIPPET': 
             return {
                 ...state,
                 selected: action.payload
             }
-        case SAVE_SNIPPETS: 
+        case 'SAVE_SNIPPETS': 
             return {
                 ...state,
                 list: action.payload

@@ -1,5 +1,4 @@
 import { Snippet } from '../../types/Snippet';
-import { SAVE_SNIPPETS, SAVE_SNIPPET } from './actions';
 
 export type SnippetState = {
     list: Snippet[];
@@ -7,12 +6,12 @@ export type SnippetState = {
 };
 
 export type saveSnippets = {
-    type: typeof SAVE_SNIPPETS;
+    type: 'SAVE_SNIPPETS';
     payload: Snippet[];
 };
 
 export type saveSnippet = {
-    type: typeof SAVE_SNIPPET;
+    type: 'SAVE_SNIPPET';
     payload: Snippet;
 };
 

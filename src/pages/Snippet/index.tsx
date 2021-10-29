@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchSnippet } from '../../store/snippets/actions';
 import { selectSnippet } from '../../store/snippets/selectors';
 import Editor from '../../components/Editor';
+import Loading from '../../components/Loading';
 
 // FIXME possibly export
 type ParamTypes = {
@@ -19,8 +20,8 @@ export default function Lnippet() {
     useEffect(() => {
         dispatch(fetchSnippet(id));
     }, [dispatch]);
-    // what is the better way 
-    if (!snippet || id !== snippet?.id) return <p>Loading</p>;
+    // what is the better way
+    if (!snippet || id !== snippet?.id) return <Loading />;
 
     return (
         <div>

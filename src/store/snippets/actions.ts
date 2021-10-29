@@ -6,16 +6,14 @@ import { apiUrl } from '../../configs';
 import { Snippet } from '../../types/Snippet';
 import { SnippetActions } from './types';
 
-export const SAVE_SNIPPETS = 'SAVE_SNIPPETS';
-export const SAVE_SNIPPET = 'SAVE_SNIPPET';
 
 const saveSnippets = (snippets: Snippet[]): SnippetActions => ({
-    type: SAVE_SNIPPETS,
+    type: 'SAVE_SNIPPETS',
     payload: snippets
 });
 
 const saveSnippet = (snippet: Snippet): SnippetActions => ({
-    type: SAVE_SNIPPET,
+    type: 'SAVE_SNIPPET',
     payload: snippet
 });
 
