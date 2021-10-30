@@ -1,17 +1,29 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
+import { useDispatch } from 'react-redux';
 import Code from '../../logic/Editor';
 import Switch from '../Switch/';
+import { patchSnippet } from '../../store/snippets/actions';
 
-type Props = {
+type SnippetProp = {
+    type: 'snippet';
     codeToInject: string;
+    id: number;
 };
+
+type CodeProp = {
+    type: '';
+    codeToInject: string;
+    id: number;
+};
+
+type Props = SnippetProp | CodeProp;
 
 export default function Editor(props: Props) {
     const [js, setJs] = useState<string>(props.codeToInject);
     const [theme, setTheme] = useState<boolean>(false);
-
+    const dispatch = useDispatch();
     // FIXME
     const isRunnable = false;
 
@@ -29,6 +41,11 @@ export default function Editor(props: Props) {
     };
 
     const changeTheme = () => setTheme(() => !theme);
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+        if (e.ctrlKey && e.key === 's') {
+            dispatch(patchSnippet(props.id, js));
+        }
+    };
 
     return (
         <div style={{ border: '1px solid black', flex: 3 }}>
@@ -40,12 +57,13 @@ export default function Editor(props: Props) {
                 }}
             >
                 <Switch changeTheme={changeTheme} />
-                {/* <button onClick={runCode}>Run</button>
-                <button onClick={updateQuestion}>Save</button> */}
+                {/* <button onClick={runCode}>Run</button> */}
+                <button onClick={() => dispatch(patchSnippet(props.id, js))}>
+                    Save
+                </button>
             </div>
             <CodeMirror
                 onChange={(value, _) => {
-                    console.log(_);
                     setJs(value);
                 }}
                 value={js}
@@ -54,6 +72,7 @@ export default function Editor(props: Props) {
                 width='600'
                 tabIndex={code.tabIndex}
                 theme={theme ? 'light' : 'dark'}
+                onKeyDown={handleKeyDown}
             />
             {isRunnable && <button onClick={runCode}>Run</button>}
         </div>

@@ -6,6 +6,7 @@ import { fetchSnippet } from '../../store/snippets/actions';
 import { selectSnippet } from '../../store/snippets/selectors';
 import Editor from '../../components/Editor';
 import Loading from '../../components/Loading';
+import { selectAppLoading } from '../../store/appState/selectors';
 
 // FIXME possibly export
 type ParamTypes = {
@@ -17,12 +18,13 @@ export default function Snippet() {
     const dispatch = useDispatch();
 
     const snippet = useSelector(selectSnippet);
+    const loading = useSelector(selectAppLoading);
 
     useEffect(() => {
         dispatch(fetchSnippet(id));
     }, [dispatch]);
 
-    if (!snippet || id !== snippet?.id) return <Loading />;
+    if (loading || !snippet) return <Loading />;
 
     return (
         <div style={{ padding: '0.85rem', display: 'flex' }}>
@@ -34,8 +36,12 @@ export default function Snippet() {
                     <p>Some notes on the snippet in MD format</p>
                 </div>
             </div>
-            
-            <Editor codeToInject={snippet.code} />
+
+            <Editor
+                type='snippet'
+                id={snippet.id}
+                codeToInject={snippet.code}
+            />
         </div>
     );
 }

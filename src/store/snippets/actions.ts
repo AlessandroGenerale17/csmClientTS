@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-import { RootState } from '..';
+import { AppDispatch, RootState } from '..';
 import axios from 'axios';
 
 import { apiUrl } from '../../configs';
@@ -23,8 +23,13 @@ const saveSnippet = (snippet: Snippet): SnippetActions => ({
     payload: snippet
 });
 
+const updateSnippet = (snippet: Snippet): SnippetActions => ({
+    type: 'UPDATE_SNIPPET',
+    payload: snippet
+});
+
 export const fetchSnippets = async (
-    dispatch: Dispatch,
+    dispatch: AppDispatch,
     getState: () => RootState
 ) => {
     try {
@@ -54,11 +59,30 @@ export const fetchSnippets = async (
 };
 
 export const fetchSnippet =
-    (id: number) => async (dispatch: Dispatch, getState: () => RootState) => {
+    (id: number) =>
+    async (dispatch: AppDispatch, getState: () => RootState) => {
         try {
             dispatch(appLoading());
             const res = await axios.get(`${apiUrl}/snippets/${id}`);
             dispatch(saveSnippet({ ...res.data }));
+            dispatch(appDoneLoading());
+        } catch (err) {
+            if (err instanceof Error) console.log(err.message);
+            dispatch(appDoneLoading());
+        }
+    };
+
+export const patchSnippet =
+    (id: number, code: string) =>
+    async (dispatch: AppDispatch, getState: () => RootState) => {
+        try {
+            dispatch(appLoading());
+            const res = await axios.patch(`${apiUrl}/snippets/${id}`, {
+                code: code
+            });
+            dispatch(saveSnippet({ ...res.data }));
+            // update snippet in  list of snippets
+            dispatch(updateSnippet({ ...res.data }));
             dispatch(appDoneLoading());
         } catch (err) {
             if (err instanceof Error) console.log(err.message);
