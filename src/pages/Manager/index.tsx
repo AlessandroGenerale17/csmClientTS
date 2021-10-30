@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
 import { fetchSnippets } from '../../store/snippets/actions';
 import { selectSnippets } from '../../store/snippets/selectors';
 import Table from '../../components/Tables/Snippets';

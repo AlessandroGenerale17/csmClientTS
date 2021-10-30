@@ -14,6 +14,7 @@ import SignUp from './pages/Signup';
 import Challenges from './pages/Challenges';
 import './App.css';
 import MessageBox from './components/MessageBox';
+import NewSnippet from './pages/NewSnippet';
 function App() {
     const dispatch = useDispatch();
     const isLoading = useSelector(selectAppLoading);
@@ -34,6 +35,7 @@ function App() {
                 <Route path='/questions' component={Question} />
                 <Route path='/manager' component={Manager} />
                 <Route path='/challenges' component={Challenges} />
+                <Route path='/newSnippet' component={NewSnippet} />
                 <Route path='/snippets/:id' component={Snippet} />
             </Switch>
         </div>

@@ -19,9 +19,10 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
+import AddIcon from '@mui/icons-material/Add';
 import { visuallyHidden } from '@mui/utils';
 import { Snippet } from '../../../types/Snippet';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import moment from 'moment';
 
 interface Data {
@@ -219,19 +220,25 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
                     Table
                 </Typography>
             )}
-            {numSelected > 0 ? (
+            {numSelected > 0 && (
                 <Tooltip title='Delete'>
                     <IconButton>
                         <DeleteIcon />
                     </IconButton>
                 </Tooltip>
-            ) : (
-                <Tooltip title='Filter list'>
-                    <IconButton>
-                        <FilterListIcon />
-                    </IconButton>
-                </Tooltip>
             )}
+            <Tooltip title='Add'>
+                <IconButton>
+                    <Link
+                        to='/newSnippet'
+                        style={{
+                            fontSize: 'large'
+                        }}
+                    >
+                        <AddIcon />
+                    </Link>
+                </IconButton>
+            </Tooltip>
         </Toolbar>
     );
 };
