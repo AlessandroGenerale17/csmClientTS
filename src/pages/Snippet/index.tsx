@@ -34,6 +34,7 @@ export default function Snippet() {
                     <p>Some notes on the snippet in MD format</p>
                 </div>
             </div>
+            
             <Editor codeToInject={snippet.code} />
         </div>
     );

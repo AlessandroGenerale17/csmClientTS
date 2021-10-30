@@ -10,6 +10,8 @@ while it is not a child. It could be passed to any method where the Person is re
 of having different parent than Person
 */
 
+import { Testcase } from './Testcase';
+
 export interface Snippet {
     id: number;
     title: string;
@@ -25,4 +27,6 @@ export interface CodeSnippet extends Snippet {
     prompt: string;
     hiddenPrompt: string;
     fName: string;
+    testCases: Testcase[];
+    difficulty: string;
 }

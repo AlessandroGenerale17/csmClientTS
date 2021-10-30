@@ -5,6 +5,7 @@ import axios from 'axios';
 import { apiUrl } from '../../configs';
 import { Snippet } from '../../types/Snippet';
 import { SnippetActions } from './types';
+import { appDoneLoading, appLoading } from '../appState/actions';
 
 const configs = (token: string) => ({
     headers: {
@@ -27,6 +28,7 @@ export const fetchSnippets = async (
     getState: () => RootState
 ) => {
     try {
+        dispatch(appLoading());
         const user = getState().user.state;
         if (!user) return;
         const token = user.token;
@@ -44,17 +46,22 @@ export const fetchSnippets = async (
             })
         );
         dispatch(saveSnippets(snippets));
+        dispatch(appDoneLoading());
     } catch (err) {
         if (err instanceof Error) console.log(err.message);
+        dispatch(appDoneLoading());
     }
 };
 
 export const fetchSnippet =
     (id: number) => async (dispatch: Dispatch, getState: () => RootState) => {
         try {
+            dispatch(appLoading());
             const res = await axios.get(`${apiUrl}/snippets/${id}`);
             dispatch(saveSnippet({ ...res.data }));
+            dispatch(appDoneLoading());
         } catch (err) {
             if (err instanceof Error) console.log(err.message);
+            dispatch(appDoneLoading());
         }
     };

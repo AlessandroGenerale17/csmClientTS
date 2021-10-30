@@ -2,6 +2,7 @@ import { useState } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
 import Code from '../../logic/Editor';
+import Switch from '../Switch/';
 
 type Props = {
     codeToInject: string;
@@ -27,8 +28,21 @@ export default function Editor(props: Props) {
         }
     };
 
+    const changeTheme = () => setTheme(() => !theme);
+
     return (
         <div style={{ border: '1px solid black', flex: 3 }}>
+            <div
+                style={{
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    backgroundColor: 'red'
+                }}
+            >
+                <Switch changeTheme={changeTheme} />
+                {/* <button onClick={runCode}>Run</button>
+                <button onClick={updateQuestion}>Save</button> */}
+            </div>
             <CodeMirror
                 onChange={(value, _) => {
                     console.log(_);
@@ -39,7 +53,7 @@ export default function Editor(props: Props) {
                 height={code.height}
                 width='600'
                 tabIndex={code.tabIndex}
-                theme='light'
+                theme={theme ? 'light' : 'dark'}
             />
             {isRunnable && <button onClick={runCode}>Run</button>}
         </div>

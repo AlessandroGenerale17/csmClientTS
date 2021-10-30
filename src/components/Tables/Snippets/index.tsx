@@ -20,7 +20,7 @@ import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
-import { Snippet } from '../../types/Snippet';
+import { Snippet } from '../../../types/Snippet';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 
@@ -237,7 +237,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
 };
 
 type Props = {
-    snippets: Snippet[];
+    list: Snippet[];
 };
 
 export default function EnhancedTable(props: Props) {
@@ -248,7 +248,7 @@ export default function EnhancedTable(props: Props) {
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-    const rows = props.snippets.map((snip: Snippet): Data => createData(snip));
+    const rows = props.list.map((snip: Snippet): Data => createData(snip));
 
     const handleRequestSort = (
         event: React.MouseEvent<unknown>,
