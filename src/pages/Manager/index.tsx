@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchSnippets } from '../../store/snippets/actions';
 import { selectSnippets } from '../../store/snippets/selectors';
-import Table from '../../components/Tables/Snippets';
+import Table from '../../components/Tables';
 import Loading from '../../components/Loading';
 import { selectAppLoading } from '../../store/appState/selectors';
 import { selectToken } from '../../store/user/selectors';

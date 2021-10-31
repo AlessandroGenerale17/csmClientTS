@@ -20,7 +20,7 @@ import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import { visuallyHidden } from '@mui/utils';
-import { CodeSnippet, Snippet } from '../../../types/Snippet';
+import { CodeSnippet, Snippet } from '../../types/Snippet';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 
@@ -180,17 +180,19 @@ function EnhancedTableHead(props: EnhancedTableProps) {
         <TableHead>
             <TableRow>
                 <TableCell padding='checkbox'>
-                    <Checkbox
-                        color='primary'
-                        indeterminate={
-                            numSelected > 0 && numSelected < rowCount
-                        }
-                        checked={rowCount > 0 && numSelected === rowCount}
-                        onChange={onSelectAllClick}
-                        inputProps={{
-                            'aria-label': 'select all desserts'
-                        }}
-                    />
+                    {headCellType === 'snippet' && (
+                        <Checkbox
+                            color='primary'
+                            indeterminate={
+                                numSelected > 0 && numSelected < rowCount
+                            }
+                            checked={rowCount > 0 && numSelected === rowCount}
+                            onChange={onSelectAllClick}
+                            inputProps={{
+                                'aria-label': 'select all desserts'
+                            }}
+                        />
+                    )}
                 </TableCell>
                 {headCells.map((headCell) => (
                     <TableCell
@@ -221,11 +223,14 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 }
 
 interface EnhancedTableToolbarProps {
+    showToolbarOptions: boolean;
     numSelected: number;
 }
 
 const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
-    const { numSelected } = props;
+    const { numSelected, showToolbarOptions } = props;
+
+    const deleteAvailable = numSelected && showToolbarOptions;
 
     return (
         <Toolbar
@@ -241,7 +246,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
                 })
             }}
         >
-            {numSelected > 0 ? (
+            {deleteAvailable ? (
                 <Typography
                     sx={{ flex: '1 1 100%' }}
                     color='inherit'
@@ -260,25 +265,27 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
                     Table
                 </Typography>
             )}
-            {numSelected > 0 && (
+            {deleteAvailable ? (
                 <Tooltip title='Delete'>
                     <IconButton>
                         <DeleteIcon />
                     </IconButton>
                 </Tooltip>
-            )}
-            <Tooltip title='Add'>
-                <IconButton>
-                    <Link
-                        to='/newSnippet'
-                        style={{
-                            fontSize: 'large'
-                        }}
-                    >
-                        <AddIcon />
-                    </Link>
-                </IconButton>
-            </Tooltip>
+            ) : null}
+            {showToolbarOptions ? (
+                <Tooltip title='Add'>
+                    <IconButton>
+                        <Link
+                            to='/newSnippet'
+                            style={{
+                                fontSize: 'large'
+                            }}
+                        >
+                            <AddIcon />
+                        </Link>
+                    </IconButton>
+                </Tooltip>
+            ) : null}
         </Toolbar>
     );
 };
@@ -312,7 +319,8 @@ export default function EnhancedTable(props: Props) {
         event: React.ChangeEvent<HTMLInputElement>
     ) => {
         if (event.target.checked) {
-            const newSelecteds = rows.map((n) => n.title);
+            const newSelecteds = rows.map((n) => n.id.toString());
+            console.log(newSelecteds);
             setSelected(newSelecteds);
             return;
         }
@@ -320,6 +328,7 @@ export default function EnhancedTable(props: Props) {
     };
 
     const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
+        console.log(name);
         const selectedIndex = selected.indexOf(name);
         let newSelected: readonly string[] = [];
 
@@ -364,7 +373,10 @@ export default function EnhancedTable(props: Props) {
         <Box sx={{ width: '100%' }}>
             <Paper sx={{ width: '100%', mb: 2 }}>
                 {/* pass down prop here */}
-                <EnhancedTableToolbar numSelected={selected.length} />
+                <EnhancedTableToolbar
+                    numSelected={selected.length}
+                    showToolbarOptions={props.type === 'snippet' ? true : false}
+                />
                 <TableContainer>
                     <Table
                         sx={{ minWidth: 750 }}
@@ -390,7 +402,7 @@ export default function EnhancedTable(props: Props) {
                                 )
                                 .map((row, index) => {
                                     const isItemSelected = isSelected(
-                                        row.title
+                                        row.id.toString()
                                     );
                                     const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -398,7 +410,10 @@ export default function EnhancedTable(props: Props) {
                                         <TableRow
                                             hover
                                             onClick={(event) =>
-                                                handleClick(event, row.title)
+                                                handleClick(
+                                                    event,
+                                                    row.id.toString()
+                                                )
                                             }
                                             role='checkbox'
                                             aria-checked={isItemSelected}
@@ -407,14 +422,16 @@ export default function EnhancedTable(props: Props) {
                                             selected={isItemSelected}
                                         >
                                             <TableCell padding='checkbox'>
-                                                <Checkbox
-                                                    color='primary'
-                                                    checked={isItemSelected}
-                                                    inputProps={{
-                                                        'aria-labelledby':
-                                                            labelId
-                                                    }}
-                                                />
+                                                {props.type === 'snippet' && (
+                                                    <Checkbox
+                                                        color='primary'
+                                                        checked={isItemSelected}
+                                                        inputProps={{
+                                                            'aria-labelledby':
+                                                                labelId
+                                                        }}
+                                                    />
+                                                )}
                                             </TableCell>
                                             <TableCell
                                                 component='th'
@@ -423,7 +440,11 @@ export default function EnhancedTable(props: Props) {
                                                 padding='none'
                                             >
                                                 <Link
-                                                    to={`/snippets/${row.id}`}
+                                                    to={
+                                                        props.type === 'snippet'
+                                                            ? `/snippets/${row.id}`
+                                                            : `/challenges/${row.id}`
+                                                    }
                                                 >
                                                     {row.title}
                                                 </Link>

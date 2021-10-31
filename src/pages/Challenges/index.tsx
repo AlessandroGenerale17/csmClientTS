@@ -1,4 +1,4 @@
-import Table from '../../components/Tables/Snippets';
+import Table from '../../components/Tables';
 
 export default function index() {
     const list = [
