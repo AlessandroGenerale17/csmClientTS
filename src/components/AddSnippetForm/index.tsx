@@ -19,7 +19,7 @@ export default function AddSnippetForm(props: Props) {
             />
             <label htmlFor='markup'>Description</label>
             <textarea
-                id='markup'
+                id='description'
                 form='snippetForm'
                 onChange={(e: OnChange) => handleFormChange(e)}
             />

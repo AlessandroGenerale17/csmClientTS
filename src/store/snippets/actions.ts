@@ -5,7 +5,11 @@ import axios from 'axios';
 import { apiUrl } from '../../configs';
 import { Snippet } from '../../Types/Snippet';
 import { SnippetActions } from './types';
-import { appDoneLoading, appLoading } from '../appState/actions';
+import {
+    appDoneLoading,
+    appLoading,
+    showMessageWithTimeout
+} from '../appState/actions';
 
 type ConfigsAuthWithData = {
     headers: {
@@ -54,6 +58,11 @@ const updateSnippet = (snippet: Snippet): SnippetActions => ({
 const deleteSnippets = (idsArray: number[]): SnippetActions => ({
     type: 'DELETE_SNIPPETS',
     payload: idsArray
+});
+
+const addSnippet = (snippet: Snippet): SnippetActions => ({
+    type: 'ADD_SNIPPET',
+    payload: snippet
 });
 
 export const fetchSnippets = async (
@@ -144,6 +153,47 @@ export const removeSnippets =
                         .toString()
                         .split(',')
                         .map((id) => parseInt(id))
+                )
+            );
+            dispatch(appDoneLoading());
+        } catch (err) {
+            if (err instanceof Error) console.log(err.message);
+            dispatch(appDoneLoading());
+        }
+    };
+
+export const createSnippet =
+    (title: string, description: string, code: string) =>
+    async (dispatch: AppDispatch, getState: () => RootState) => {
+        try {
+            dispatch(appLoading());
+            // FIXME auth is missing in this route
+            // FIXME missing userId
+            const userId = 1;
+            const res = await axios.post(`${apiUrl}/snippets/`, {
+                title,
+                description,
+                code,
+                userId,
+                languageId: 1
+            });
+            const newSnippet: Snippet = {
+                id: res.data.id,
+                title: res.data.title,
+                description: res.data.description,
+                code: res.data.code,
+                userId: res.data.id,
+                language: res.data.language.name,
+                createdAt: res.data.createdAt,
+                updatedAt: res.data.updatedAt
+            };
+            dispatch(addSnippet(newSnippet));
+            dispatch(
+                showMessageWithTimeout(
+                    'success',
+                    true,
+                    'Snippet added successfully!',
+                    2500
                 )
             );
             dispatch(appDoneLoading());

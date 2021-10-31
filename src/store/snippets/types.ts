@@ -25,8 +25,14 @@ export type DeleteSnippets = {
     payload: number[];
 };
 
+export type AddSnippet = {
+    type: 'ADD_SNIPPET';
+    payload: Snippet;
+};
+
 export type SnippetActions =
     | SaveSnippets
     | SaveSnippet
     | UpdateSnippet
-    | DeleteSnippets;
+    | DeleteSnippets
+    | AddSnippet;

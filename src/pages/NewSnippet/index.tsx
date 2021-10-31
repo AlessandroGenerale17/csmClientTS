@@ -3,6 +3,8 @@ import { useDispatch } from 'react-redux';
 import AddSnippetForm from '../../components/AddSnippetForm';
 import Editor from '../../components/Editor';
 import { OnChange, OnSubmit } from '../../Types/EventListener';
+import { createSnippet } from '../../store/snippets/actions';
+import { useHistory } from 'react-router-dom';
 
 type formState = {
     title: string;
@@ -10,14 +12,17 @@ type formState = {
     code: string;
 };
 
+const initialFormState = {
+    title: '',
+    description: '',
+    code: ''
+};
+
 export default function NewSnippet() {
-    const [formState, setFormState] = useState<formState>({
-        title: '',
-        description: '',
-        code: ''
-    });
+    const [formState, setFormState] = useState<formState>(initialFormState);
 
     const dispatch = useDispatch();
+    const history = useHistory();
 
     const handleCodeChange = (code: string) => {
         setFormState({
@@ -34,14 +39,16 @@ export default function NewSnippet() {
 
     const handleFormSubmit = (e: OnSubmit) => {
         e.preventDefault();
-        // dispatch action
+        // TODO Check form validity...  
         console.log('submitting ', formState);
+        const { title, description, code } = formState;
+        dispatch(createSnippet(title, description, code));
+        setFormState(initialFormState);
+        history.push('/manager');
     };
 
     const performDispatch = () => {
-        // TODO Check form validity
-        //dispatch(createSnippet)
-        console.log('dispatching action');
+        
     };
 
     return (

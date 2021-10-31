@@ -38,6 +38,11 @@ const reducer = (
                     return snip;
                 })
             };
+        case 'ADD_SNIPPET':
+            return {
+                ...state,
+                list: [...state.list, action.payload]
+            };
         default: {
             return state;
         }
