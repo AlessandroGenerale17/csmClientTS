@@ -1,4 +1,4 @@
-import { Snippet } from '../../types/Snippet';
+import { Snippet } from '../../Types/Snippet';
 
 export type SnippetState = {
     list: Snippet[];

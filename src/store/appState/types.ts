@@ -1,4 +1,4 @@
-import { StateMessage } from '../../types/Message';
+import { StateMessage } from '../../Types/Message';
 
 export type AppState = {
     loading: boolean;

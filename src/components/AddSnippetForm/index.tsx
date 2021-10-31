@@ -1,9 +1,29 @@
-import React from 'react';
+import { OnChange, OnSubmit } from '../../Types/EventListener';
 
-export default function AddSnippetForm() {
+type Props = {
+    handleFormChange: (e: OnChange) => void;
+    handleFormSubmit: (e: OnSubmit) => void;
+};
+
+export default function AddSnippetForm(props: Props) {
+    const { handleFormChange, handleFormSubmit } = props;
     return (
-        <div>
-            <h1>Form</h1>
-        </div>
+        <form id='snippetForm' onSubmit={(e: OnSubmit) => handleFormSubmit(e)}>
+            <label htmlFor='title'>Title</label>
+            <input
+                id='title'
+                type='text'
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    handleFormChange(e)
+                }
+            />
+            <label htmlFor='markup'>Description</label>
+            <textarea
+                id='markup'
+                form='snippetForm'
+                onChange={(e: OnChange) => handleFormChange(e)}
+            />
+            <button type='submit'>Submit</button>
+        </form>
     );
 }

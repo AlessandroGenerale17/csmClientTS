@@ -3,7 +3,7 @@ import { AppDispatch, RootState } from '..';
 import axios from 'axios';
 
 import { apiUrl } from '../../configs';
-import { Snippet } from '../../types/Snippet';
+import { Snippet } from '../../Types/Snippet';
 import { SnippetActions } from './types';
 import { appDoneLoading, appLoading } from '../appState/actions';
 

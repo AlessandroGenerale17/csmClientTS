@@ -1,26 +1,20 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import AddSnippetForm from '../../components/AddSnippetForm';
 import Editor from '../../components/Editor';
+import { OnChange, OnSubmit } from '../../Types/EventListener';
 
 type formState = {
-    title: {
-        isOpen: boolean;
-        value: string;
-    };
-    description: {
-        isOpen: boolean;
-        value: string;
-    };
-    code: {
-        value: string;
-    };
+    title: string;
+    description: string;
+    code: string;
 };
 
 export default function NewSnippet() {
     const [formState, setFormState] = useState<formState>({
-        title: { isOpen: false, value: '' },
-        description: { isOpen: false, value: '' },
-        code: { value: '' }
+        title: '',
+        description: '',
+        code: ''
     });
 
     const dispatch = useDispatch();
@@ -28,10 +22,20 @@ export default function NewSnippet() {
     const handleCodeChange = (code: string) => {
         setFormState({
             ...formState,
-            code: {
-                value: code
-            }
+            code: code
         });
+    };
+
+    const handleFormChange = (e: OnChange) =>
+        setFormState({
+            ...formState,
+            [e.target.id]: e.target.value
+        });
+
+    const handleFormSubmit = (e: OnSubmit) => {
+        e.preventDefault();
+        // dispatch action
+        console.log('submitting ', formState);
     };
 
     const performDispatch = () => {
@@ -44,14 +48,10 @@ export default function NewSnippet() {
         <div>
             <h1>Fill in the form to add a new snippet!</h1>
             <div>
-                <form id='snippetForm'>
-                    <label htmlFor='title'>Title</label>
-                    <input id='title' type='text' />
-                    <label htmlFor='description'>
-                        Insert details in MD format
-                    </label>
-                    <textarea form='snippetForm' id='description' />
-                </form>
+                <AddSnippetForm
+                    handleFormSubmit={handleFormSubmit}
+                    handleFormChange={handleFormChange}
+                />
                 <Editor
                     type='snippet'
                     codeToInject=''
