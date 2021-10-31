@@ -18,11 +18,10 @@ import Tooltip from '@mui/material/Tooltip';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
-import FilterListIcon from '@mui/icons-material/FilterList';
 import AddIcon from '@mui/icons-material/Add';
 import { visuallyHidden } from '@mui/utils';
-import { Snippet } from '../../../types/Snippet';
-import { Link, NavLink } from 'react-router-dom';
+import { CodeSnippet, Snippet } from '../../../types/Snippet';
+import { Link } from 'react-router-dom';
 import moment from 'moment';
 
 interface Data {
@@ -30,14 +29,24 @@ interface Data {
     title: string;
     language: string;
     createdAt: number;
+    difficulty: number;
 }
 
-function createData(snippet: Snippet): Data {
+function createData(snippet: Snippet | CodeSnippet): Data {
+    if ('difficulty' in snippet)
+        return {
+            id: snippet.id,
+            title: snippet.title,
+            language: snippet.language,
+            createdAt: moment(snippet.createdAt).valueOf(),
+            difficulty: snippet.difficulty
+        };
     return {
         id: snippet.id,
         title: snippet.title,
         language: snippet.language,
-        createdAt: moment(snippet.createdAt).valueOf()
+        createdAt: moment(snippet.createdAt).valueOf(),
+        difficulty: -1
     };
 }
 
@@ -89,7 +98,7 @@ interface HeadCell {
     numeric: boolean;
 }
 
-const headCells: readonly HeadCell[] = [
+const headCellsSnippet: readonly HeadCell[] = [
     {
         id: 'title',
         numeric: false,
@@ -110,6 +119,33 @@ const headCells: readonly HeadCell[] = [
     }
 ];
 
+const headCellsCode: readonly HeadCell[] = [
+    {
+        id: 'title',
+        numeric: false,
+        disablePadding: true,
+        label: 'NAME'
+    },
+    {
+        id: 'language',
+        numeric: true,
+        disablePadding: false,
+        label: 'LANGUAGE'
+    },
+    {
+        id: 'difficulty',
+        numeric: true,
+        disablePadding: false,
+        label: 'DIFFICULTY'
+    },
+    {
+        id: 'createdAt',
+        numeric: true,
+        disablePadding: false,
+        label: 'DATE'
+    }
+];
+
 interface EnhancedTableProps {
     numSelected: number;
     onRequestSort: (
@@ -120,6 +156,7 @@ interface EnhancedTableProps {
     order: Order;
     orderBy: string;
     rowCount: number;
+    headCellType: string;
 }
 
 function EnhancedTableHead(props: EnhancedTableProps) {
@@ -129,12 +166,15 @@ function EnhancedTableHead(props: EnhancedTableProps) {
         orderBy,
         numSelected,
         rowCount,
-        onRequestSort
+        onRequestSort,
+        headCellType
     } = props;
     const createSortHandler =
         (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
             onRequestSort(event, property);
         };
+    const headCells =
+        headCellType === 'snippet' ? headCellsSnippet : headCellsCode;
 
     return (
         <TableHead>
@@ -243,8 +283,9 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
     );
 };
 
-type Props = {
-    list: Snippet[];
+type Props<T = Snippet | CodeSnippet> = {
+    type: string;
+    list: T[];
 };
 
 export default function EnhancedTable(props: Props) {
@@ -255,7 +296,8 @@ export default function EnhancedTable(props: Props) {
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-    const rows = props.list.map((snip: Snippet): Data => createData(snip));
+    const rows = props.list.map((snip): Data => createData(snip));
+    const difficulty = ['Easy', 'Medium', 'Hard'];
 
     const handleRequestSort = (
         event: React.MouseEvent<unknown>,
@@ -336,6 +378,7 @@ export default function EnhancedTable(props: Props) {
                             onSelectAllClick={handleSelectAllClick}
                             onRequestSort={handleRequestSort}
                             rowCount={rows.length}
+                            headCellType={props.type}
                         />
                         <TableBody>
                             {/* if you don't need to support IE11, you can replace the `stableSort` call with:
@@ -388,6 +431,11 @@ export default function EnhancedTable(props: Props) {
                                             <TableCell align='right'>
                                                 {row.language}
                                             </TableCell>
+                                            {props.type === 'code' && (
+                                                <TableCell align='right'>
+                                                    {difficulty[row.difficulty]}
+                                                </TableCell>
+                                            )}
                                             <TableCell align='right'>
                                                 {moment(row.createdAt).format(
                                                     'DD-MM-YY, HH:MM:SS'

@@ -22,7 +22,7 @@ export default function Manager() {
         <div>
             <h2>My Snippets</h2>
             <div>
-                <Table list={snippets} />
+                <Table type='snippet' list={snippets} />
             </div>
         </div>
     );

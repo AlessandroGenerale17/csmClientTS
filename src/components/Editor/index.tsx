@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
 import Code from '../../logic/Editor';
@@ -15,7 +15,6 @@ type SnippetProp = {
 type Props = SnippetProp;
 
 export default function Editor(props: Props) {
-    const [js, setJs] = useState<string>(props.codeToInject);
     const [theme, setTheme] = useState<boolean>(false);
     // FIXME
     const isRunnable = false;
@@ -25,7 +24,7 @@ export default function Editor(props: Props) {
     const runCode = () => {
         try {
             const args = [2, 2];
-            code.setUserFn('const c = 1;', js, 'add');
+            code.setUserFn('const c = 1;', props.codeToInject, 'add');
             console.log(code.fn);
             console.log(code.runFn(args));
         } catch (err) {
@@ -58,7 +57,7 @@ export default function Editor(props: Props) {
                 onChange={(value, _) => {
                     props.handleCodeChange(value);
                 }}
-                value={js}
+                value={props.codeToInject}
                 extensions={[javascript({ jsx: true })]}
                 height={code.height}
                 width='600'
