@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchSnippets } from '../../store/snippets/actions';
+import { fetchSnippets, removeSnippets } from '../../store/snippets/actions';
 import { selectSnippets } from '../../store/snippets/selectors';
 import Table from '../../components/Tables';
 import Loading from '../../components/Loading';
@@ -18,7 +18,7 @@ export default function Manager() {
     }, [dispatch, token]);
 
     const deleteSnippets = (snippetsToDelete: readonly string[]) =>
-        console.log('deleteSnippets', snippetsToDelete);
+        dispatch(removeSnippets(snippetsToDelete));
 
     if (loading) return <Loading />;
     return (

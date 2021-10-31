@@ -20,6 +20,13 @@ const reducer = (
                 ...state,
                 list: action.payload
             };
+        case 'DELETE_SNIPPETS':
+            return {
+                ...state,
+                list: state.list.filter(
+                    (snip) => !action.payload.includes(snip.id)
+                )
+            };
         case 'UPDATE_SNIPPET':
             return {
                 ...state,

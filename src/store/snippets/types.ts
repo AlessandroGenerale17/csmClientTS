@@ -20,4 +20,13 @@ export type UpdateSnippet = {
     payload: Snippet;
 };
 
-export type SnippetActions = SaveSnippets | SaveSnippet | UpdateSnippet;
+export type DeleteSnippets = {
+    type: 'DELETE_SNIPPETS';
+    payload: number[];
+};
+
+export type SnippetActions =
+    | SaveSnippets
+    | SaveSnippet
+    | UpdateSnippet
+    | DeleteSnippets;
