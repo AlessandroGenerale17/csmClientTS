@@ -3,6 +3,7 @@ import CodeMirror from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
 import Code from '../../logic/Editor';
 import Switch from '../Switch/';
+import './index.css';
 
 type SnippetProp = {
     type: 'snippet';
@@ -10,6 +11,7 @@ type SnippetProp = {
     handleCodeChange: (code: string) => void;
     performDispatch: () => void;
     displayOutput: () => void;
+    className: string;
 };
 
 type Props = SnippetProp;
@@ -17,6 +19,7 @@ type Props = SnippetProp;
 export default function Editor(props: Props) {
     const [theme, setTheme] = useState<boolean>(false);
     // FIXME
+    const { className } = props;
     const isRunnable = false;
 
     const code = new Code(450);
@@ -39,19 +42,13 @@ export default function Editor(props: Props) {
     //         dispatch(patchSnippet(props.id, js));
     //     }
     // };
-
+    //style={{ border: '1px solid black', flex: 3 }}
     return (
-        <div style={{ border: '1px solid black', flex: 3 }}>
-            <div
-                style={{
-                    display: 'flex',
-                    justifyContent: 'flex-end',
-                    backgroundColor: 'red'
-                }}
-            >
+        <div className={className}>
+            <div className={`toolbar ${theme ? 'active' : ''}`}>
                 <Switch changeTheme={changeTheme} />
                 {/* <button onClick={runCode}>Run</button> */}
-                <button onClick={() => props.performDispatch()}>Save</button>
+                {/*<button onClick={() => props.performDispatch()}>Save</button>*/}
             </div>
             <CodeMirror
                 onChange={(value, _) => {

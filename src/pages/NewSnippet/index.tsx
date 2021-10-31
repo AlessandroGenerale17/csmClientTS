@@ -5,6 +5,7 @@ import Editor from '../../components/Editor';
 import { OnChange, OnSubmit } from '../../Types/EventListener';
 import { createSnippet } from '../../store/snippets/actions';
 import { useHistory } from 'react-router-dom';
+import './index.css';
 
 type formState = {
     title: string;
@@ -37,9 +38,9 @@ export default function NewSnippet() {
             [e.target.id]: e.target.value
         });
 
-    const handleFormSubmit = (e: OnSubmit) => {
+    const handleFormSubmit = async (e: OnSubmit) => {
         e.preventDefault();
-        // TODO Check form validity...  
+        // TODO Check form validity...
         console.log('submitting ', formState);
         const { title, description, code } = formState;
         dispatch(createSnippet(title, description, code));
@@ -47,19 +48,19 @@ export default function NewSnippet() {
         history.push('/manager');
     };
 
-    const performDispatch = () => {
-        
-    };
+    const performDispatch = () => {};
 
     return (
-        <div>
+        <div className='page'>
             <h1>Fill in the form to add a new snippet!</h1>
-            <div>
+            <div className='content-container'>
                 <AddSnippetForm
                     handleFormSubmit={handleFormSubmit}
                     handleFormChange={handleFormChange}
+                    className='form-newSnippet'
                 />
                 <Editor
+                    className='editor-newSnippet'
                     type='snippet'
                     codeToInject=''
                     handleCodeChange={handleCodeChange}

@@ -1,0 +1,14 @@
+.page {
+    display: flex;
+    flex-direction: column;
+    margin-left: 0.5rem;
+}
+
+.content-container {
+    display: flex;
+    margin-top: 2.65rem;
+}
+
+.page > h1 {
+    text-align: center;
+}
