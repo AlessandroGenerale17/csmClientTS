@@ -17,12 +17,19 @@ export default function Manager() {
         dispatch(fetchSnippets);
     }, [dispatch, token]);
 
+    const deleteSnippets = (snippetsToDelete: readonly string[]) =>
+        console.log('deleteSnippets', snippetsToDelete);
+
     if (loading) return <Loading />;
     return (
         <div>
             <h2>My Snippets</h2>
             <div>
-                <Table type='snippet' list={snippets} />
+                <Table
+                    type='snippet'
+                    list={snippets}
+                    performDispatch={deleteSnippets}
+                />
             </div>
         </div>
     );

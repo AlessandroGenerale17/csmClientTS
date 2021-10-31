@@ -23,7 +23,7 @@ export default function index() {
     return (
         <div>
             <h1>Challenges</h1>
-            <Table type='code' list={list} />
+            <Table performDispatch={() => []}type='code' list={list} />
         </div>
     );
 }

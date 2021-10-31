@@ -225,10 +225,11 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 interface EnhancedTableToolbarProps {
     showToolbarOptions: boolean;
     numSelected: number;
+    deleteSnippets: () => void;
 }
 
 const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
-    const { numSelected, showToolbarOptions } = props;
+    const { numSelected, showToolbarOptions, deleteSnippets } = props;
 
     const deleteAvailable = numSelected && showToolbarOptions;
 
@@ -266,9 +267,9 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
                 </Typography>
             )}
             {deleteAvailable ? (
-                <Tooltip title='Delete'>
+                <Tooltip title='Delete' onClick={deleteSnippets}>
                     <IconButton>
-                        <DeleteIcon />
+                        <DeleteIcon style={{ color: 'red' }} />
                     </IconButton>
                 </Tooltip>
             ) : null}
@@ -293,6 +294,8 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
 type Props<T = Snippet | CodeSnippet> = {
     type: string;
     list: T[];
+    // TODO perform dispatch to delete
+    performDispatch: (snippetsToDelete: readonly string[]) => void;
 };
 
 export default function EnhancedTable(props: Props) {
@@ -320,7 +323,6 @@ export default function EnhancedTable(props: Props) {
     ) => {
         if (event.target.checked) {
             const newSelecteds = rows.map((n) => n.id.toString());
-            console.log(newSelecteds);
             setSelected(newSelecteds);
             return;
         }
@@ -376,6 +378,7 @@ export default function EnhancedTable(props: Props) {
                 <EnhancedTableToolbar
                     numSelected={selected.length}
                     showToolbarOptions={props.type === 'snippet' ? true : false}
+                    deleteSnippets={() => props.performDispatch(selected)}
                 />
                 <TableContainer>
                     <Table
@@ -393,8 +396,6 @@ export default function EnhancedTable(props: Props) {
                             headCellType={props.type}
                         />
                         <TableBody>
-                            {/* if you don't need to support IE11, you can replace the `stableSort` call with:
-              rows.slice().sort(getComparator(order, orderBy)) */}
                             {stableSort(rows, getComparator(order, orderBy))
                                 .slice(
                                     page * rowsPerPage,
