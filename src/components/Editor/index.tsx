@@ -1,22 +1,33 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
 import Code from '../../logic/Editor';
+import Switch from '../Switch/';
+import './index.css';
 
-type Props = {
+type SnippetProp = {
+    type: string;
     codeToInject: string;
+    handleCodeChange: (code: string) => void;
+    performDispatch: () => void;
+    displayOutput: () => void;
+    className: string;
 };
 
+type Props = SnippetProp;
+
 export default function Editor(props: Props) {
-    const [js, setJs] = useState<string>(props.codeToInject);
     const [theme, setTheme] = useState<boolean>(false);
+    // FIXME
+    const { className } = props;
+    const isRunnable = false;
 
     const code = new Code(450);
 
     const runCode = () => {
         try {
             const args = [2, 2];
-            code.setUserFn('const c = 1;', js, 'add');
+            code.setUserFn('const c = 1;', props.codeToInject, 'add');
             console.log(code.fn);
             console.log(code.runFn(args));
         } catch (err) {
@@ -24,20 +35,33 @@ export default function Editor(props: Props) {
         }
     };
 
+    const changeTheme = () => setTheme(() => !theme);
+    // CTRL S TO SAVE
+    // const handleKeyDown = (e: React.KeyboardEvent) => {
+    //     if (e.ctrlKey && e.key === 's') {
+    //         dispatch(patchSnippet(props.id, js));
+    //     }
+    // };
+    //style={{ border: '1px solid black', flex: 3 }}
     return (
-        <div>
+        <div className={className}>
+            <div className={`toolbar ${theme ? 'active' : ''}`}>
+                <Switch changeTheme={changeTheme} />
+                {/* <button onClick={runCode}>Run</button> */}
+                {/*<button onClick={() => props.performDispatch()}>Save</button>*/}
+            </div>
             <CodeMirror
                 onChange={(value, _) => {
-                    console.log(_);
-                    setJs(value);
+                    props.handleCodeChange(value);
                 }}
-                value={js}
+                value={props.codeToInject}
                 extensions={[javascript({ jsx: true })]}
                 height={code.height}
+                width='600'
                 tabIndex={code.tabIndex}
-                theme='light'
+                theme={theme ? 'light' : 'dark'}
             />
-            <button onClick={runCode}>Run</button>
+            {isRunnable && <button onClick={runCode}>Run</button>}
         </div>
     );
 }

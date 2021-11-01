@@ -1,5 +1,5 @@
 import { RootState } from '..';
-import { Snippet } from '../../types/Snippet';
+import { Snippet } from '../../Types/Snippet';
 
 export const selectSnippets = (reduxState: RootState): Snippet[] =>
     reduxState.snippets.list;
