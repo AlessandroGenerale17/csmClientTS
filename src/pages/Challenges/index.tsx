@@ -10,7 +10,6 @@ export default function Challenges() {
     const dispatch = useDispatch();
     const challenges = useSelector(selectChallenges);
     const loading = useSelector(selectAppLoading);
-    console.log(challenges);
 
     useEffect(() => {
         dispatch(fetchChallenges);

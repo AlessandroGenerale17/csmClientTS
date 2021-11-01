@@ -10,4 +10,9 @@ export type SaveChallenges = {
     payload: CodeSnippet[];
 };
 
-export type ChallengeActions = SaveChallenges;
+export type SaveChallenge = {
+    type: 'SAVE_CHALLENGE';
+    payload: CodeSnippet;
+};
+
+export type ChallengeActions = SaveChallenges | SaveChallenge;

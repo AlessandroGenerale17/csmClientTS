@@ -12,6 +12,11 @@ const reducer = (state = initialState, action: ChallengeActions) => {
                 ...state,
                 list: action.payload
             };
+        case 'SAVE_CHALLENGE':
+            return {
+                ...state,
+                selected: action.payload
+            };
         default:
             return state;
     }
