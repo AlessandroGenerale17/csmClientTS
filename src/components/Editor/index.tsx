@@ -6,7 +6,7 @@ import Switch from '../Switch/';
 import './index.css';
 
 type SnippetProp = {
-    type: 'snippet';
+    type: string;
     codeToInject: string;
     handleCodeChange: (code: string) => void;
     performDispatch: () => void;

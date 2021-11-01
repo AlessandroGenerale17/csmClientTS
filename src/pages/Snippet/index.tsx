@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-
-import { createSnippet, fetchSnippet } from '../../store/snippets/actions';
+import { fetchSnippet } from '../../store/snippets/actions';
 import { selectSnippet } from '../../store/snippets/selectors';
 import Editor from '../../components/Editor';
 import Loading from '../../components/Loading';
@@ -16,7 +15,8 @@ import {
     OnClickFormDiv,
     OnSubmit
 } from '../../Types/EventListener';
-import { useHistory } from 'react-router-dom';
+
+import './index.css';
 
 // FIXME possibly export
 type ParamTypes = {
@@ -42,17 +42,17 @@ export default function Snippet() {
     const dispatch = useDispatch();
     const snippet = useSelector(selectSnippet);
     const loading = useSelector(selectAppLoading);
-    const history = useHistory();
     const [formState, setFormState] = useState<FormState>(initialFormState);
 
     useEffect(() => {
-        dispatch(fetchSnippet(id));
+        // IMPORTANT
+        if (!snippet || snippet.id !== id) dispatch(fetchSnippet(id));
         if (snippet !== null)
             setFormState({
                 ...snippet,
                 isOpen: false
             });
-    }, [dispatch]);
+    }, [dispatch, snippet]);
 
     if (loading || !snippet) return <Loading />;
 
@@ -72,7 +72,6 @@ export default function Snippet() {
     const handleFormSubmit = async (e: OnSubmit) => {
         e.preventDefault();
         // TODO Check form validity...
-        console.log('submitting ', formState);
         const { title, description, code } = formState;
         dispatch(patchSnippet(id, title, description, code));
         setFormState(initialFormState);
@@ -103,14 +102,15 @@ export default function Snippet() {
 
     }; */
     return (
-        <div style={{ display: 'flex' }}>
+        <div className='snippet-page'>
             {!formState.isOpen ? (
-                <div style={{ flex: 2 }} onClick={handleFormClick}>
+                <div className='snippet-content' onClick={handleFormClick}>
                     <h2 id='title'>{snippet.title}</h2>
-
-                    <h2 style={{ textAlign: 'center' }}>Notes</h2>
-                    <div>
-                        <ReactMarkdown children={snippet.description} />
+                    <div className='markdown'>
+                        <ReactMarkdown
+                            className='md'
+                            children={snippet.description}
+                        />
                     </div>
                 </div>
             ) : (

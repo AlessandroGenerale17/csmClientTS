@@ -2,6 +2,8 @@ import { AppState, AppStateActions } from './types';
 
 const initialState: AppState = {
     loading: false,
+    //snippetLoading: false,TODO 
+    // theme: TODO 
     message: null
 };
 

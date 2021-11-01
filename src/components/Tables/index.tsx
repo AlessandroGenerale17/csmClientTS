@@ -40,7 +40,7 @@ function createData(snippet: Snippet | CodeSnippet): Data {
             title: snippet.title.toLowerCase(),
             language: snippet.language,
             createdAt: moment(snippet.createdAt).valueOf(),
-            difficulty: snippet.difficulty
+            difficulty: snippet.difficulty.value
         };
     return {
         id: snippet.id,
@@ -224,11 +224,13 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 interface EnhancedTableToolbarProps {
     showToolbarOptions: boolean;
     numSelected: number;
+    tableName: string;
     deleteSnippets: () => void;
 }
 
 const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
-    const { numSelected, showToolbarOptions, deleteSnippets } = props;
+    const { numSelected, showToolbarOptions, tableName, deleteSnippets } =
+        props;
 
     const deleteAvailable = numSelected && showToolbarOptions;
 
@@ -262,7 +264,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
                     id='tableTitle'
                     component='div'
                 >
-                    Table
+                    {tableName}
                 </Typography>
             )}
             {deleteAvailable ? (
@@ -293,6 +295,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
 type Props<T = Snippet | CodeSnippet> = {
     type: string;
     list: T[];
+    tableName: string;
     // TODO perform dispatch to delete
     performDispatch: (snippetsToDelete: readonly string[]) => void;
 };
@@ -378,6 +381,7 @@ export default function EnhancedTable(props: Props) {
                     numSelected={selected.length}
                     showToolbarOptions={props.type === 'snippet' ? true : false}
                     deleteSnippets={() => props.performDispatch(selected)}
+                    tableName={props.tableName}
                 />
                 <TableContainer>
                     <Table

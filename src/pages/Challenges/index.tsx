@@ -1,29 +1,31 @@
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchChallenges } from '../../store/challenges/actions';
 import Table from '../../components/Tables';
+import { selectChallenges } from '../../store/challenges/selectors';
+import { selectAppLoading } from '../../store/appState/selectors';
+import Loading from '../../components/Loading';
 
-export default function index() {
-    const list = [
-        {
-            id: 1,
-            title: 'hello',
-            description: 'hello',
-            code: 'heyyy',
-            userId: 1,
-            language: 'JavaScript',
-            createdAt: new Date(),
-            updatedAt: new Date(),
+export default function Challenges() {
+    const dispatch = useDispatch();
+    const challenges = useSelector(selectChallenges);
+    const loading = useSelector(selectAppLoading);
+    console.log(challenges);
 
-            prompt: 'heyy',
-            hiddenPrompt: 'heyy',
-            fName: 'heyy',
-            testCases: [],
-            difficulty: 1
-        }
-    ];
+    useEffect(() => {
+        dispatch(fetchChallenges);
+    }, [dispatch]);
 
+    if (loading) return <Loading />;
     return (
         <div>
             <h1>Challenges</h1>
-            <Table performDispatch={() => []}type='code' list={list} />
+            <Table
+                performDispatch={() => []}
+                type='code'
+                list={challenges}
+                tableName='Challenges'
+            />
         </div>
     );
 }

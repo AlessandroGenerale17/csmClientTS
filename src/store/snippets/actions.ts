@@ -99,6 +99,7 @@ export const fetchSnippet =
     (id: number) =>
     async (dispatch: AppDispatch, getState: () => RootState) => {
         try {
+            console.log('fetching snippet');
             dispatch(appLoading());
             const res = await axios.get(`${apiUrl}/snippets/${id}`);
             dispatch(saveSnippet({ ...res.data }));

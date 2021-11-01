@@ -11,6 +11,7 @@ of having different parent than Person
 */
 
 import { Testcase } from './Testcase';
+import { Difficulty } from './Difficulty';
 
 export interface Snippet {
     id: number;
@@ -27,7 +28,7 @@ export interface CodeSnippet extends Snippet {
     prompt: string;
     hiddenPrompt: string;
     fName: string;
-    testCases: Testcase[];
+    // testCases: Testcase[];
     // 0 easy 1 medium 2 hard
-    difficulty: number;
+    difficulty: Difficulty;
 }

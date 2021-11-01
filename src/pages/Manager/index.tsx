@@ -6,6 +6,7 @@ import Table from '../../components/Tables';
 import Loading from '../../components/Loading';
 import { selectAppLoading } from '../../store/appState/selectors';
 import { selectToken } from '../../store/user/selectors';
+import './index.css';
 
 export default function Manager() {
     const dispatch = useDispatch();
@@ -22,13 +23,16 @@ export default function Manager() {
 
     if (loading) return <Loading />;
     return (
-        <div>
-            <h2>My Snippets</h2>
+        <div className='manager-page'>
+            <div>
+                <p>Some configs</p>
+            </div>
             <div>
                 <Table
                     type='snippet'
                     list={snippets}
                     performDispatch={deleteSnippets}
+                    tableName='My Snippets'
                 />
             </div>
         </div>
