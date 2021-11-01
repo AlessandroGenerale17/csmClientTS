@@ -48,3 +48,8 @@
 .form-newSnippet > label {
     font-weight: 500;
 }
+
+.form-commands {
+    display: flex;
+    justify-content: space-evenly;
+}

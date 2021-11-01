@@ -36,14 +36,15 @@ function createData(snippet: Snippet | CodeSnippet): Data {
     if ('difficulty' in snippet)
         return {
             id: snippet.id,
-            title: snippet.title,
+            // TODO check this if it sorts correctly
+            title: snippet.title.toLowerCase(),
             language: snippet.language,
             createdAt: moment(snippet.createdAt).valueOf(),
             difficulty: snippet.difficulty
         };
     return {
         id: snippet.id,
-        title: snippet.title,
+        title: snippet.title.toLowerCase(),
         language: snippet.language,
         createdAt: moment(snippet.createdAt).valueOf(),
         difficulty: -1
@@ -74,8 +75,6 @@ function getComparator<Key extends keyof any>(
         : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-// This method is created for cross-browser compatibility, if you don't
-// need to support IE11, you can use Array.prototype.sort() directly
 function stableSort<T>(
     array: readonly T[],
     comparator: (a: T, b: T) => number
@@ -300,7 +299,7 @@ type Props<T = Snippet | CodeSnippet> = {
 
 export default function EnhancedTable(props: Props) {
     const [order, setOrder] = React.useState<Order>('asc');
-    const [orderBy, setOrderBy] = React.useState<keyof Data>('title');
+    const [orderBy, setOrderBy] = React.useState<keyof Data>('id');
     const [selected, setSelected] = React.useState<readonly string[]>([]);
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(false);
@@ -419,7 +418,7 @@ export default function EnhancedTable(props: Props) {
                                             role='checkbox'
                                             aria-checked={isItemSelected}
                                             tabIndex={-1}
-                                            key={row.title}
+                                            key={row.id}
                                             selected={isItemSelected}
                                         >
                                             <TableCell padding='checkbox'>

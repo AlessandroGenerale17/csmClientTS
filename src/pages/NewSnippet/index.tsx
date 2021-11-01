@@ -7,7 +7,7 @@ import { createSnippet } from '../../store/snippets/actions';
 import { useHistory } from 'react-router-dom';
 import './index.css';
 
-type formState = {
+type FormState = {
     title: string;
     description: string;
     code: string;
@@ -20,7 +20,7 @@ const initialFormState = {
 };
 
 export default function NewSnippet() {
-    const [formState, setFormState] = useState<formState>(initialFormState);
+    const [formState, setFormState] = useState<FormState>(initialFormState);
 
     const dispatch = useDispatch();
     const history = useHistory();
@@ -57,7 +57,10 @@ export default function NewSnippet() {
                 <AddSnippetForm
                     handleFormSubmit={handleFormSubmit}
                     handleFormChange={handleFormChange}
+                    closeForm={() => {}}
                     className='form-newSnippet'
+                    title={formState.title}
+                    description={formState.description}
                 />
                 <Editor
                     className='editor-newSnippet'

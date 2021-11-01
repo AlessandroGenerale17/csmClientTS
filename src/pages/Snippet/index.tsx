@@ -2,30 +2,39 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { fetchSnippet } from '../../store/snippets/actions';
+import { createSnippet, fetchSnippet } from '../../store/snippets/actions';
 import { selectSnippet } from '../../store/snippets/selectors';
 import Editor from '../../components/Editor';
 import Loading from '../../components/Loading';
 import { selectAppLoading } from '../../store/appState/selectors';
 import { patchSnippet } from '../../store/snippets/actions';
+import ReactMarkdown from 'react-markdown';
+import AddSnippetForm from '../../components/AddSnippetForm';
+import {
+    OnChange,
+    OnClick,
+    OnClickFormDiv,
+    OnSubmit
+} from '../../Types/EventListener';
+import { useHistory } from 'react-router-dom';
 
 // FIXME possibly export
 type ParamTypes = {
     id: string;
 };
 
-type formState = {
-    title: {
-        isOpen: boolean;
-        value: string;
-    };
-    description: {
-        isOpen: boolean;
-        value: string;
-    };
-    code: {
-        value: string;
-    };
+type FormState = {
+    title: string;
+    description: string;
+    code: string;
+    isOpen: boolean;
+};
+
+const initialFormState = {
+    title: '',
+    description: '',
+    code: '',
+    isOpen: false
 };
 
 export default function Snippet() {
@@ -33,79 +42,87 @@ export default function Snippet() {
     const dispatch = useDispatch();
     const snippet = useSelector(selectSnippet);
     const loading = useSelector(selectAppLoading);
-    const [formState, setFormState] = useState<formState>({
-        title: { isOpen: false, value: '' },
-        description: { isOpen: false, value: '' },
-        code: { value: '' }
-    });
+    const history = useHistory();
+    const [formState, setFormState] = useState<FormState>(initialFormState);
 
     useEffect(() => {
         dispatch(fetchSnippet(id));
+        if (snippet !== null)
+            setFormState({
+                ...snippet,
+                isOpen: false
+            });
     }, [dispatch]);
 
     if (loading || !snippet) return <Loading />;
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setFormState(() => ({
-            ...formState,
-            [e.target.id]: {
-                isOpen: true,
-                value: e.target.value
-            }
-        }));
-    };
-
     const handleCodeChange = (code: string) => {
         setFormState({
             ...formState,
-            code: {
-                value: code
-            }
+            code: code
         });
     };
 
-    const handleClick = (
-        e: React.MouseEvent<HTMLHeadElement> | React.MouseEvent
-    ) => {
-        setFormState(() => ({
+    const handleFormChange = (e: OnChange) =>
+        setFormState({
             ...formState,
-            title: {
-                ...formState.title,
-                value: snippet.title
-            }
+            [e.target.id]: e.target.value
+        });
+
+    const handleFormSubmit = async (e: OnSubmit) => {
+        e.preventDefault();
+        // TODO Check form validity...
+        console.log('submitting ', formState);
+        const { title, description, code } = formState;
+        dispatch(patchSnippet(id, title, description, code));
+        setFormState(initialFormState);
+        // history.push('/manager');
+    };
+
+    const handleFormClick = (e: OnClickFormDiv) => {
+        setFormState((prevFormState) => ({
+            ...formState,
+            isOpen: !prevFormState.isOpen
         }));
     };
 
-    const performDispatch = () =>
-        dispatch(patchSnippet(id, formState.code.value));
+    const closeForm = (e: OnClick) => {
+        setFormState({
+            ...snippet,
+            isOpen: false
+        });
+    };
+
+    const performDispatch = () => {};
     /* TODO make form appear when user clicks on an 'editable' field */
     /* const addPizza = (e: React.FormEvent) => {
         e.preventDefault();
         dispatch(add(formState));
         // clear form
         setFormState({ name: '', description: '' });
+
     }; */
     return (
-        <div style={{ padding: '0.85rem', display: 'flex' }}>
-            <div style={{ flex: 2 }}>
-                {!formState.title.isOpen ? (
-                    <h2 id='title' onClick={handleClick}>
-                        {snippet.title}
-                    </h2>
-                ) : (
-                    <input
-                        id='value'
-                        value={snippet.title}
-                        onChange={handleChange}
-                    />
-                )}
-                <h2 style={{ textAlign: 'center' }}>Notes</h2>
-                <div>
-                    {/* MARKUP INPUT ON DOUBLE CLICK else MARKDOWN*/}
-                    <p>{snippet.description}</p>
-                </div>
-            </div>
+        <div style={{ display: 'flex' }}>
+            {!formState.isOpen ? (
+                <div style={{ flex: 2 }} onClick={handleFormClick}>
+                    <h2 id='title'>{snippet.title}</h2>
 
+                    <h2 style={{ textAlign: 'center' }}>Notes</h2>
+                    <div>
+                        <ReactMarkdown children={snippet.description} />
+                    </div>
+                </div>
+            ) : (
+                <AddSnippetForm
+                    handleFormSubmit={handleFormSubmit}
+                    handleFormChange={handleFormChange}
+                    closeForm={closeForm}
+                    className='form-newSnippet'
+                    title={formState.title}
+                    description={formState.description}
+                />
+            )}
             <Editor
                 type='snippet'
                 className='editor-newSnippet'

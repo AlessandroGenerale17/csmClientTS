@@ -110,12 +110,14 @@ export const fetchSnippet =
     };
 
 export const patchSnippet =
-    (id: number, code: string) =>
+    (id: number, title: string, description: string, code: string) =>
     async (dispatch: AppDispatch, getState: () => RootState) => {
         try {
             dispatch(appLoading());
             const res = await axios.patch(`${apiUrl}/snippets/${id}`, {
-                code: code
+                title,
+                code,
+                description
             });
             dispatch(saveSnippet({ ...res.data }));
             // update snippet in  list of snippets
