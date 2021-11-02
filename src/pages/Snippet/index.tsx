@@ -126,7 +126,9 @@ export default function Snippet() {
             <Editor
                 type='snippet'
                 className='editor-newSnippet'
-                codeToInject={snippet.code}
+                prompt={snippet.code}
+                hiddenPrompt=''
+                fName=''
                 handleCodeChange={handleCodeChange}
                 performDispatch={performDispatch}
                 displayOutput={() => {}}

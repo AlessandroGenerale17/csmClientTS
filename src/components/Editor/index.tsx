@@ -5,31 +5,42 @@ import Code from '../../logic/Editor';
 import Switch from '../Switch/';
 import './index.css';
 
-type SnippetProp = {
+type Props = {
     type: string;
-    codeToInject: string;
+    className: string;
+    prompt: string;
+    hiddenPrompt: string;
+    fName: string;
     handleCodeChange: (code: string) => void;
     performDispatch: () => void;
-    displayOutput: () => void;
-    className: string;
+    displayOutput: (output: string) => void;
+    // tableName: string;
+    // // TODO perform dispatch to delete
+    // performDispatch: (snippetsToDelete: readonly string[]) => void;
 };
 
-type Props = SnippetProp;
-
 export default function Editor(props: Props) {
+    const { type, handleCodeChange, prompt, hiddenPrompt, fName } = props;
+
     const [theme, setTheme] = useState<boolean>(false);
     // FIXME
     const { className } = props;
-    const isRunnable = false;
 
     const code = new Code(450);
 
     const runCode = () => {
         try {
             const args = [2, 2];
-            code.setUserFn('const c = 1;', props.codeToInject, 'add');
-            console.log(code.fn);
-            console.log(code.runFn(args));
+            // hidden prompt
+            // prompt
+            // fnName
+            if (type === 'code') {
+                code.setUserFn(hiddenPrompt, prompt, fName);
+                console.log(code.fn);
+                console.log(code.runFn(args));
+                const output = code.runFn(args);
+                console.log(typeof output);
+            }
         } catch (err) {
             console.log(err);
         }
@@ -52,16 +63,16 @@ export default function Editor(props: Props) {
             </div>
             <CodeMirror
                 onChange={(value, _) => {
-                    props.handleCodeChange(value);
+                    handleCodeChange(value);
                 }}
-                value={props.codeToInject}
+                value={prompt}
                 extensions={[javascript({ jsx: true })]}
                 height={code.height}
                 width='600'
                 tabIndex={code.tabIndex}
                 theme={theme ? 'light' : 'dark'}
             />
-            {isRunnable && <button onClick={runCode}>Run</button>}
+            {type === 'code' && <button onClick={runCode}>Run</button>}
         </div>
     );
 }

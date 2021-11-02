@@ -1,5 +1,5 @@
 import Editor from '../../components/Editor';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { selectChallenge } from '../../store/challenges/selectors';
@@ -11,15 +11,28 @@ type ParamTypes = {
     id: string;
 };
 
-export default function Question() {
+export default function Challenge() {
+    const [codeChallenge, setCodeChallenge] = useState<string>('');
     const challenge = useSelector(selectChallenge);
     const id = parseInt(useParams<ParamTypes>().id);
     const dispatch = useDispatch();
-    console.log(challenge);
 
     useEffect(() => {
         if (!challenge || challenge.id !== id) dispatch(fetchChallenge(id));
+        if (challenge !== null) setCodeChallenge(challenge.prompt);
     }, [dispatch, challenge]);
+
+    // TODO here I take care of the state of stuff like test cases input
+    // submission
+
+    const handleCodeChange = (code: string) => {
+        setCodeChallenge(code);
+    };
+
+    const displayOutput = (output: string) => {
+        console.log(output);
+    };
+    console.log(challenge);
 
     if (!challenge) return <Loading />;
 
@@ -30,14 +43,18 @@ export default function Question() {
                 {/*<Editor />*/}
                 <p>Some text about question MD format</p>
             </div>
-            {/* <Editor
+            <Editor
                 type='code'
                 className='editor-newSnippet'
-                codeToInject={snippet.code}
+                prompt={codeChallenge}
+                hiddenPrompt={
+                    challenge.hiddenPrompt ? challenge.hiddenPrompt : ''
+                }
+                fName={challenge.fName}
                 handleCodeChange={handleCodeChange}
-                performDispatch={performDispatch}
-                displayOutput={() => {}}
-            /> */}
+                performDispatch={() => {}}
+                displayOutput={displayOutput}
+            />
         </div>
     );
 }
