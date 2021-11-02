@@ -50,6 +50,7 @@ export default function Editor(props: Props) {
                 onChange={(value, _) => {
                     handleCodeChange(value);
                 }}
+                style={{ border: '1px solid black' }}
                 value={prompt}
                 extensions={[javascript({ jsx: true })]}
                 height='450px'

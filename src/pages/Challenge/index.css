@@ -12,6 +12,11 @@
     padding: 0.85rem;
 }
 
+.challenge-details > p {
+    max-height: 450px;
+    overflow: auto;
+}
+
 .challenge-footer {
     display: flex;
 }

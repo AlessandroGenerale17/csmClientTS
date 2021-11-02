@@ -76,6 +76,9 @@ export default function Challenge() {
         }
     };
 
+    // TODO
+    // please do not delete the prompt given to you
+    // please give the right amount of arguments to the function
     const runCode = (stringArgs: string) => {
         try {
             const args = JSON.parse(stringArgs);
@@ -88,8 +91,7 @@ export default function Challenge() {
                 return output;
             }
         } catch (err) {
-            if (err instanceof Error)
-                return { error: `${err} : ${err.message}` };
+            if (err instanceof Error) return { error: `${err}` };
         }
     };
 
@@ -107,7 +109,7 @@ export default function Challenge() {
                 <div className='challenge-details'>
                     <h2>Question</h2>
                     {/*<Editor />*/}
-                    <p>Some text about question MD format</p>
+                    <p>Some text about question MD formatSome text about</p>
                 </div>
                 <Editor
                     type='code'
