@@ -1,50 +1,29 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
-import Code from '../../logic/Editor';
 import Switch from '../Switch/';
+import PlayButton from '../Button/PlayButton';
 import './index.css';
 
 type Props = {
     type: string;
     className: string;
     prompt: string;
-    hiddenPrompt: string;
-    fName: string;
     handleCodeChange: (code: string) => void;
-    performDispatch: () => void;
-    displayOutput: (output: string) => void;
+    runCode: () => void;
+    // performDispatch: () => void;
+    // displayOutput: () => void;
     // tableName: string;
     // // TODO perform dispatch to delete
     // performDispatch: (snippetsToDelete: readonly string[]) => void;
 };
 
 export default function Editor(props: Props) {
-    const { type, handleCodeChange, prompt, hiddenPrompt, fName } = props;
+    const { type, prompt, handleCodeChange, runCode } = props;
 
     const [theme, setTheme] = useState<boolean>(false);
     // FIXME
     const { className } = props;
-
-    const code = new Code(450);
-
-    const runCode = () => {
-        try {
-            const args = [2, 2];
-            // hidden prompt
-            // prompt
-            // fnName
-            if (type === 'code') {
-                code.setUserFn(hiddenPrompt, prompt, fName);
-                console.log(code.fn);
-                console.log(code.runFn(args));
-                const output = code.runFn(args);
-                console.log(typeof output);
-            }
-        } catch (err) {
-            console.log(err);
-        }
-    };
 
     const changeTheme = () => setTheme(() => !theme);
     // CTRL S TO SAVE
@@ -58,8 +37,9 @@ export default function Editor(props: Props) {
         <div className={className}>
             <div className={`toolbar ${theme ? 'active' : ''}`}>
                 <Switch changeTheme={changeTheme} />
-                {/* <button onClick={runCode}>Run</button> */}
-                {/*<button onClick={() => props.performDispatch()}>Save</button>*/}
+                {type === 'code' && (
+                    <PlayButton handleClick={() => runCode()} />
+                )}
             </div>
             <CodeMirror
                 onChange={(value, _) => {
@@ -67,12 +47,11 @@ export default function Editor(props: Props) {
                 }}
                 value={prompt}
                 extensions={[javascript({ jsx: true })]}
-                height={code.height}
+                height='450px'
                 width='600'
-                tabIndex={code.tabIndex}
+                tabIndex={2}
                 theme={theme ? 'light' : 'dark'}
             />
-            {type === 'code' && <button onClick={runCode}>Run</button>}
         </div>
     );
 }

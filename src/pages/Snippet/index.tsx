@@ -127,11 +127,8 @@ export default function Snippet() {
                 type='snippet'
                 className='editor-newSnippet'
                 prompt={snippet.code}
-                hiddenPrompt=''
-                fName=''
                 handleCodeChange={handleCodeChange}
-                performDispatch={performDispatch}
-                displayOutput={() => {}}
+                runCode={() => {}}
             />
         </div>
     );

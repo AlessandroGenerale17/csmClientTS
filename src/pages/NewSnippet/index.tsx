@@ -65,12 +65,9 @@ export default function NewSnippet() {
                 <Editor
                     className='editor-newSnippet'
                     type='snippet'
-                    prompt=''
-                    hiddenPrompt=''
-                    fName=''
                     handleCodeChange={handleCodeChange}
-                    performDispatch={performDispatch}
-                    displayOutput={() => {}}
+                    prompt={formState.code}
+                    runCode={() => {}}
                 />
             </div>
         </div>

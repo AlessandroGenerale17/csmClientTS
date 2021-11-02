@@ -1,0 +1,26 @@
+.challenge-page {
+    display: flex;
+    flex-direction: column;
+}
+
+.challenge {
+    display: flex;
+}
+
+.challenge-details {
+    flex: 2;
+    padding: 0.85rem;
+}
+
+.challenge-footer {
+    display: flex;
+}
+
+.challenge-footer > .testcase {
+    flex: 2;
+    padding: 0.85rem;
+}
+
+.challenge-footer > .output {
+    flex: 3;
+}
