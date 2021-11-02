@@ -32,17 +32,38 @@ export default function Challenge() {
         setCodeChallenge(code);
     };
 
-    const displayOutput = () => {
-        const out = runCode();
-        console.log('output: ', out);
-        // if the output matches
-        if (typeof out === 'number' && out === 4)
-            console.log('you passed a test');
+    // const displayOutput = () => {
+    //     const out = runCode();
+    //     console.log('output: ', out);
+    //     // if the output matches
+    //     if (typeof out === 'number' && out === 4)
+    //         console.log('you passed a test');
+    // };
+
+    const submitSolution = () => {
+        if (challenge !== null) {
+            let score = 0;
+            const total = challenge.testcases.length;
+            let failed: number[] = [];
+
+            challenge.testcases.forEach((testcase, index) => {
+                const solution = JSON.parse(testcase.solution);
+                const output = runCode(testcase.args);
+                console.log('output ', output);
+                console.log('solution ', solution);
+                if (output !== solution) {
+                    console.log('failed');
+                    failed = [...failed, index];
+                } else {
+                    score += 1;
+                }
+            });
+            console.log('score ', score, total);
+        }
     };
 
-    const runCode = () => {
+    const runCode = (stringArgs: string) => {
         try {
-            const stringArgs = '[2, 2]';
             const args = JSON.parse(stringArgs);
             if (challenge !== null) {
                 const hiddenCode = challenge.hiddenPrompt
@@ -53,7 +74,7 @@ export default function Challenge() {
                 return output;
             }
         } catch (err) {
-            console.log(err);
+            return err;
         }
     };
 
@@ -72,7 +93,7 @@ export default function Challenge() {
                     className='editor-newSnippet'
                     prompt={codeChallenge}
                     handleCodeChange={handleCodeChange}
-                    runCode={displayOutput}
+                    runCode={submitSolution}
                 />
             </div>
             <div className='challenge-footer'>

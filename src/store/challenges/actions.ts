@@ -37,6 +37,7 @@ export const fetchChallenges = async (
                     name: codeSnip.difficulty.name,
                     value: codeSnip.difficulty.value
                 },
+                testcases: [],
                 createdAt: codeSnip.createdAt,
                 updatedAt: codeSnip.updatedAt
             })
