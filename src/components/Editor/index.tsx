@@ -4,12 +4,14 @@ import { javascript } from '@codemirror/lang-javascript';
 import Switch from '../Switch/';
 import PlayButton from '../Button/PlayButton';
 import './index.css';
+import SubmitSolutionButton from '../Button/SubmitSolutionButton';
 
 type Props = {
     type: string;
     className: string;
     prompt: string;
     handleCodeChange: (code: string) => void;
+    submitSolution: () => void;
     runCode: () => void;
     // performDispatch: () => void;
     // displayOutput: () => void;
@@ -19,7 +21,7 @@ type Props = {
 };
 
 export default function Editor(props: Props) {
-    const { type, prompt, handleCodeChange, runCode } = props;
+    const { type, prompt, handleCodeChange, runCode, submitSolution } = props;
 
     const [theme, setTheme] = useState<boolean>(false);
     // FIXME
@@ -38,7 +40,10 @@ export default function Editor(props: Props) {
             <div className={`toolbar ${theme ? 'active' : ''}`}>
                 <Switch changeTheme={changeTheme} />
                 {type === 'code' && (
-                    <PlayButton handleClick={() => runCode()} />
+                    <>
+                        <PlayButton handleClick={runCode} />
+                        <SubmitSolutionButton handleClick={submitSolution} />
+                    </>
                 )}
             </div>
             <CodeMirror

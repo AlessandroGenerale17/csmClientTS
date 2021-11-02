@@ -129,6 +129,7 @@ export default function Snippet() {
                 prompt={snippet.code}
                 handleCodeChange={handleCodeChange}
                 runCode={() => {}}
+                submitSolution={() => {}}
             />
         </div>
     );

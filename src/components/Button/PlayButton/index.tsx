@@ -2,6 +2,7 @@ import Button from '@mui/material/Button';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import { OnClick } from '../../../Types/EventListener';
 
+
 type Props = {
     handleClick: (e: OnClick) => void;
 };

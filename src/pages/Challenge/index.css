@@ -18,9 +18,27 @@
 
 .challenge-footer > .testcase {
     flex: 2;
+    display: flex;
     padding: 0.85rem;
+    flex-direction: column;
+}
+
+.testcase > input {
+    flex: 1;
 }
 
 .challenge-footer > .output {
     flex: 3;
+    background-color: black;
+    margin-top: 0.5rem;
+    border-radius: 0.5rem;
+}
+
+.output > p {
+    padding: 0.85rem;
+    color: #adff2f;
+}
+
+.output.error > p {
+    color: red;
 }

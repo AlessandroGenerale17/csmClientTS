@@ -7,14 +7,25 @@ import { fetchChallenge } from '../../store/challenges/actions';
 import Loading from '../../components/Loading';
 import Code from '../../logic/Editor';
 import './index.css';
+import { OnChangeInput } from '../../Types/EventListener';
 
 // FIXME possibly export
 type ParamTypes = {
     id: string;
 };
 
+type CodeOutput = {
+    error: boolean;
+    value: string;
+};
+
 export default function Challenge() {
     const [codeChallenge, setCodeChallenge] = useState<string>('');
+    const [localTestcase, setLocalTestcase] = useState<string>('');
+    const [outputCode, setOutputCode] = useState<CodeOutput>({
+        error: false,
+        value: ''
+    });
     const challenge = useSelector(selectChallenge);
     const id = parseInt(useParams<ParamTypes>().id);
     const dispatch = useDispatch();
@@ -22,7 +33,10 @@ export default function Challenge() {
 
     useEffect(() => {
         if (!challenge || challenge.id !== id) dispatch(fetchChallenge(id));
-        if (challenge !== null) setCodeChallenge(challenge.prompt);
+        if (challenge !== null) {
+            setCodeChallenge(challenge.prompt);
+            setLocalTestcase(challenge.testcases[0].args);
+        }
     }, [dispatch, challenge]);
 
     // TODO here I take care of the state of stuff like test cases input
@@ -51,7 +65,7 @@ export default function Challenge() {
                 const output = runCode(testcase.args);
                 console.log('output ', output);
                 console.log('solution ', solution);
-                if (output !== solution) {
+                if (output !== solution || typeof output !== typeof solution) {
                     console.log('failed');
                     failed = [...failed, index];
                 } else {
@@ -74,8 +88,15 @@ export default function Challenge() {
                 return output;
             }
         } catch (err) {
-            return err;
+            if (err instanceof Error)
+                return { error: `${err} : ${err.message}` };
         }
+    };
+
+    const runCodeWithTestCase = () => {
+        const out = runCode(localTestcase);
+        if (out.error) setOutputCode({ error: true, value: out.error });
+        else setOutputCode({ error: false, value: JSON.stringify(out) });
     };
 
     if (!challenge) return <Loading />;
@@ -93,12 +114,25 @@ export default function Challenge() {
                     className='editor-newSnippet'
                     prompt={codeChallenge}
                     handleCodeChange={handleCodeChange}
-                    runCode={submitSolution}
+                    submitSolution={submitSolution}
+                    runCode={runCodeWithTestCase}
                 />
             </div>
             <div className='challenge-footer'>
-                <div className='testcase'>TESTCASE INPUT</div>
-                <div className='output'>OUTPUT</div>
+                <div className='testcase'>
+                    <label htmlFor='testcase-input'>Testcase</label>
+                    <input
+                        id='testcase-input'
+                        type='text'
+                        value={localTestcase}
+                        onChange={(e: OnChangeInput) =>
+                            setLocalTestcase(e.target.value)
+                        }
+                    />
+                </div>
+                <div className={`output ${outputCode.error && 'error'}`}>
+                    <p>{outputCode.value}</p>
+                </div>
             </div>
         </div>
     );

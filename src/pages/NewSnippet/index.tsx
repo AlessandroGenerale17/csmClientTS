@@ -68,6 +68,7 @@ export default function NewSnippet() {
                     handleCodeChange={handleCodeChange}
                     prompt={formState.code}
                     runCode={() => {}}
+                    submitSolution={() => {}}
                 />
             </div>
         </div>
