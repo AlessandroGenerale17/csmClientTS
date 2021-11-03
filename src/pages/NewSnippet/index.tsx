@@ -7,18 +7,13 @@ import { createSnippet } from '../../store/snippets/actions';
 import { useHistory } from 'react-router-dom';
 import { showFormAlertWithTimeout } from '../../store/appState/actions';
 import { isFormValid } from '../../Lib/Validators';
+import { FormState } from '../../Types/FormState';
 import './index.css';
-
-export type FormState = {
-    title: { value: string; err: boolean };
-    description: { value: string; err: boolean };
-    code: string;
-    isOpen: boolean;
-};
 
 const initialFormState = {
     title: { value: '', err: false },
     description: { value: '', err: false },
+    language: { value: '', err: false },
     code: '',
     isOpen: true
 };
@@ -74,8 +69,7 @@ export default function NewSnippet() {
                     handleFormChange={handleFormChange}
                     closeForm={closeForm}
                     className='form-newSnippet'
-                    title={formState.title}
-                    description={formState.description}
+                    form={formState}
                 />
                 <Editor
                     className='editor-newSnippet'

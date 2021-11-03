@@ -2,7 +2,8 @@ import {
     OnChange,
     OnChangeInput,
     OnClick,
-    OnSubmit
+    OnSubmit,
+    OnChangeSelect
 } from '../../Types/EventListener';
 import LoadingButton from '../Button/LoadingButton/';
 import { useSelector } from 'react-redux';
@@ -11,6 +12,11 @@ import CloseButton from '../Button/CloseButton/';
 import FormAlert from '../../components/Alert/FormInputAlert/';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
+import NativeSelect from '@mui/material/NativeSelect';
+
+import FormControl from '@mui/material/FormControl';
+import { FormState } from '../../Types/FormState';
+import InputLabel from '@mui/material/InputLabel';
 import './index.css';
 
 type Props = {
@@ -18,20 +24,13 @@ type Props = {
     handleFormSubmit: (e: OnSubmit) => void;
     closeForm: (e: OnClick) => void;
     className: string;
-    title: { value: string; err: boolean };
-    description: { value: string; err: boolean };
+    form: FormState;
 };
 
 export default function AddSnippetForm(props: Props) {
-    const {
-        handleFormChange,
-        handleFormSubmit,
-        closeForm,
-        className,
-        title,
-        description
-    } = props;
-
+    const { handleFormChange, handleFormSubmit, closeForm, form, className } =
+        props;
+    const { title, description, language } = form;
     const loading = useSelector(selectSaveLoading);
 
     return (
@@ -54,6 +53,21 @@ export default function AddSnippetForm(props: Props) {
                 onChange={(e: OnChangeInput) => handleFormChange(e)}
                 error={title.err}
             />
+            <FormControl>
+                <InputLabel variant='standard' htmlFor='uncontrolled-native'>
+                    Language
+                </InputLabel>
+                <NativeSelect
+                    inputProps={{
+                        name: 'language',
+                        id: 'uncontrolled-native'
+                    }}
+                >
+                    <option value={10}>Ten</option>
+                    <option value={20}>Twenty</option>
+                    <option value={30}>Thirty</option>
+                </NativeSelect>
+            </FormControl>
             <TextField
                 name='description'
                 id='outlined-multiline'
@@ -61,7 +75,7 @@ export default function AddSnippetForm(props: Props) {
                 multiline
                 rows={4}
                 value={description.value}
-                onChange={(e: OnChange) => handleFormChange(e)}
+                onChange={(e: OnChangeInput) => handleFormChange(e)}
                 error={description.err}
             />
             <div className='form-commands'>

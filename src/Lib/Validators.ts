@@ -8,7 +8,6 @@ export const isFormValid = (
     const { title, description, code } = formState;
     const errors = [];
     if (!title.value.trim().length) {
-        console.log('entering for title');
         setFormState((prev) => ({
             ...prev,
             title: { value: title.value, err: true }

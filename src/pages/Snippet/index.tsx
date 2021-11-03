@@ -32,6 +32,7 @@ type ParamTypes = {
 type FormState = {
     title: { value: string; err: boolean };
     description: { value: string; err: boolean };
+    language: { value: string; err: boolean };
     code: string;
     isOpen: boolean;
 };
@@ -39,6 +40,7 @@ type FormState = {
 const initialFormState = {
     title: { value: '', err: false },
     description: { value: '', err: false },
+    language: { value: '', err: false },
     code: '',
     isOpen: false
 };
@@ -59,6 +61,7 @@ export default function Snippet() {
                 title: { value: snippet.title, err: false },
                 description: { value: snippet.description, err: false },
                 code: snippet.code,
+                language: { value: snippet.language, err: false },
                 isOpen: false
             });
     }, [dispatch, snippet]);
@@ -112,6 +115,7 @@ export default function Snippet() {
             ...snippet,
             title: { value: snippet.title, err: false },
             description: { value: snippet.description, err: false },
+            language: { value: snippet.language, err: false },
             isOpen: false
         });
     };
@@ -136,8 +140,7 @@ export default function Snippet() {
                     handleFormChange={handleFormChange}
                     closeForm={closeForm}
                     className='form-newSnippet'
-                    title={formState.title}
-                    description={formState.description}
+                    form={formState}
                 />
             )}
             <div className='editor-container'>
