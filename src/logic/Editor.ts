@@ -5,45 +5,34 @@ export default class Editor {
     tabIndex: number = 2;
     height: string;
     theme: string = 'dark';
-    fn: (...args: any[]) => any = () => 0;
+    fn: Function;
 
     /**
      * @param {string} theme - light or dark
      * @param {number} height - e.g. 100-200-300 etc...
      */
     constructor(height: number) {
-        this.lineWrapping = true;
         this.height = `${height}px`;
+        this.fn = () => {};
     }
 
     /**
      * @param {string} hiddenPrompt  - code before function declaration
      * @param {string} userInput - code entered by the user
      * @param {string} fnName - name of function to call
+     * @param {string} args - arguments passed to fn as string '[1, 2]'
      */
-    setUserFn = (hiddenPrompt: string, userInput: string, fnName: string) => {
+    setUserFn = (
+        hiddenPrompt: string,
+        userInput: string,
+        fnName: string,
+        args: string
+    ) => {
         // eslint-disable-next-line no-new-func
         this.fn = new Function(
-            `${hiddenPrompt}${userInput} return ${fnName};`
-        )();
+            `${hiddenPrompt}${userInput}\n\treturn ${fnName}(${args})`
+        );
     };
 
-    /**
-     * @param {any} args - arguments passed by test case
-     */
-    runFn = (args: any[]) => this.fn(...args);
+    runFn = () => this.fn();
 }
-
-/**
-  function {
-    // hidden
-    const c = 1;
-    // prompt
-    function add(a) {
-        return a + c;
-    }
-
-    return add
-  }
- 
- */

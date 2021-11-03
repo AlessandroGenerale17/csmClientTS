@@ -28,6 +28,7 @@ export interface CodeSnippet extends Snippet {
     prompt: string;
     hiddenPrompt: string;
     fName: string;
+    numArgs: number;
     testcases: Testcase[];
     // 0 easy 1 medium 2 hard
     difficulty: Difficulty;

@@ -276,16 +276,16 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
             ) : null}
             {showToolbarOptions ? (
                 <Tooltip title='Add'>
-                    <IconButton>
-                        <Link
-                            to='/newSnippet'
-                            style={{
-                                fontSize: 'large'
-                            }}
-                        >
+                    <Link
+                        to='/newSnippet'
+                        style={{
+                            fontSize: 'large'
+                        }}
+                    >
+                        <IconButton>
                             <AddIcon />
-                        </Link>
-                    </IconButton>
+                        </IconButton>
+                    </Link>
                 </Tooltip>
             ) : null}
         </Toolbar>

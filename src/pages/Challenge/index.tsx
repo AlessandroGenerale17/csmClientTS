@@ -5,7 +5,7 @@ import { useParams } from 'react-router';
 import { selectChallenge } from '../../store/challenges/selectors';
 import { fetchChallenge } from '../../store/challenges/actions';
 import Loading from '../../components/Loading';
-import Code from '../../logic/Editor';
+import Code from '../../Logic/Editor';
 import './index.css';
 import { OnChangeInput } from '../../Types/EventListener';
 
@@ -76,22 +76,29 @@ export default function Challenge() {
         }
     };
 
-    // TODO
-    // please do not delete the prompt given to you
-    // please give the right amount of arguments to the function
     const runCode = (stringArgs: string) => {
         try {
             const args = JSON.parse(stringArgs);
             if (challenge !== null) {
+                if (args.length !== 2)
+                    return {
+                        error: `Provided ${args.length} arguments, but the function expects ${challenge.numArgs}`
+                    };
                 const hiddenCode = challenge.hiddenPrompt
                     ? challenge.hiddenPrompt
                     : '';
-                code.setUserFn(hiddenCode, codeChallenge, challenge.fName);
-                const output = code.runFn(args);
+                code.setUserFn(
+                    hiddenCode,
+                    codeChallenge,
+                    challenge.fName,
+                    args
+                );
+                const output = code.runFn();
                 return output;
             }
         } catch (err) {
             if (err instanceof Error) return { error: `${err}` };
+            console.log(err);
         }
     };
 
