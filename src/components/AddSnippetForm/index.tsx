@@ -9,6 +9,8 @@ import { useSelector } from 'react-redux';
 import { selectSaveLoading } from '../../store/appState/selectors';
 import CloseButton from '../Button/CloseButton/';
 import FormAlert from '../../components/Alert/FormInputAlert/';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
 import './index.css';
 
 type Props = {
@@ -33,35 +35,35 @@ export default function AddSnippetForm(props: Props) {
     const loading = useSelector(selectSaveLoading);
 
     return (
-        <form
-            id='snippetForm'
+        <Box
             className={className}
-            onSubmit={(e: OnSubmit) => handleFormSubmit(e)}
+            component='form'
+            sx={{
+                '& > :not(style)': { m: 1 }
+            }}
+            noValidate
+            autoComplete='off'
         >
             <FormAlert />
-            <label htmlFor='title'>Title</label>
-            <input
-                id='title'
-                type='text'
-                style={{ borderColor: title.err ? 'red' : 'black' }}
-                onChange={(e: OnChangeInput) => handleFormChange(e)}
+            <TextField
+                name='title'
+                id='outlined-basic'
+                label='Title'
+                variant='outlined'
                 value={title.value}
+                onChange={(e: OnChangeInput) => handleFormChange(e)}
+                error={title.err}
             />
-
-            <label htmlFor='language'>Language</label>
-            {/* TODO fix so that it works with the languages available */}
-            <select id='language'>
-                <option value='JavaScript'>JavaScript</option>
-                <option value='C'>C</option>
-            </select>
-            <label htmlFor='markup'>Description</label>
-            <textarea
-                id='description'
-                form='snippetForm'
-                style={{ borderColor: description.err ? 'red' : 'black' }}
-                onChange={(e: OnChange) => handleFormChange(e)}
+            <TextField
+                name='description'
+                id='outlined-multiline'
+                label='Description'
+                multiline
+                rows={4}
                 value={description.value}
-            ></textarea>
+                onChange={(e: OnChange) => handleFormChange(e)}
+                error={description.err}
+            />
             <div className='form-commands'>
                 <LoadingButton
                     backgroundColor='#282c34'
@@ -70,6 +72,6 @@ export default function AddSnippetForm(props: Props) {
                 />
                 <CloseButton handleClick={closeForm} />
             </div>
-        </form>
+        </Box>
     );
 }

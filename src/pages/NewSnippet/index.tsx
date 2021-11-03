@@ -6,18 +6,21 @@ import { OnChange, OnClick, OnSubmit } from '../../Types/EventListener';
 import { createSnippet } from '../../store/snippets/actions';
 import { useHistory } from 'react-router-dom';
 import { showFormAlertWithTimeout } from '../../store/appState/actions';
+import { isFormValid } from '../../Lib/Validators';
 import './index.css';
 
-type FormState = {
+export type FormState = {
     title: { value: string; err: boolean };
     description: { value: string; err: boolean };
     code: string;
+    isOpen: boolean;
 };
 
 const initialFormState = {
     title: { value: '', err: false },
     description: { value: '', err: false },
-    code: ''
+    code: '',
+    isOpen: true
 };
 
 export default function NewSnippet() {
@@ -36,45 +39,29 @@ export default function NewSnippet() {
     const handleFormChange = (e: OnChange) =>
         setFormState({
             ...formState,
-            [e.target.id]: { value: e.target.value, err: false }
+            [e.target.name]: { value: e.target.value, err: false }
         });
-
-    const dispatchFormError = (inputFieldLabel: string) =>
-        dispatch(
-            showFormAlertWithTimeout(
-                `Please provide a ${inputFieldLabel}  to your snippet`
-            )
-        );
 
     const handleFormSubmit = async (e: OnSubmit) => {
         e.preventDefault();
-        const { code } = formState;
-        const description = formState.description.value;
-        const title = formState.title.value;
+        const { title, description, code } = formState;
+        const validForm = isFormValid(formState, setFormState);
 
-        if (!title.trim().length) {
-            dispatchFormError('title');
-            setFormState(() => ({
-                ...formState,
-                title: { value: formState.title.value, err: true }
-            }));
-        } else if (!description.trim().length) {
-            dispatchFormError('description');
-            setFormState(() => ({
-                ...formState,
-                description: {
-                    value: formState.description.value,
-                    err: true
-                }
-            }));
-        } else {
-            dispatch(createSnippet(title, description, code));
+        if (validForm.length === 0) {
+            dispatch(createSnippet(title.value, description.value, code));
             setFormState(initialFormState);
             history.push('/manager');
+        } else {
+            dispatch(
+                showFormAlertWithTimeout(
+                    `Please enter something for fields: ${validForm
+                        .toString()
+                        .split(',')
+                        .join(', ')}`
+                )
+            );
         }
     };
-
-    console.log(formState);
 
     const closeForm = (e: OnClick) => history.push('/manager');
 

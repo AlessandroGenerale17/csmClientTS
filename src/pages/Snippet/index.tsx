@@ -22,6 +22,7 @@ import {
 
 import './index.css';
 import { showFormAlertWithTimeout } from '../../store/appState/actions';
+import { isFormValid } from '../../Lib/Validators';
 
 // FIXME possibly export
 type ParamTypes = {
@@ -73,45 +74,30 @@ export default function Snippet() {
     const handleFormChange = (e: OnChange) => {
         setFormState({
             ...formState,
-            [e.target.id]: { value: e.target.value, err: false }
+            [e.target.name]: { value: e.target.value, err: false }
         });
     };
 
-    const dispatchFormError = (inputFieldLabel: string) =>
-        dispatch(
-            showFormAlertWithTimeout(
-                `Please provide a ${inputFieldLabel}  to your snippet`
-            )
-        );
-
     const handleFormSubmit = (e: OnSubmit) => {
         e.preventDefault();
-        const { code } = formState;
-        const title = formState.title.value;
-        const description = formState.description.value;
-
-        if (!title.trim().length) {
-            dispatchFormError('title');
-            setFormState(() => ({
-                ...formState,
-                title: { value: formState.title.value, err: true }
-            }));
-        } else if (!description.trim().length) {
-            dispatchFormError('description');
-            setFormState(() => ({
-                ...formState,
-                description: { value: formState.description.value, err: true }
-            }));
-        } else {
-            dispatch(patchSnippet(id, title, description, code));
-        }
+        const { title, description, code } = formState;
+        const validForm = isFormValid(formState, setFormState);
+        if (validForm.length === 0)
+            dispatch(patchSnippet(id, title.value, description.value, code));
+        else
+            dispatch(
+                showFormAlertWithTimeout(
+                    `Please enter something for fields: ${validForm
+                        .toString()
+                        .split(',')
+                        .join(', ')}`
+                )
+            );
     };
 
     const saveCode = () => {
-        const { code } = formState;
-        const title = formState.title.value;
-        const description = formState.description.value;
-        dispatch(patchSnippet(id, title, description, code));
+        const { title, description, code } = formState;
+        dispatch(patchSnippet(id, title.value, description.value, code));
     };
 
     const handleFormClick = (e: OnClickFormDiv) => {
