@@ -3,9 +3,9 @@ import CodeMirror from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
 import Switch from '../Switch/';
 import PlayButton from '../Button/PlayButton';
-import './index.css';
 import SubmitSolutionButton from '../Button/SubmitSolutionButton';
 import { Keyboard } from '../../Types/EventListener';
+import './index.css';
 
 type Props = {
     type: string;
@@ -14,15 +14,11 @@ type Props = {
     handleCodeChange: (code: string) => void;
     submitSolution: () => void;
     runCode: () => void;
-    // performDispatch: () => void;
-    // displayOutput: () => void;
-    // tableName: string;
-    // // TODO perform dispatch to delete
-    // performDispatch: (snippetsToDelete: readonly string[]) => void;
+    saveCode: () => void;
 };
 
 export default function Editor(props: Props) {
-    const { type, prompt, className,handleCodeChange, runCode, submitSolution } = props;
+    const { type, prompt, className, handleCodeChange, runCode, submitSolution, saveCode } = props;
 
     const [theme, setTheme] = useState<boolean>(false);
 
@@ -31,6 +27,9 @@ export default function Editor(props: Props) {
     const handleKeyDown = (e: React.KeyboardEvent) => {
         if (e.ctrlKey && e.key === 'r') {
             runCode();
+        }
+        if (e.ctrlKey && e.key === 's') {
+            saveCode();
         }
     };
 

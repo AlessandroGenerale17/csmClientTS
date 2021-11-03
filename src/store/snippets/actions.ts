@@ -1,4 +1,4 @@
-import { Dispatch } from 'redux';
+
 import { AppDispatch, RootState } from '..';
 import axios from 'axios';
 
@@ -8,6 +8,8 @@ import { SnippetActions } from './types';
 import {
     appDoneLoading,
     appLoading,
+    saveDoneLoading,
+    saveLoading,
     showMessageWithTimeout
 } from '../appState/actions';
 
@@ -114,7 +116,7 @@ export const patchSnippet =
     (id: number, title: string, description: string, code: string) =>
     async (dispatch: AppDispatch, getState: () => RootState) => {
         try {
-            dispatch(appLoading());
+            dispatch(saveLoading());
             const res = await axios.patch(`${apiUrl}/snippets/${id}`, {
                 title,
                 code,
@@ -123,10 +125,10 @@ export const patchSnippet =
             dispatch(saveSnippet({ ...res.data }));
             // update snippet in  list of snippets
             dispatch(updateSnippet({ ...res.data }));
-            dispatch(appDoneLoading());
+            dispatch(saveDoneLoading());
         } catch (err) {
             if (err instanceof Error) console.log(err.message);
-            dispatch(appDoneLoading());
+            dispatch(saveDoneLoading());
         }
     };
 
@@ -148,8 +150,6 @@ export const removeSnippets =
                           }
                       })
                     : await axios.delete(`${apiUrl}/snippets/${idsArray[0]}`);
-            // TODO Dispatch to reducer the deleted stuff
-            // FIXME
             dispatch(
                 deleteSnippets(
                     idsArray

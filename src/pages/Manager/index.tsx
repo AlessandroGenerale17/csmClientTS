@@ -15,7 +15,7 @@ export default function Manager() {
     const token = useSelector(selectToken);
 
     useEffect(() => {
-        dispatch(fetchSnippets);
+        if (!snippets.length) dispatch(fetchSnippets);
     }, [dispatch, token]);
 
     const deleteSnippets = (snippetsToDelete: readonly string[]) =>

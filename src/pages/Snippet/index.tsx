@@ -5,7 +5,11 @@ import { fetchSnippet } from '../../store/snippets/actions';
 import { selectSnippet } from '../../store/snippets/selectors';
 import Editor from '../../components/Editor';
 import Loading from '../../components/Loading';
-import { selectAppLoading } from '../../store/appState/selectors';
+import LinearProgress from '../../components/LinearProgress/';
+import {
+    selectAppLoading,
+    selectSaveLoading
+} from '../../store/appState/selectors';
 import { patchSnippet } from '../../store/snippets/actions';
 import ReactMarkdown from 'react-markdown';
 import AddSnippetForm from '../../components/AddSnippetForm';
@@ -17,6 +21,7 @@ import {
 } from '../../Types/EventListener';
 
 import './index.css';
+import { showFormAlertWithTimeout } from '../../store/appState/actions';
 
 // FIXME possibly export
 type ParamTypes = {
@@ -42,6 +47,7 @@ export default function Snippet() {
     const dispatch = useDispatch();
     const snippet = useSelector(selectSnippet);
     const loading = useSelector(selectAppLoading);
+    const saveLoading = useSelector(selectSaveLoading);
     const [formState, setFormState] = useState<FormState>(initialFormState);
 
     useEffect(() => {
@@ -69,13 +75,25 @@ export default function Snippet() {
         });
     };
 
-    const handleFormSubmit = async (e: OnSubmit) => {
+    const handleFormSubmit = (e: OnSubmit) => {
         e.preventDefault();
-        // TODO Check form validity...
         const { title, description, code } = formState;
 
+        if (!title.trim().length)
+            dispatch(
+                showFormAlertWithTimeout(
+                    'Please provide a title to your snippet'
+                )
+            );
+        else {
+            dispatch(patchSnippet(id, title, description, code));
+            setTimeout(() => setFormState(initialFormState), 1500);
+        }
+    };
+
+    const saveCode = () => {
+        const { title, description, code } = formState;
         dispatch(patchSnippet(id, title, description, code));
-        setFormState(initialFormState);
     };
 
     const handleFormClick = (e: OnClickFormDiv) => {
@@ -114,14 +132,18 @@ export default function Snippet() {
                     description={formState.description}
                 />
             )}
-            <Editor
-                type='snippet'
-                className='editor-newSnippet'
-                prompt={snippet.code}
-                handleCodeChange={handleCodeChange}
-                runCode={() => {}}
-                submitSolution={() => {}}
-            />
+            <div className='editor-container'>
+                <Editor
+                    type='snippet'
+                    className='editor-newSnippet'
+                    prompt={snippet.code}
+                    handleCodeChange={handleCodeChange}
+                    runCode={() => {}}
+                    saveCode={saveCode}
+                    submitSolution={() => {}}
+                />
+                {saveLoading && <LinearProgress />}
+            </div>
         </div>
     );
 }

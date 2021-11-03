@@ -102,9 +102,7 @@ export default function Challenge() {
     if (!challenge) return <Loading />;
 
     return (
-        <div
-            className='challenge-page'
-        >
+        <div className='challenge-page'>
             <div className='challenge'>
                 <div className='challenge-details'>
                     <h2>Question</h2>
@@ -117,6 +115,7 @@ export default function Challenge() {
                     handleCodeChange={handleCodeChange}
                     submitSolution={submitSolution}
                     runCode={runCodeWithTestCase}
+                    saveCode={() => {}}
                 />
             </div>
             <div className='challenge-footer'>

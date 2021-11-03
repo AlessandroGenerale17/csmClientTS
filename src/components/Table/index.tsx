@@ -463,7 +463,7 @@ export default function EnhancedTable(props: Props) {
                                             )}
                                             <TableCell align='right'>
                                                 {moment(row.createdAt).format(
-                                                    'DD-MM-YY, HH:MM:SS'
+                                                    'DD-MM-YY, HH:MM:ss'
                                                 )}
                                             </TableCell>
                                         </TableRow>

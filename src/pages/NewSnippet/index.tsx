@@ -2,9 +2,10 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import AddSnippetForm from '../../components/AddSnippetForm';
 import Editor from '../../components/Editor';
-import { OnChange, OnSubmit } from '../../Types/EventListener';
+import { OnChange, OnClick, OnSubmit } from '../../Types/EventListener';
 import { createSnippet } from '../../store/snippets/actions';
 import { useHistory } from 'react-router-dom';
+import { showFormAlertWithTimeout } from '../../store/appState/actions';
 import './index.css';
 
 type FormState = {
@@ -40,15 +41,21 @@ export default function NewSnippet() {
 
     const handleFormSubmit = async (e: OnSubmit) => {
         e.preventDefault();
-        // TODO Check form validity...
-        console.log('submitting ', formState);
         const { title, description, code } = formState;
-        dispatch(createSnippet(title, description, code));
-        setFormState(initialFormState);
-        history.push('/manager');
+        if (!title.trim().length)
+            dispatch(
+                showFormAlertWithTimeout(
+                    'Please provide a title for your snippet'
+                )
+            );
+        else {
+            dispatch(createSnippet(title, description, code));
+            setFormState(initialFormState);
+            history.push('/manager');
+        }
     };
 
-    const performDispatch = () => {};
+    const closeForm = (e: OnClick) => history.push('/manager');
 
     return (
         <div className='page'>
@@ -57,7 +64,7 @@ export default function NewSnippet() {
                 <AddSnippetForm
                     handleFormSubmit={handleFormSubmit}
                     handleFormChange={handleFormChange}
-                    closeForm={() => {}}
+                    closeForm={closeForm}
                     className='form-newSnippet'
                     title={formState.title}
                     description={formState.description}
@@ -67,6 +74,7 @@ export default function NewSnippet() {
                     type='snippet'
                     handleCodeChange={handleCodeChange}
                     prompt={formState.code}
+                    saveCode={() => {}}
                     runCode={() => {}}
                     submitSolution={() => {}}
                 />
