@@ -5,5 +5,6 @@ export type OnChangeInputArea = React.ChangeEvent<HTMLTextAreaElement>;
 export type OnSubmit = React.FormEvent;
 export type OnClick = React.MouseEvent<HTMLButtonElement>;
 export type OnClickFormDiv = React.MouseEvent<HTMLDivElement>;
+export type Keyboard = React.KeyboardEvent;
 
 export type OnChange = OnChangeInput | OnChangeInputArea;

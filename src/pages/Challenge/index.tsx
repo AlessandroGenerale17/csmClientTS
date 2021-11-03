@@ -1,13 +1,15 @@
 import Editor from '../../components/Editor';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { selectChallenge } from '../../store/challenges/selectors';
 import { fetchChallenge } from '../../store/challenges/actions';
 import Loading from '../../components/Loading';
+import { OnChangeInput } from '../../Types/EventListener';
+import CancelIcon from '@mui/icons-material/Cancel';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import Code from '../../Logic/Editor';
 import './index.css';
-import { OnChangeInput } from '../../Types/EventListener';
 
 // FIXME possibly export
 type ParamTypes = {
@@ -22,10 +24,7 @@ type CodeOutput = {
 export default function Challenge() {
     const [codeChallenge, setCodeChallenge] = useState<string>('');
     const [localTestcase, setLocalTestcase] = useState<string>('');
-    const [outputCode, setOutputCode] = useState<CodeOutput>({
-        error: false,
-        value: ''
-    });
+    const [output, setOutput] = useState<CodeOutput[]>([]);
     const challenge = useSelector(selectChallenge);
     const id = parseInt(useParams<ParamTypes>().id);
     const dispatch = useDispatch();
@@ -41,38 +40,30 @@ export default function Challenge() {
 
     // TODO here I take care of the state of stuff like test cases input
     // submission
-
     const handleCodeChange = (code: string) => {
         setCodeChallenge(code);
     };
 
-    // const displayOutput = () => {
-    //     const out = runCode();
-    //     console.log('output: ', out);
-    //     // if the output matches
-    //     if (typeof out === 'number' && out === 4)
-    //         console.log('you passed a test');
-    // };
-
     const submitSolution = () => {
+        const submitOutput: CodeOutput[] = [];
         if (challenge !== null) {
-            let score = 0;
-            const total = challenge.testcases.length;
-            let failed: number[] = [];
-
             challenge.testcases.forEach((testcase, index) => {
                 const solution = JSON.parse(testcase.solution);
-                const output = runCode(testcase.args);
-                console.log('output ', output);
-                console.log('solution ', solution);
-                if (output !== solution || typeof output !== typeof solution) {
-                    console.log('failed');
-                    failed = [...failed, index];
+                const out = runCode(testcase.args);
+                if (out !== solution || typeof out !== typeof solution) {
+                    console.log('failed ');
+                    submitOutput.push({
+                        error: true,
+                        value: `Testcase ${index + 1} failed`
+                    });
                 } else {
-                    score += 1;
+                    submitOutput.push({
+                        error: false,
+                        value: `Testcase ${index + 1} passed`
+                    });
                 }
             });
-            console.log('score ', score, total);
+            setOutput(submitOutput);
         }
     };
 
@@ -104,18 +95,19 @@ export default function Challenge() {
 
     const runCodeWithTestCase = () => {
         const out = runCode(localTestcase);
-        if (out.error) setOutputCode({ error: true, value: out.error });
-        else setOutputCode({ error: false, value: JSON.stringify(out) });
+        if (out.error) setOutput([{ error: true, value: out.error }]);
+        else setOutput([{ error: false, value: JSON.stringify(out) }]);
     };
 
     if (!challenge) return <Loading />;
 
     return (
-        <div className='challenge-page'>
+        <div
+            className='challenge-page'
+        >
             <div className='challenge'>
                 <div className='challenge-details'>
                     <h2>Question</h2>
-                    {/*<Editor />*/}
                     <p>Some text about question MD formatSome text about</p>
                 </div>
                 <Editor
@@ -139,8 +131,26 @@ export default function Challenge() {
                         }
                     />
                 </div>
-                <div className={`output ${outputCode.error && 'error'}`}>
-                    <p>{outputCode.value}</p>
+                <div className='output'>
+                    {output.map((out, index) => (
+                        <p
+                            key={index}
+                            style={{
+                                color: `${out.error ? 'red' : ' #adff2f'}`
+                            }}
+                        >
+                            {out.error ? (
+                                <CancelIcon style={{ color: 'red' }} />
+                            ) : (
+                                output.length > 1 && (
+                                    <CheckBoxIcon
+                                        style={{ color: '#adff2f' }}
+                                    />
+                                )
+                            )}
+                            {out.value}
+                        </p>
+                    ))}
                 </div>
             </div>
         </div>

@@ -5,6 +5,7 @@ import Switch from '../Switch/';
 import PlayButton from '../Button/PlayButton';
 import './index.css';
 import SubmitSolutionButton from '../Button/SubmitSolutionButton';
+import { Keyboard } from '../../Types/EventListener';
 
 type Props = {
     type: string;
@@ -21,20 +22,18 @@ type Props = {
 };
 
 export default function Editor(props: Props) {
-    const { type, prompt, handleCodeChange, runCode, submitSolution } = props;
+    const { type, prompt, className,handleCodeChange, runCode, submitSolution } = props;
 
     const [theme, setTheme] = useState<boolean>(false);
-    // FIXME
-    const { className } = props;
 
     const changeTheme = () => setTheme(() => !theme);
-    // CTRL S TO SAVE
-    // const handleKeyDown = (e: React.KeyboardEvent) => {
-    //     if (e.ctrlKey && e.key === 's') {
-    //         dispatch(patchSnippet(props.id, js));
-    //     }
-    // };
-    //style={{ border: '1px solid black', flex: 3 }}
+
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+        if (e.ctrlKey && e.key === 'r') {
+            runCode();
+        }
+    };
+
     return (
         <div className={className}>
             <div className={`toolbar ${theme ? 'active' : ''}`}>
@@ -50,6 +49,7 @@ export default function Editor(props: Props) {
                 onChange={(value, _) => {
                     handleCodeChange(value);
                 }}
+                onKeyDown={(e: Keyboard) => handleKeyDown(e)}
                 style={{ border: '1px solid black' }}
                 value={prompt}
                 extensions={[javascript({ jsx: true })]}

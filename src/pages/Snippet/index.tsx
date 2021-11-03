@@ -56,26 +56,26 @@ export default function Snippet() {
 
     if (loading || !snippet) return <Loading />;
 
-    const handleCodeChange = (code: string) => {
+    const handleCodeChange = (code: string) =>
         setFormState({
             ...formState,
             code: code
         });
-    };
 
-    const handleFormChange = (e: OnChange) =>
+    const handleFormChange = (e: OnChange) => {
         setFormState({
             ...formState,
             [e.target.id]: e.target.value
         });
+    };
 
     const handleFormSubmit = async (e: OnSubmit) => {
         e.preventDefault();
         // TODO Check form validity...
         const { title, description, code } = formState;
+
         dispatch(patchSnippet(id, title, description, code));
         setFormState(initialFormState);
-        // history.push('/manager');
     };
 
     const handleFormClick = (e: OnClickFormDiv) => {
@@ -92,15 +92,6 @@ export default function Snippet() {
         });
     };
 
-    const performDispatch = () => {};
-    /* TODO make form appear when user clicks on an 'editable' field */
-    /* const addPizza = (e: React.FormEvent) => {
-        e.preventDefault();
-        dispatch(add(formState));
-        // clear form
-        setFormState({ name: '', description: '' });
-
-    }; */
     return (
         <div className='snippet-page'>
             {!formState.isOpen ? (
