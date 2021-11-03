@@ -9,14 +9,14 @@ import { showFormAlertWithTimeout } from '../../store/appState/actions';
 import './index.css';
 
 type FormState = {
-    title: string;
-    description: string;
+    title: { value: string; err: boolean };
+    description: { value: string; err: boolean };
     code: string;
 };
 
 const initialFormState = {
-    title: '',
-    description: '',
+    title: { value: '', err: false },
+    description: { value: '', err: false },
     code: ''
 };
 
@@ -36,24 +36,45 @@ export default function NewSnippet() {
     const handleFormChange = (e: OnChange) =>
         setFormState({
             ...formState,
-            [e.target.id]: e.target.value
+            [e.target.id]: { value: e.target.value, err: false }
         });
+
+    const dispatchFormError = (inputFieldLabel: string) =>
+        dispatch(
+            showFormAlertWithTimeout(
+                `Please provide a ${inputFieldLabel}  to your snippet`
+            )
+        );
 
     const handleFormSubmit = async (e: OnSubmit) => {
         e.preventDefault();
-        const { title, description, code } = formState;
-        if (!title.trim().length)
-            dispatch(
-                showFormAlertWithTimeout(
-                    'Please provide a title for your snippet'
-                )
-            );
-        else {
+        const { code } = formState;
+        const description = formState.description.value;
+        const title = formState.title.value;
+
+        if (!title.trim().length) {
+            dispatchFormError('title');
+            setFormState(() => ({
+                ...formState,
+                title: { value: formState.title.value, err: true }
+            }));
+        } else if (!description.trim().length) {
+            dispatchFormError('description');
+            setFormState(() => ({
+                ...formState,
+                description: {
+                    value: formState.description.value,
+                    err: true
+                }
+            }));
+        } else {
             dispatch(createSnippet(title, description, code));
             setFormState(initialFormState);
             history.push('/manager');
         }
     };
+
+    console.log(formState);
 
     const closeForm = (e: OnClick) => history.push('/manager');
 

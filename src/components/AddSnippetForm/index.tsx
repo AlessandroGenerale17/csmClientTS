@@ -10,15 +10,14 @@ import { selectSaveLoading } from '../../store/appState/selectors';
 import CloseButton from '../Button/CloseButton/';
 import FormAlert from '../../components/Alert/FormInputAlert/';
 import './index.css';
-import { TextField } from '@material-ui/core';
 
 type Props = {
     handleFormChange: (e: OnChange) => void;
     handleFormSubmit: (e: OnSubmit) => void;
     closeForm: (e: OnClick) => void;
     className: string;
-    title: string;
-    description: string;
+    title: { value: string; err: boolean };
+    description: { value: string; err: boolean };
 };
 
 export default function AddSnippetForm(props: Props) {
@@ -44,8 +43,9 @@ export default function AddSnippetForm(props: Props) {
             <input
                 id='title'
                 type='text'
+                style={{ borderColor: title.err ? 'red' : 'black' }}
                 onChange={(e: OnChangeInput) => handleFormChange(e)}
-                value={title}
+                value={title.value}
             />
 
             <label htmlFor='language'>Language</label>
@@ -58,8 +58,9 @@ export default function AddSnippetForm(props: Props) {
             <textarea
                 id='description'
                 form='snippetForm'
+                style={{ borderColor: description.err ? 'red' : 'black' }}
                 onChange={(e: OnChange) => handleFormChange(e)}
-                value={description}
+                value={description.value}
             ></textarea>
             <div className='form-commands'>
                 <LoadingButton

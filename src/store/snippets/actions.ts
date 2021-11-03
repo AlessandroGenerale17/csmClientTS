@@ -1,4 +1,3 @@
-
 import { AppDispatch, RootState } from '..';
 import axios from 'axios';
 
@@ -104,7 +103,9 @@ export const fetchSnippet =
             console.log('fetching snippet');
             dispatch(appLoading());
             const res = await axios.get(`${apiUrl}/snippets/${id}`);
-            dispatch(saveSnippet({ ...res.data }));
+            dispatch(
+                saveSnippet({ ...res.data, language: res.data.language.name })
+            );
             dispatch(appDoneLoading());
         } catch (err) {
             if (err instanceof Error) console.log(err.message);

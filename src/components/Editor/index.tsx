@@ -60,3 +60,4 @@ export default function Editor(props: Props) {
         </div>
     );
 }
+

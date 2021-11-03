@@ -29,15 +29,15 @@ type ParamTypes = {
 };
 
 type FormState = {
-    title: string;
-    description: string;
+    title: { value: string; err: boolean };
+    description: { value: string; err: boolean };
     code: string;
     isOpen: boolean;
 };
 
 const initialFormState = {
-    title: '',
-    description: '',
+    title: { value: '', err: false },
+    description: { value: '', err: false },
     code: '',
     isOpen: false
 };
@@ -55,7 +55,9 @@ export default function Snippet() {
         if (!snippet || snippet.id !== id) dispatch(fetchSnippet(id));
         if (snippet !== null)
             setFormState({
-                ...snippet,
+                title: { value: snippet.title, err: false },
+                description: { value: snippet.description, err: false },
+                code: snippet.code,
                 isOpen: false
             });
     }, [dispatch, snippet]);
@@ -71,28 +73,44 @@ export default function Snippet() {
     const handleFormChange = (e: OnChange) => {
         setFormState({
             ...formState,
-            [e.target.id]: e.target.value
+            [e.target.id]: { value: e.target.value, err: false }
         });
     };
 
+    const dispatchFormError = (inputFieldLabel: string) =>
+        dispatch(
+            showFormAlertWithTimeout(
+                `Please provide a ${inputFieldLabel}  to your snippet`
+            )
+        );
+
     const handleFormSubmit = (e: OnSubmit) => {
         e.preventDefault();
-        const { title, description, code } = formState;
+        const { code } = formState;
+        const title = formState.title.value;
+        const description = formState.description.value;
 
-        if (!title.trim().length)
-            dispatch(
-                showFormAlertWithTimeout(
-                    'Please provide a title to your snippet'
-                )
-            );
-        else {
+        if (!title.trim().length) {
+            dispatchFormError('title');
+            setFormState(() => ({
+                ...formState,
+                title: { value: formState.title.value, err: true }
+            }));
+        } else if (!description.trim().length) {
+            dispatchFormError('description');
+            setFormState(() => ({
+                ...formState,
+                description: { value: formState.description.value, err: true }
+            }));
+        } else {
             dispatch(patchSnippet(id, title, description, code));
-            setTimeout(() => setFormState(initialFormState), 1500);
         }
     };
 
     const saveCode = () => {
-        const { title, description, code } = formState;
+        const { code } = formState;
+        const title = formState.title.value;
+        const description = formState.description.value;
         dispatch(patchSnippet(id, title, description, code));
     };
 
@@ -106,6 +124,8 @@ export default function Snippet() {
     const closeForm = (e: OnClick) => {
         setFormState({
             ...snippet,
+            title: { value: snippet.title, err: false },
+            description: { value: snippet.description, err: false },
             isOpen: false
         });
     };
@@ -115,12 +135,14 @@ export default function Snippet() {
             {!formState.isOpen ? (
                 <div className='snippet-content' onClick={handleFormClick}>
                     <h2 id='title'>{snippet.title}</h2>
+                    <p>{snippet.language}</p>
                     <div className='markdown'>
                         <ReactMarkdown
                             className='md'
                             children={snippet.description}
                         />
                     </div>
+                    {/* <div>TAGS</div> */}
                 </div>
             ) : (
                 <AddSnippetForm
