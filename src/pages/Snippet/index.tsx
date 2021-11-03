@@ -84,10 +84,9 @@ export default function Snippet() {
         else
             dispatch(
                 showFormAlertWithTimeout(
-                    `Please enter something for fields: ${validForm
-                        .toString()
-                        .split(',')
-                        .join(', ')}`
+                    `Please enter something for field${
+                        validForm.length > 1 ? 's' : ''
+                    }: ${validForm.toString().split(',').join(', ')}`
                 )
             );
     };

@@ -85,7 +85,7 @@ export default function AddSnippetForm(props: Props) {
                     onChange={(e: OnChangeSelect) => handleFormChange(e)}
                     error={language.err}
                 >
-                    <option></option>
+                    <option value={-1}></option>
                     {languageOptions.map((language) => (
                         <option key={language.id} value={language.id}>
                             {language.name}

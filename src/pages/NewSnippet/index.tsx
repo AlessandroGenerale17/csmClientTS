@@ -51,17 +51,16 @@ export default function NewSnippet() {
         } else {
             dispatch(
                 showFormAlertWithTimeout(
-                    `Please enter something for fields: ${validForm
-                        .toString()
-                        .split(',')
-                        .join(', ')}`
+                    `Please enter something for field${
+                        validForm.length > 1 ? 's' : ''
+                    }: ${validForm.toString().split(',').join(', ')}`
                 )
             );
         }
     };
 
     const closeForm = (e: OnClick) => history.push('/manager');
-
+    console.log(formState);
     return (
         <div className='page'>
             <h1>Fill in the form to add a new snippet!</h1>
