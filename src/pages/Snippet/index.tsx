@@ -23,24 +23,17 @@ import {
 import './index.css';
 import { showFormAlertWithTimeout } from '../../store/appState/actions';
 import { isFormValid } from '../../Lib/Validators';
+import { FormState } from '../../Types/FormState';
 
 // FIXME possibly export
 type ParamTypes = {
     id: string;
 };
 
-type FormState = {
-    title: { value: string; err: boolean };
-    description: { value: string; err: boolean };
-    language: { value: string; err: boolean };
-    code: string;
-    isOpen: boolean;
-};
-
 const initialFormState = {
     title: { value: '', err: false },
     description: { value: '', err: false },
-    language: { value: '', err: false },
+    language: { value: -1, err: false },
     code: '',
     isOpen: false
 };
@@ -61,7 +54,7 @@ export default function Snippet() {
                 title: { value: snippet.title, err: false },
                 description: { value: snippet.description, err: false },
                 code: snippet.code,
-                language: { value: snippet.language, err: false },
+                language: { value: snippet.languageId, err: false },
                 isOpen: false
             });
     }, [dispatch, snippet]);
@@ -75,6 +68,7 @@ export default function Snippet() {
         });
 
     const handleFormChange = (e: OnChange) => {
+        console.log(e.target.name, e.target.value);
         setFormState({
             ...formState,
             [e.target.name]: { value: e.target.value, err: false }
@@ -115,7 +109,7 @@ export default function Snippet() {
             ...snippet,
             title: { value: snippet.title, err: false },
             description: { value: snippet.description, err: false },
-            language: { value: snippet.language, err: false },
+            language: { value: snippet.languageId, err: false },
             isOpen: false
         });
     };

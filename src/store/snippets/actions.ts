@@ -84,6 +84,7 @@ export const fetchSnippets = async (
                 code: snip.code,
                 userId: snip.userId,
                 language: snip.language.name,
+                languageId: snip.language.id,
                 createdAt: snip.createdAt,
                 updatedAt: snip.updatedAt
             })
@@ -179,6 +180,7 @@ export const createSnippet =
                 description,
                 code,
                 userId,
+                // FIXME THIS
                 languageId: 1
             });
             const newSnippet: Snippet = {
@@ -187,7 +189,9 @@ export const createSnippet =
                 description: res.data.description,
                 code: res.data.code,
                 userId: res.data.id,
+                // FIXME THIS
                 language: res.data.language.name,
+                languageId: res.data.language.id,
                 createdAt: res.data.createdAt,
                 updatedAt: res.data.updatedAt
             };

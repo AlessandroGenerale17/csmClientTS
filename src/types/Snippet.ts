@@ -20,6 +20,7 @@ export interface Snippet {
     code: string;
     userId: number;
     language: string;
+    languageId: number;
     createdAt: Date;
     updatedAt: Date;
 }

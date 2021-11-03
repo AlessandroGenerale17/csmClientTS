@@ -30,6 +30,7 @@ export const fetchChallenges = async (
                 code: codeSnip.code,
                 userId: codeSnip.userId,
                 language: codeSnip.language.name,
+                languageId: codeSnip.language.id,
                 prompt: codeSnip.prompt,
                 hiddenPrompt: codeSnip.hiddenPrompt,
                 fName: codeSnip.fName,

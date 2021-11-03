@@ -13,7 +13,7 @@ import './index.css';
 const initialFormState = {
     title: { value: '', err: false },
     description: { value: '', err: false },
-    language: { value: '', err: false },
+    language: { value: -1, err: false },
     code: '',
     isOpen: true
 };
@@ -31,15 +31,17 @@ export default function NewSnippet() {
         });
     };
 
-    const handleFormChange = (e: OnChange) =>
+    const handleFormChange = (e: OnChange) => {
+        console.log(e.target.name, e.target.value);
         setFormState({
             ...formState,
             [e.target.name]: { value: e.target.value, err: false }
         });
+    };
 
     const handleFormSubmit = async (e: OnSubmit) => {
         e.preventDefault();
-        const { title, description, code } = formState;
+        const { title, description, code, language } = formState;
         const validForm = isFormValid(formState, setFormState);
 
         if (validForm.length === 0) {

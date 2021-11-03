@@ -1,9 +1,8 @@
 import React from 'react';
-import { SelectChangeEvent } from '@mui/material/Select';
 
 export type OnChangeInput = React.ChangeEvent<HTMLInputElement>;
 export type OnChangeInputArea = React.ChangeEvent<HTMLTextAreaElement>;
-export type OnChangeSelect = SelectChangeEvent;
+export type OnChangeSelect = React.ChangeEvent<HTMLSelectElement>;
 export type OnSubmit = React.FormEvent;
 export type OnClick = React.MouseEvent<HTMLButtonElement>;
 export type OnClickFormDiv = React.MouseEvent<HTMLDivElement>;
