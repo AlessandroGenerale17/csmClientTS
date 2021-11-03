@@ -47,7 +47,7 @@ export default function NewSnippet() {
         if (validForm.length === 0) {
             dispatch(createSnippet(title.value, description.value, code));
             setFormState(initialFormState);
-            history.push('/manager');
+            setTimeout(() => history.push('/manager'), 2000);
         } else {
             dispatch(
                 showFormAlertWithTimeout(
@@ -60,7 +60,7 @@ export default function NewSnippet() {
     };
 
     const closeForm = (e: OnClick) => history.push('/manager');
-    console.log(formState);
+
     return (
         <div className='page'>
             <h1>Fill in the form to add a new snippet!</h1>
