@@ -115,7 +115,13 @@ export const fetchSnippet =
     };
 
 export const patchSnippet =
-    (id: number, title: string, description: string, code: string, languageId: number) =>
+    (
+        id: number,
+        title: string,
+        description: string,
+        code: string,
+        languageId: number
+    ) =>
     async (dispatch: AppDispatch, getState: () => RootState) => {
         try {
             dispatch(saveLoading());
@@ -125,9 +131,15 @@ export const patchSnippet =
                 languageId,
                 description
             });
-            dispatch(saveSnippet({ ...res.data }));
+            dispatch(
+                saveSnippet({ ...res.data, language: res.data.language.name })
+            );
             // update snippet in  list of snippets
-            dispatch(updateSnippet({ ...res.data }));
+            dispatch(
+                updateSnippet({
+                    ...res.data, language: res.data.language.name
+                })
+            );
             dispatch(saveDoneLoading());
         } catch (err) {
             if (err instanceof Error) console.log(err.message);

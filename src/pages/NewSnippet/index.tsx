@@ -66,7 +66,6 @@ export default function NewSnippet() {
     };
 
     const closeForm = (e: OnClick) => history.push('/manager');
-
     return (
         <div className='page'>
             <h1>Fill in the form to add a new snippet!</h1>

@@ -50,7 +50,6 @@ export default function Snippet() {
         // IMPORTANT
         if (!snippet || snippet.id !== id) dispatch(fetchSnippet(id));
         if (snippet !== null) {
-            console.log('setting form', snippet.languageId);
             setFormState({
                 title: { value: snippet.title, err: false },
                 description: { value: snippet.description, err: false },
@@ -70,17 +69,24 @@ export default function Snippet() {
         });
 
     const handleFormChange = (e: OnChange) => {
-        console.log(e.target.name, e.target.value);
-        setFormState({
-            ...formState,
-            [e.target.name]: { value: e.target.value, err: false }
-        });
+        if (e.target.name === 'language') {
+            setFormState({
+                ...formState,
+                [e.target.name]: { value: parseInt(e.target.value), err: false }
+            });
+        } else {
+            setFormState({
+                ...formState,
+                [e.target.name]: { value: e.target.value, err: false }
+            });
+        }
     };
 
     const handleFormSubmit = (e: OnSubmit) => {
         e.preventDefault();
         const { title, description, code, language } = formState;
         const validForm = isFormValid(formState, setFormState);
+
         if (validForm.length === 0)
             dispatch(
                 patchSnippet(
