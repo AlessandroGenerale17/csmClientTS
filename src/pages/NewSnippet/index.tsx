@@ -2,21 +2,20 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import AddSnippetForm from '../../components/AddSnippetForm';
 import Editor from '../../components/Editor';
-import { OnChange, OnSubmit } from '../../Types/EventListener';
+import { OnChange, OnClick, OnSubmit } from '../../Types/EventListener';
 import { createSnippet } from '../../store/snippets/actions';
 import { useHistory } from 'react-router-dom';
+import { showFormAlertWithTimeout } from '../../store/appState/actions';
+import { isFormValid } from '../../Lib/Validators';
+import { FormState } from '../../Types/FormState';
 import './index.css';
 
-type FormState = {
-    title: string;
-    description: string;
-    code: string;
-};
-
 const initialFormState = {
-    title: '',
-    description: '',
-    code: ''
+    title: { value: '', err: false },
+    description: { value: '', err: false },
+    language: { value: -1, err: false },
+    code: '',
+    isOpen: true
 };
 
 export default function NewSnippet() {
@@ -32,24 +31,41 @@ export default function NewSnippet() {
         });
     };
 
-    const handleFormChange = (e: OnChange) =>
+    const handleFormChange = (e: OnChange) => {
         setFormState({
             ...formState,
-            [e.target.id]: e.target.value
+            [e.target.name]: { value: e.target.value, err: false }
         });
+    };
 
     const handleFormSubmit = async (e: OnSubmit) => {
         e.preventDefault();
-        // TODO Check form validity...
-        console.log('submitting ', formState);
-        const { title, description, code } = formState;
-        dispatch(createSnippet(title, description, code));
-        setFormState(initialFormState);
-        history.push('/manager');
+        const { title, description, code, language } = formState;
+        const validForm = isFormValid(formState, setFormState);
+
+        if (validForm.length === 0) {
+            dispatch(
+                createSnippet(
+                    title.value,
+                    description.value,
+                    code,
+                    language.value
+                )
+            );
+            setFormState(initialFormState);
+            setTimeout(() => history.push('/manager'), 2000);
+        } else {
+            dispatch(
+                showFormAlertWithTimeout(
+                    `Please enter something for field${
+                        validForm.length > 1 ? 's' : ''
+                    }: ${validForm.toString().split(',').join(', ')}`
+                )
+            );
+        }
     };
 
-    const performDispatch = () => {};
-
+    const closeForm = (e: OnClick) => history.push('/manager');
     return (
         <div className='page'>
             <h1>Fill in the form to add a new snippet!</h1>
@@ -57,18 +73,19 @@ export default function NewSnippet() {
                 <AddSnippetForm
                     handleFormSubmit={handleFormSubmit}
                     handleFormChange={handleFormChange}
-                    closeForm={() => {}}
+                    closeForm={closeForm}
                     className='form-newSnippet'
-                    title={formState.title}
-                    description={formState.description}
+                    form={formState}
                 />
                 <Editor
                     className='editor-newSnippet'
                     type='snippet'
-                    codeToInject=''
                     handleCodeChange={handleCodeChange}
-                    performDispatch={performDispatch}
-                    displayOutput={() => {}}
+                    prompt={formState.code}
+                    language={formState.language.value}
+                    saveCode={() => {}}
+                    runCode={() => {}}
+                    submitSolution={() => {}}
                 />
             </div>
         </div>

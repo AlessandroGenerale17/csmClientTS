@@ -1,4 +1,3 @@
-import { Dispatch } from 'redux';
 import { AppDispatch, RootState } from '..';
 import axios from 'axios';
 
@@ -8,6 +7,8 @@ import { SnippetActions } from './types';
 import {
     appDoneLoading,
     appLoading,
+    saveDoneLoading,
+    saveLoading,
     showMessageWithTimeout
 } from '../appState/actions';
 
@@ -83,6 +84,7 @@ export const fetchSnippets = async (
                 code: snip.code,
                 userId: snip.userId,
                 language: snip.language.name,
+                languageId: snip.language.id,
                 createdAt: snip.createdAt,
                 updatedAt: snip.updatedAt
             })
@@ -102,7 +104,9 @@ export const fetchSnippet =
             console.log('fetching snippet');
             dispatch(appLoading());
             const res = await axios.get(`${apiUrl}/snippets/${id}`);
-            dispatch(saveSnippet({ ...res.data }));
+            dispatch(
+                saveSnippet({ ...res.data, language: res.data.language.name })
+            );
             dispatch(appDoneLoading());
         } catch (err) {
             if (err instanceof Error) console.log(err.message);
@@ -111,22 +115,35 @@ export const fetchSnippet =
     };
 
 export const patchSnippet =
-    (id: number, title: string, description: string, code: string) =>
+    (
+        id: number,
+        title: string,
+        description: string,
+        code: string,
+        languageId: number
+    ) =>
     async (dispatch: AppDispatch, getState: () => RootState) => {
         try {
-            dispatch(appLoading());
+            dispatch(saveLoading());
             const res = await axios.patch(`${apiUrl}/snippets/${id}`, {
                 title,
                 code,
+                languageId,
                 description
             });
-            dispatch(saveSnippet({ ...res.data }));
+            dispatch(
+                saveSnippet({ ...res.data, language: res.data.language.name })
+            );
             // update snippet in  list of snippets
-            dispatch(updateSnippet({ ...res.data }));
-            dispatch(appDoneLoading());
+            dispatch(
+                updateSnippet({
+                    ...res.data, language: res.data.language.name
+                })
+            );
+            dispatch(saveDoneLoading());
         } catch (err) {
             if (err instanceof Error) console.log(err.message);
-            dispatch(appDoneLoading());
+            dispatch(saveDoneLoading());
         }
     };
 
@@ -148,8 +165,6 @@ export const removeSnippets =
                           }
                       })
                     : await axios.delete(`${apiUrl}/snippets/${idsArray[0]}`);
-            // TODO Dispatch to reducer the deleted stuff
-            // FIXME
             dispatch(
                 deleteSnippets(
                     idsArray
@@ -166,7 +181,7 @@ export const removeSnippets =
     };
 
 export const createSnippet =
-    (title: string, description: string, code: string) =>
+    (title: string, description: string, code: string, languageId: number) =>
     async (dispatch: AppDispatch, getState: () => RootState) => {
         try {
             dispatch(appLoading());
@@ -178,7 +193,7 @@ export const createSnippet =
                 description,
                 code,
                 userId,
-                languageId: 1
+                languageId
             });
             const newSnippet: Snippet = {
                 id: res.data.id,
@@ -186,7 +201,9 @@ export const createSnippet =
                 description: res.data.description,
                 code: res.data.code,
                 userId: res.data.id,
+                // FIXME THIS
                 language: res.data.language.name,
+                languageId: res.data.language.id,
                 createdAt: res.data.createdAt,
                 updatedAt: res.data.updatedAt
             };

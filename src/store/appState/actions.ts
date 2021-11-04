@@ -6,6 +6,9 @@ import { AppStateActions } from './types';
 export const appLoading = () => ({ type: 'APP_LOADING' });
 export const appDoneLoading = () => ({ type: 'APP_DONE_LOADING' });
 export const clearMessage = () => ({ type: 'CLEAR_MESSAGE' });
+export const saveLoading = () => ({ type: 'SAVE_LOADING' });
+export const saveDoneLoading = () => ({ type: 'SAVE_DONE_LOADING' });
+export const clearFormAlert = () => ({ type: 'CLEAR_FORM_ALERT' });
 
 export const setMessage = (
     variant: string,
@@ -22,6 +25,11 @@ export const setMessage = (
     };
 };
 
+export const setFormAlert = (text: string) => ({
+    type: 'SET_FORM_ALERT',
+    payload: text
+});
+
 export const showMessageWithTimeout = (
     variant: string,
     dismissable: boolean,
@@ -36,3 +44,9 @@ export const showMessageWithTimeout = (
         setTimeout(() => dispatch(clearMessage()), timeout);
     };
 };
+
+export const showFormAlertWithTimeout =
+    (text: string) => (dispatch: AppDispatch, getState: () => RootState) => {
+        dispatch(setFormAlert(text));
+        setTimeout(() => dispatch(clearFormAlert()), 1500);
+    };

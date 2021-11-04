@@ -3,3 +3,4 @@ export type StateMessage = {
     dismissable: boolean;
     text: string;
 };
+

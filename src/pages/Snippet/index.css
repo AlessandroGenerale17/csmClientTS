@@ -22,3 +22,7 @@
 .markdown > .md {
     padding: 0.85rem;
 }
+
+.editor-container {
+    flex: 3;
+}

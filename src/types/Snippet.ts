@@ -20,6 +20,7 @@ export interface Snippet {
     code: string;
     userId: number;
     language: string;
+    languageId: number;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -28,7 +29,8 @@ export interface CodeSnippet extends Snippet {
     prompt: string;
     hiddenPrompt: string;
     fName: string;
-    // testCases: Testcase[];
+    numArgs: number;
+    testcases: Testcase[];
     // 0 easy 1 medium 2 hard
     difficulty: Difficulty;
 }

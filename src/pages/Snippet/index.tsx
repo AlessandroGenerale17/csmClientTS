@@ -5,7 +5,11 @@ import { fetchSnippet } from '../../store/snippets/actions';
 import { selectSnippet } from '../../store/snippets/selectors';
 import Editor from '../../components/Editor';
 import Loading from '../../components/Loading';
-import { selectAppLoading } from '../../store/appState/selectors';
+import LinearProgress from '../../components/LinearProgress/';
+import {
+    selectAppLoading,
+    selectSaveLoading
+} from '../../store/appState/selectors';
 import { patchSnippet } from '../../store/snippets/actions';
 import ReactMarkdown from 'react-markdown';
 import AddSnippetForm from '../../components/AddSnippetForm';
@@ -17,22 +21,19 @@ import {
 } from '../../Types/EventListener';
 
 import './index.css';
+import { showFormAlertWithTimeout } from '../../store/appState/actions';
+import { isFormValid } from '../../Lib/Validators';
+import { FormState } from '../../Types/FormState';
 
 // FIXME possibly export
 type ParamTypes = {
     id: string;
 };
 
-type FormState = {
-    title: string;
-    description: string;
-    code: string;
-    isOpen: boolean;
-};
-
 const initialFormState = {
-    title: '',
-    description: '',
+    title: { value: '', err: false },
+    description: { value: '', err: false },
+    language: { value: -1, err: false },
     code: '',
     isOpen: false
 };
@@ -42,40 +43,81 @@ export default function Snippet() {
     const dispatch = useDispatch();
     const snippet = useSelector(selectSnippet);
     const loading = useSelector(selectAppLoading);
+    const saveLoading = useSelector(selectSaveLoading);
     const [formState, setFormState] = useState<FormState>(initialFormState);
 
     useEffect(() => {
         // IMPORTANT
         if (!snippet || snippet.id !== id) dispatch(fetchSnippet(id));
-        if (snippet !== null)
+        if (snippet !== null) {
             setFormState({
-                ...snippet,
+                title: { value: snippet.title, err: false },
+                description: { value: snippet.description, err: false },
+                code: snippet.code,
+                language: { value: snippet.languageId, err: false },
                 isOpen: false
             });
+        }
     }, [dispatch, snippet]);
 
     if (loading || !snippet) return <Loading />;
 
-    const handleCodeChange = (code: string) => {
+    const handleCodeChange = (code: string) =>
         setFormState({
             ...formState,
             code: code
         });
+
+    const handleFormChange = (e: OnChange) => {
+        if (e.target.name === 'language') {
+            setFormState({
+                ...formState,
+                [e.target.name]: { value: parseInt(e.target.value), err: false }
+            });
+        } else {
+            setFormState({
+                ...formState,
+                [e.target.name]: { value: e.target.value, err: false }
+            });
+        }
     };
 
-    const handleFormChange = (e: OnChange) =>
-        setFormState({
-            ...formState,
-            [e.target.id]: e.target.value
-        });
-
-    const handleFormSubmit = async (e: OnSubmit) => {
+    const handleFormSubmit = (e: OnSubmit) => {
         e.preventDefault();
-        // TODO Check form validity...
-        const { title, description, code } = formState;
-        dispatch(patchSnippet(id, title, description, code));
-        setFormState(initialFormState);
-        // history.push('/manager');
+        const { title, description, code, language } = formState;
+        const validForm = isFormValid(formState, setFormState);
+
+        if (validForm.length === 0)
+            dispatch(
+                patchSnippet(
+                    id,
+                    title.value,
+                    description.value,
+                    code,
+                    language.value
+                )
+            );
+        else
+            dispatch(
+                showFormAlertWithTimeout(
+                    `Please enter something for field${
+                        validForm.length > 1 ? 's' : ''
+                    }: ${validForm.toString().split(',').join(', ')}`
+                )
+            );
+    };
+
+    const saveCode = () => {
+        const { title, description, code, language } = formState;
+        dispatch(
+            patchSnippet(
+                id,
+                title.value,
+                description.value,
+                code,
+                language.value
+            )
+        );
     };
 
     const handleFormClick = (e: OnClickFormDiv) => {
@@ -87,31 +129,27 @@ export default function Snippet() {
 
     const closeForm = (e: OnClick) => {
         setFormState({
-            ...snippet,
+            title: { value: snippet.title, err: false },
+            description: { value: snippet.description, err: false },
+            language: { value: snippet.languageId, err: false },
+            code: snippet.code,
             isOpen: false
         });
     };
 
-    const performDispatch = () => {};
-    /* TODO make form appear when user clicks on an 'editable' field */
-    /* const addPizza = (e: React.FormEvent) => {
-        e.preventDefault();
-        dispatch(add(formState));
-        // clear form
-        setFormState({ name: '', description: '' });
-
-    }; */
     return (
         <div className='snippet-page'>
             {!formState.isOpen ? (
                 <div className='snippet-content' onClick={handleFormClick}>
                     <h2 id='title'>{snippet.title}</h2>
+                    <p>{snippet.language}</p>
                     <div className='markdown'>
                         <ReactMarkdown
                             className='md'
                             children={snippet.description}
                         />
                     </div>
+                    {/* <div>TAGS</div> */}
                 </div>
             ) : (
                 <AddSnippetForm
@@ -119,18 +157,23 @@ export default function Snippet() {
                     handleFormChange={handleFormChange}
                     closeForm={closeForm}
                     className='form-newSnippet'
-                    title={formState.title}
-                    description={formState.description}
+                    form={formState}
+                    langId={snippet.languageId}
                 />
             )}
-            <Editor
-                type='snippet'
-                className='editor-newSnippet'
-                codeToInject={snippet.code}
-                handleCodeChange={handleCodeChange}
-                performDispatch={performDispatch}
-                displayOutput={() => {}}
-            />
+            <div className='editor-container'>
+                <Editor
+                    type='snippet'
+                    className='editor-newSnippet'
+                    prompt={snippet.code}
+                    language={formState.language.value}
+                    handleCodeChange={handleCodeChange}
+                    runCode={() => {}}
+                    saveCode={saveCode}
+                    submitSolution={() => {}}
+                />
+                {saveLoading && <LinearProgress />}
+            </div>
         </div>
     );
 }

@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchSnippets, removeSnippets } from '../../store/snippets/actions';
 import { selectSnippets } from '../../store/snippets/selectors';
-import Table from '../../components/Tables';
+import Table from '../../components/Table';
 import Loading from '../../components/Loading';
 import { selectAppLoading } from '../../store/appState/selectors';
 import { selectToken } from '../../store/user/selectors';
@@ -15,7 +15,7 @@ export default function Manager() {
     const token = useSelector(selectToken);
 
     useEffect(() => {
-        dispatch(fetchSnippets);
+        if (!snippets.length) dispatch(fetchSnippets);
     }, [dispatch, token]);
 
     const deleteSnippets = (snippetsToDelete: readonly string[]) =>

@@ -30,13 +30,17 @@ export const fetchChallenges = async (
                 code: codeSnip.code,
                 userId: codeSnip.userId,
                 language: codeSnip.language.name,
+                languageId: codeSnip.language.id,
                 prompt: codeSnip.prompt,
                 hiddenPrompt: codeSnip.hiddenPrompt,
                 fName: codeSnip.fName,
+                numArgs: codeSnip.numArgs,
                 difficulty: {
                     name: codeSnip.difficulty.name,
-                    value: codeSnip.difficulty.value
+                    value: codeSnip.difficulty.value,
+                    color: codeSnip.difficulty.color
                 },
+                testcases: [],
                 createdAt: codeSnip.createdAt,
                 updatedAt: codeSnip.updatedAt
             })

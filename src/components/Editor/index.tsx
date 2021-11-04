@@ -1,67 +1,76 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
-import Code from '../../logic/Editor';
+import { java } from '@codemirror/lang-java';
+import { cpp } from '@codemirror/lang-cpp/';
 import Switch from '../Switch/';
+import PlayButton from '../Button/PlayButton';
+import SubmitSolutionButton from '../Button/SubmitSolutionButton';
+import { Keyboard } from '../../Types/EventListener';
 import './index.css';
 
-type SnippetProp = {
+type Props = {
     type: string;
-    codeToInject: string;
-    handleCodeChange: (code: string) => void;
-    performDispatch: () => void;
-    displayOutput: () => void;
     className: string;
+    prompt: string;
+    language: number;
+    handleCodeChange: (code: string) => void;
+    submitSolution: () => void;
+    runCode: () => void;
+    saveCode: () => void;
 };
 
-type Props = SnippetProp;
-
 export default function Editor(props: Props) {
+    const {
+        type,
+        prompt,
+        className,
+        handleCodeChange,
+        runCode,
+        submitSolution,
+        saveCode,
+        language
+    } = props;
+
     const [theme, setTheme] = useState<boolean>(false);
-    // FIXME
-    const { className } = props;
-    const isRunnable = false;
 
-    const code = new Code(450);
+    const changeTheme = () => setTheme(() => !theme);
 
-    const runCode = () => {
-        try {
-            const args = [2, 2];
-            code.setUserFn('const c = 1;', props.codeToInject, 'add');
-            console.log(code.fn);
-            console.log(code.runFn(args));
-        } catch (err) {
-            console.log(err);
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+        if (e.ctrlKey && e.key === 'r') {
+            runCode();
+        }
+        if (e.ctrlKey && e.key === 's') {
+            saveCode();
         }
     };
 
-    const changeTheme = () => setTheme(() => !theme);
-    // CTRL S TO SAVE
-    // const handleKeyDown = (e: React.KeyboardEvent) => {
-    //     if (e.ctrlKey && e.key === 's') {
-    //         dispatch(patchSnippet(props.id, js));
-    //     }
-    // };
-    //style={{ border: '1px solid black', flex: 3 }}
+    const languages: any[] = [[], javascript({ jsx: true }), java(), cpp()];
+
     return (
         <div className={className}>
             <div className={`toolbar ${theme ? 'active' : ''}`}>
                 <Switch changeTheme={changeTheme} />
-                {/* <button onClick={runCode}>Run</button> */}
-                {/*<button onClick={() => props.performDispatch()}>Save</button>*/}
+                {type === 'code' && (
+                    <>
+                        <PlayButton handleClick={runCode} />
+                        <SubmitSolutionButton handleClick={submitSolution} />
+                    </>
+                )}
             </div>
             <CodeMirror
                 onChange={(value, _) => {
-                    props.handleCodeChange(value);
+                    handleCodeChange(value);
                 }}
-                value={props.codeToInject}
-                extensions={[javascript({ jsx: true })]}
-                height={code.height}
+                onKeyDown={(e: Keyboard) => handleKeyDown(e)}
+                style={{ border: '1px solid black' }}
+                value={prompt}
+                extensions={languages[language]}
+                height='450px'
                 width='600'
-                tabIndex={code.tabIndex}
+                tabIndex={2}
                 theme={theme ? 'light' : 'dark'}
             />
-            {isRunnable && <button onClick={runCode}>Run</button>}
         </div>
     );
 }
