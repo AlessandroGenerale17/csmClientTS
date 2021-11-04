@@ -8,8 +8,15 @@ export type PopularSnippet = {
     issue: boolean;
     title: string;
     description: string;
+    likes: Like[];
     createdAt: Date;
     updatedAt: Date;
+};
+
+export type Like = {
+    id: number;
+    userId: number;
+    snippetId: number;
 };
 
 export type HomeState = {
@@ -22,4 +29,14 @@ export type SavePopularSnippets = {
     payload: PopularSnippet[];
 };
 
-export type HomeActions = SavePopularSnippets;
+export type UpdateLike = {
+    type: 'UPDATE_LIKE';
+    payload: Like;
+};
+
+export type DeleteLike = {
+    type: 'DELETE_LIKE';
+    payload: { userId: number; snippetId: number };
+};
+
+export type HomeActions = SavePopularSnippets | UpdateLike | DeleteLike;

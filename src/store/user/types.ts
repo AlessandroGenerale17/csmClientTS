@@ -10,6 +10,7 @@ type TokenStillValid = {
     payload: {
         name: string;
         email: string;
+        id: number;
     };
 };
 

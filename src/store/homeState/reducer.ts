@@ -7,6 +7,34 @@ const initialState: HomeState = {
 
 const reducer = (state = initialState, action: HomeActions) => {
     switch (action.type) {
+        case 'UPDATE_LIKE':
+            return {
+                ...state,
+                popularSnippets: state.popularSnippets.map((snippet) => {
+                    if (snippet.id === action.payload.snippetId) {
+                        return {
+                            ...snippet,
+                            likes: [...snippet.likes, action.payload]
+                        };
+                    }
+                    return snippet;
+                })
+            };
+        case 'DELETE_LIKE':
+            return {
+                ...state,
+                popularSnippets: state.popularSnippets.map((snippet) => {
+                    if (snippet.id === action.payload.snippetId) {
+                        return {
+                            ...snippet,
+                            likes: snippet.likes.filter(
+                                (like) => like.userId !== action.payload.userId
+                            )
+                        };
+                    }
+                    return snippet;
+                })
+            };
         case 'SAVE_POPULAR_SNIPPETS':
             return {
                 ...state,
