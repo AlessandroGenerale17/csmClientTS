@@ -35,6 +35,7 @@ export const fetchChallenges = async (
                 hiddenPrompt: codeSnip.hiddenPrompt,
                 fName: codeSnip.fName,
                 numArgs: codeSnip.numArgs,
+                issue: false,
                 difficulty: {
                     name: codeSnip.difficulty.name,
                     value: codeSnip.difficulty.value,

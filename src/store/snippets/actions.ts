@@ -83,6 +83,7 @@ export const fetchSnippets = async (
                 description: snip.description,
                 code: snip.code,
                 userId: snip.userId,
+                issue: snip.issue,
                 language: snip.language.name,
                 languageId: snip.language.id,
                 createdAt: snip.createdAt,
@@ -137,7 +138,8 @@ export const patchSnippet =
             // update snippet in  list of snippets
             dispatch(
                 updateSnippet({
-                    ...res.data, language: res.data.language.name
+                    ...res.data,
+                    language: res.data.language.name
                 })
             );
             dispatch(saveDoneLoading());
@@ -188,12 +190,14 @@ export const createSnippet =
             // FIXME auth is missing in this route
             // FIXME missing userId
             const userId = 1;
+            const issue = false;
             const res = await axios.post(`${apiUrl}/snippets/`, {
                 title,
                 description,
                 code,
                 userId,
-                languageId
+                languageId,
+                issue
             });
             const newSnippet: Snippet = {
                 id: res.data.id,
@@ -201,6 +205,7 @@ export const createSnippet =
                 description: res.data.description,
                 code: res.data.code,
                 userId: res.data.id,
+                issue: res.data.issue,
                 // FIXME THIS
                 language: res.data.language.name,
                 languageId: res.data.language.id,
