@@ -309,7 +309,11 @@ export default function EnhancedTable(props: Props) {
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
     const rows = props.list.map((snip): Data => createData(snip));
-    const difficulty = ['Easy', 'Medium', 'Hard'];
+    const difficulty = [
+        { label: 'Easy', color: 'green' },
+        { label: 'Medium', color: 'orange' },
+        { label: 'Hard', color: 'red' }
+    ];
 
     const handleRequestSort = (
         event: React.MouseEvent<unknown>,
@@ -457,8 +461,21 @@ export default function EnhancedTable(props: Props) {
                                                 {row.language}
                                             </TableCell>
                                             {props.type === 'code' && (
-                                                <TableCell align='right'>
-                                                    {difficulty[row.difficulty]}
+                                                <TableCell
+                                                    align='right'
+                                                    style={{
+                                                        color: `${
+                                                            difficulty[
+                                                                row.difficulty
+                                                            ].color
+                                                        }`
+                                                    }}
+                                                >
+                                                    {
+                                                        difficulty[
+                                                            row.difficulty
+                                                        ].label
+                                                    }
                                                 </TableCell>
                                             )}
                                             <TableCell align='right'>

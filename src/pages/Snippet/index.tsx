@@ -49,7 +49,8 @@ export default function Snippet() {
     useEffect(() => {
         // IMPORTANT
         if (!snippet || snippet.id !== id) dispatch(fetchSnippet(id));
-        if (snippet !== null)
+        if (snippet !== null) {
+            console.log('setting form', snippet.languageId);
             setFormState({
                 title: { value: snippet.title, err: false },
                 description: { value: snippet.description, err: false },
@@ -57,6 +58,7 @@ export default function Snippet() {
                 language: { value: snippet.languageId, err: false },
                 isOpen: false
             });
+        }
     }, [dispatch, snippet]);
 
     if (loading || !snippet) return <Loading />;
@@ -77,10 +79,18 @@ export default function Snippet() {
 
     const handleFormSubmit = (e: OnSubmit) => {
         e.preventDefault();
-        const { title, description, code } = formState;
+        const { title, description, code, language } = formState;
         const validForm = isFormValid(formState, setFormState);
         if (validForm.length === 0)
-            dispatch(patchSnippet(id, title.value, description.value, code));
+            dispatch(
+                patchSnippet(
+                    id,
+                    title.value,
+                    description.value,
+                    code,
+                    language.value
+                )
+            );
         else
             dispatch(
                 showFormAlertWithTimeout(
@@ -92,8 +102,16 @@ export default function Snippet() {
     };
 
     const saveCode = () => {
-        const { title, description, code } = formState;
-        dispatch(patchSnippet(id, title.value, description.value, code));
+        const { title, description, code, language } = formState;
+        dispatch(
+            patchSnippet(
+                id,
+                title.value,
+                description.value,
+                code,
+                language.value
+            )
+        );
     };
 
     const handleFormClick = (e: OnClickFormDiv) => {
@@ -105,10 +123,10 @@ export default function Snippet() {
 
     const closeForm = (e: OnClick) => {
         setFormState({
-            ...snippet,
             title: { value: snippet.title, err: false },
             description: { value: snippet.description, err: false },
             language: { value: snippet.languageId, err: false },
+            code: snippet.code,
             isOpen: false
         });
     };
@@ -134,6 +152,7 @@ export default function Snippet() {
                     closeForm={closeForm}
                     className='form-newSnippet'
                     form={formState}
+                    langId={snippet.languageId}
                 />
             )}
             <div className='editor-container'>
@@ -141,6 +160,7 @@ export default function Snippet() {
                     type='snippet'
                     className='editor-newSnippet'
                     prompt={snippet.code}
+                    language={formState.language.value}
                     handleCodeChange={handleCodeChange}
                     runCode={() => {}}
                     saveCode={saveCode}

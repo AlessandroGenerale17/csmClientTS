@@ -32,7 +32,6 @@ export default function NewSnippet() {
     };
 
     const handleFormChange = (e: OnChange) => {
-        console.log(e.target.name, e.target.value);
         setFormState({
             ...formState,
             [e.target.name]: { value: e.target.value, err: false }
@@ -45,7 +44,14 @@ export default function NewSnippet() {
         const validForm = isFormValid(formState, setFormState);
 
         if (validForm.length === 0) {
-            dispatch(createSnippet(title.value, description.value, code));
+            dispatch(
+                createSnippet(
+                    title.value,
+                    description.value,
+                    code,
+                    language.value
+                )
+            );
             setFormState(initialFormState);
             setTimeout(() => history.push('/manager'), 2000);
         } else {
@@ -77,6 +83,7 @@ export default function NewSnippet() {
                     type='snippet'
                     handleCodeChange={handleCodeChange}
                     prompt={formState.code}
+                    language={formState.language.value}
                     saveCode={() => {}}
                     runCode={() => {}}
                     submitSolution={() => {}}

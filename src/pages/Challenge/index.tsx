@@ -112,6 +112,7 @@ export default function Challenge() {
                     type='code'
                     className='editor-newSnippet'
                     prompt={codeChallenge}
+                    language={challenge.languageId}
                     handleCodeChange={handleCodeChange}
                     submitSolution={submitSolution}
                     runCode={runCodeWithTestCase}

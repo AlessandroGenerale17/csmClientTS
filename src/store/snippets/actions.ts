@@ -115,13 +115,14 @@ export const fetchSnippet =
     };
 
 export const patchSnippet =
-    (id: number, title: string, description: string, code: string) =>
+    (id: number, title: string, description: string, code: string, languageId: number) =>
     async (dispatch: AppDispatch, getState: () => RootState) => {
         try {
             dispatch(saveLoading());
             const res = await axios.patch(`${apiUrl}/snippets/${id}`, {
                 title,
                 code,
+                languageId,
                 description
             });
             dispatch(saveSnippet({ ...res.data }));
@@ -168,7 +169,7 @@ export const removeSnippets =
     };
 
 export const createSnippet =
-    (title: string, description: string, code: string) =>
+    (title: string, description: string, code: string, languageId: number) =>
     async (dispatch: AppDispatch, getState: () => RootState) => {
         try {
             dispatch(appLoading());
@@ -180,8 +181,7 @@ export const createSnippet =
                 description,
                 code,
                 userId,
-                // FIXME THIS
-                languageId: 1
+                languageId
             });
             const newSnippet: Snippet = {
                 id: res.data.id,

@@ -17,9 +17,10 @@ import axios from 'axios';
 import FormControl from '@mui/material/FormControl';
 import { FormState } from '../../Types/FormState';
 import InputLabel from '@mui/material/InputLabel';
-import './index.css';
 import { useEffect, useState } from 'react';
 import { apiUrl } from '../../configs';
+import './index.css';
+import Loading from '../Loading';
 
 type Props = {
     handleFormChange: (e: OnChange) => void;
@@ -27,17 +28,26 @@ type Props = {
     closeForm: (e: OnClick) => void;
     className: string;
     form: FormState;
+    langId?: number | null;
 };
 
 export default function AddSnippetForm(props: Props) {
-    const { handleFormChange, handleFormSubmit, closeForm, form, className } =
-        props;
+    const {
+        handleFormChange,
+        handleFormSubmit,
+        closeForm,
+        form,
+        className,
+        langId
+    } = props;
     const { title, description, language } = form;
     const [languageOptions, setLanguageOptions] = useState<
         { name: string; id: number }[]
     >([]);
+
     const loading = useSelector(selectSaveLoading);
 
+    // FIXME should be fetched on snippet manager access
     const fetchLanguages = async () => {
         const res = await axios.get(`${apiUrl}/languages`);
         setLanguageOptions(
@@ -51,6 +61,8 @@ export default function AddSnippetForm(props: Props) {
     useEffect(() => {
         fetchLanguages();
     }, []);
+
+    if (!languageOptions.length) return <Loading />;
 
     return (
         <Box
@@ -81,6 +93,7 @@ export default function AddSnippetForm(props: Props) {
                         name: 'language',
                         id: 'uncontrolled-native'
                     }}
+                    defaultValue={langId}
                     name='language'
                     onChange={(e: OnChangeSelect) => handleFormChange(e)}
                     error={language.err}

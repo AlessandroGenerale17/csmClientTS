@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
+import { java } from '@codemirror/lang-java';
 import Switch from '../Switch/';
 import PlayButton from '../Button/PlayButton';
 import SubmitSolutionButton from '../Button/SubmitSolutionButton';
@@ -11,6 +12,7 @@ type Props = {
     type: string;
     className: string;
     prompt: string;
+    language: number;
     handleCodeChange: (code: string) => void;
     submitSolution: () => void;
     runCode: () => void;
@@ -18,7 +20,16 @@ type Props = {
 };
 
 export default function Editor(props: Props) {
-    const { type, prompt, className, handleCodeChange, runCode, submitSolution, saveCode } = props;
+    const {
+        type,
+        prompt,
+        className,
+        handleCodeChange,
+        runCode,
+        submitSolution,
+        saveCode,
+        language
+    } = props;
 
     const [theme, setTheme] = useState<boolean>(false);
 
@@ -32,6 +43,8 @@ export default function Editor(props: Props) {
             saveCode();
         }
     };
+
+    const languages: any[] = [[], javascript({ jsx: true }), java()];
 
     return (
         <div className={className}>
@@ -51,7 +64,7 @@ export default function Editor(props: Props) {
                 onKeyDown={(e: Keyboard) => handleKeyDown(e)}
                 style={{ border: '1px solid black' }}
                 value={prompt}
-                extensions={[javascript({ jsx: true })]}
+                extensions={languages[language]}
                 height='450px'
                 width='600'
                 tabIndex={2}
@@ -60,4 +73,3 @@ export default function Editor(props: Props) {
         </div>
     );
 }
-
