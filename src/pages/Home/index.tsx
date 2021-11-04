@@ -28,7 +28,6 @@ export default function Home() {
 
     const likeSnippet = (postId: number, likes: Like[]) => {
         if (user) {
-            console.log('liking post ', postId);
             if (likes.filter((like) => like.userId === user.id).length > 0) {
                 dispatch(removeLike(postId));
             } else dispatch(createLike(postId));
@@ -48,13 +47,17 @@ export default function Home() {
                         whiteSpace: 'nowrap'
                     }}
                 >
-                    {popularSnippets.map((snippet: PopularSnippet) => (
-                        <Card
-                            key={snippet.id}
-                            snippet={snippet}
-                            performDispatch={likeSnippet}
-                        />
-                    ))}
+                    {popularSnippets.map((snippet: PopularSnippet) => {
+                        const likes = snippet.likes.map((like) => like.userId);
+                        return (
+                            <Card
+                                key={snippet.id}
+                                snippet={snippet}
+                                performDispatch={likeSnippet}
+                                isLiked={likes.includes(user?.id)}
+                            />
+                        );
+                    })}
                 </div>
             </div>
             <div>
@@ -72,6 +75,7 @@ export default function Home() {
                             key={snippet.id}
                             snippet={snippet}
                             performDispatch={likeSnippet}
+                            isLiked={false}
                         />
                     ))}
                 </div>

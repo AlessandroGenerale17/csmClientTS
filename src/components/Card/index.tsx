@@ -8,9 +8,11 @@ import { Like, PopularSnippet } from '../../store/homeState/types';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import moment from 'moment';
+import './index.css';
 
 type Props = {
     snippet: PopularSnippet;
+    isLiked: boolean;
     performDispatch: (postId: number, likes: Like[]) => void;
 };
 
@@ -25,6 +27,8 @@ export default function SnippetCard(props: Props) {
         likes,
         issue
     } = props.snippet;
+
+    const { isLiked } = props;
     return (
         <Card
             style={{ marginRight: '0.4rem', marginBottom: '0.6rem' }}
@@ -58,11 +62,21 @@ export default function SnippetCard(props: Props) {
                         justifyContent: 'flex-end'
                     }}
                 >
-                    {!issue && (
-                        <FavoriteBorderIcon
-                            onClick={() => props.performDispatch(id, likes)}
-                        />
-                    )}{' '}
+                    {!issue &&
+                        (!isLiked ? (
+                            <FavoriteBorderIcon
+                                className='like-button'
+                                style={{ color: 'red' }}
+                                onClick={() => props.performDispatch(id, likes)}
+                            />
+                        ) : (
+                            <FavoriteIcon
+                                className='like-button'
+                                style={{ color: 'red' }}
+                                onClick={() => props.performDispatch(id, likes)}
+                            />
+                        ))}
+
                     {!issue && likes.length}
                 </div>
             </CardActions>
