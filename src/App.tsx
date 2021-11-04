@@ -16,6 +16,7 @@ import Challenge from './pages/Challenge';
 import MessageBox from './components/MessageBox';
 import NewSnippet from './pages/NewSnippet';
 import './App.css';
+import SnippetDetails from './pages/SnippetDetails';
 
 function App() {
     const dispatch = useDispatch();
@@ -40,6 +41,7 @@ function App() {
                 <Route path='/challenges' component={Challenges} />
                 <Route path='/newSnippet' component={NewSnippet} />
                 <Route path='/snippets/:id' component={Snippet} />
+                <Route path='/snippetDetails/:id' component={SnippetDetails} />
             </Switch>
         </div>
     );

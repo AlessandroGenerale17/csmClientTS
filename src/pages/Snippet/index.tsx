@@ -171,6 +171,7 @@ export default function Snippet() {
                     runCode={() => {}}
                     saveCode={saveCode}
                     submitSolution={() => {}}
+                    editable={true}
                 />
                 {saveLoading && <LinearProgress />}
             </div>

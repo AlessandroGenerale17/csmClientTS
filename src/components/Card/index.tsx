@@ -8,7 +8,10 @@ import { Like, PopularSnippet } from '../../store/homeState/types';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import moment from 'moment';
+import { Link } from 'react-router-dom';
 import './index.css';
+import { useSelector } from 'react-redux';
+import { selectUser } from '../../store/user/selectors';
 
 type Props = {
     snippet: PopularSnippet;
@@ -29,6 +32,7 @@ export default function SnippetCard(props: Props) {
     } = props.snippet;
 
     const { isLiked } = props;
+    const user = useSelector(selectUser);
     return (
         <Card
             style={{ marginRight: '0.4rem', marginBottom: '0.6rem' }}
@@ -54,7 +58,23 @@ export default function SnippetCard(props: Props) {
                 <Typography>{language}</Typography>
             </CardContent>
             <CardActions>
-                <Button size='small'>Learn More</Button>
+                <Button size='small'>
+                    {user?.id === author.id ? (
+                        <Link
+                            style={{ textDecoration: 'none' }}
+                            to={`/snippets/${id}`}
+                        >
+                            Learn More
+                        </Link>
+                    ) : (
+                        <Link
+                            style={{ textDecoration: 'none' }}
+                            to={`/snippetDetails/${id}`}
+                        >
+                            Learn More
+                        </Link>
+                    )}
+                </Button>
                 <div
                     style={{
                         display: 'flex',

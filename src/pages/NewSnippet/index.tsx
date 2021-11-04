@@ -83,6 +83,7 @@ export default function NewSnippet() {
                     handleCodeChange={handleCodeChange}
                     prompt={formState.code}
                     language={formState.language.value}
+                    editable={true}
                     saveCode={() => {}}
                     runCode={() => {}}
                     submitSolution={() => {}}
