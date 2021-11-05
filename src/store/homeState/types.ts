@@ -1,3 +1,5 @@
+import { Comment } from '../../Types/Comment';
+
 export type PopularSnippet = {
     id: number;
     author: {
@@ -9,6 +11,7 @@ export type PopularSnippet = {
     title: string;
     description: string;
     likes: Like[];
+    comments: Comment[];
     createdAt: Date;
     updatedAt: Date;
 };

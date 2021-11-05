@@ -21,6 +21,8 @@ export interface Snippet {
     userId: number;
     language: string;
     languageId: number;
+    comments: [];
+    public: boolean;
     issue: boolean;
     createdAt: Date;
     updatedAt: Date;

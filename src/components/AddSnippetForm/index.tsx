@@ -21,6 +21,7 @@ import { useEffect, useState } from 'react';
 import { apiUrl } from '../../configs';
 import './index.css';
 import Loading from '../Loading';
+import Checkbox from '@mui/material/Checkbox';
 
 type Props = {
     handleFormChange: (e: OnChange) => void;
@@ -40,7 +41,7 @@ export default function AddSnippetForm(props: Props) {
         className,
         langId
     } = props;
-    const { title, description, language } = form;
+    const { title, description, language, pub, issue } = form;
     const [languageOptions, setLanguageOptions] = useState<
         { name: string; id: number }[]
     >([]);
@@ -105,6 +106,26 @@ export default function AddSnippetForm(props: Props) {
                         </option>
                     ))}
                 </NativeSelect>
+                <div
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-evenly'
+                    }}
+                >
+                    <label>Public</label>
+                    <Checkbox
+                        name='public'
+                        onChange={(e: OnChange) => handleFormChange(e)}
+                        checked={pub}
+                    />
+                    <label>Issue</label>
+                    <Checkbox
+                        name='issue'
+                        onChange={(e: OnChange) => handleFormChange(e)}
+                        checked={issue}
+                    />
+                </div>
             </FormControl>
             <TextField
                 name='description'
@@ -116,6 +137,7 @@ export default function AddSnippetForm(props: Props) {
                 onChange={(e: OnChangeInput) => handleFormChange(e)}
                 error={description.err}
             />
+
             <div className='form-commands'>
                 <LoadingButton
                     backgroundColor='#282c34'

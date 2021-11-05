@@ -22,6 +22,7 @@ export const fetchChallenges = async (
     try {
         dispatch(appLoading());
         const res = await axios.get(`${apiUrl}/challenges/`);
+        // FIXME with state local to reducer not general
         const challenges: CodeSnippet[] = res.data.map(
             (codeSnip: any): CodeSnippet => ({
                 id: codeSnip.id,
@@ -36,11 +37,13 @@ export const fetchChallenges = async (
                 fName: codeSnip.fName,
                 numArgs: codeSnip.numArgs,
                 issue: false,
+                public: true,
                 difficulty: {
                     name: codeSnip.difficulty.name,
                     value: codeSnip.difficulty.value,
                     color: codeSnip.difficulty.color
                 },
+                comments: [],
                 testcases: [],
                 createdAt: codeSnip.createdAt,
                 updatedAt: codeSnip.updatedAt

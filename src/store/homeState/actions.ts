@@ -42,6 +42,7 @@ export const fetchPopularSnippets = async (
                     name: snip.user.name
                 },
                 likes: snip.likes,
+                comments: snip.comments,
                 issue: snip.issue,
                 createdAt: snip.createdAt,
                 updatedAt: snip.updatedAt
@@ -75,6 +76,16 @@ export const removeLike =
             const res = await axios.delete(`${apiUrl}/home/like/${snippetId}`);
             const userId = 1;
             dispatch(deleteLike({ userId, snippetId }));
+        } catch (err) {
+            if (err instanceof Error) console.log(err.message);
+        }
+    };
+
+export const createComment =
+    (postId: number, comment: string) =>
+    async (dispatch: AppDispatch, getState: () => RootState) => {
+        try {
+            console.log('dispatching comment ', comment);
         } catch (err) {
             if (err instanceof Error) console.log(err.message);
         }

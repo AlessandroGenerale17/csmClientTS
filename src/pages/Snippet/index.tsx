@@ -24,6 +24,7 @@ import './index.css';
 import { showFormAlertWithTimeout } from '../../store/appState/actions';
 import { isFormValid } from '../../Lib/Validators';
 import { FormState } from '../../Types/FormState';
+import { handleFormChange } from '../../Lib/FormChange';
 
 // FIXME possibly export
 type ParamTypes = {
@@ -35,6 +36,8 @@ const initialFormState = {
     description: { value: '', err: false },
     language: { value: -1, err: false },
     code: '',
+    pub: false,
+    issue: false,
     isOpen: false
 };
 
@@ -55,6 +58,8 @@ export default function Snippet() {
                 description: { value: snippet.description, err: false },
                 code: snippet.code,
                 language: { value: snippet.languageId, err: false },
+                pub: snippet.public,
+                issue: snippet.issue,
                 isOpen: false
             });
         }
@@ -68,23 +73,11 @@ export default function Snippet() {
             code: code
         });
 
-    const handleFormChange = (e: OnChange) => {
-        if (e.target.name === 'language') {
-            setFormState({
-                ...formState,
-                [e.target.name]: { value: parseInt(e.target.value), err: false }
-            });
-        } else {
-            setFormState({
-                ...formState,
-                [e.target.name]: { value: e.target.value, err: false }
-            });
-        }
-    };
+    const formChange = (e: OnChange) => handleFormChange(e, setFormState);
 
     const handleFormSubmit = (e: OnSubmit) => {
         e.preventDefault();
-        const { title, description, code, language } = formState;
+        const { title, description, code, language, pub, issue } = formState;
         const validForm = isFormValid(formState, setFormState);
 
         if (validForm.length === 0)
@@ -94,7 +87,9 @@ export default function Snippet() {
                     title.value,
                     description.value,
                     code,
-                    language.value
+                    language.value,
+                    pub,
+                    issue
                 )
             );
         else
@@ -108,14 +103,16 @@ export default function Snippet() {
     };
 
     const saveCode = () => {
-        const { title, description, code, language } = formState;
+        const { title, description, code, language, pub, issue } = formState;
         dispatch(
             patchSnippet(
                 id,
                 title.value,
                 description.value,
                 code,
-                language.value
+                language.value,
+                pub,
+                issue
             )
         );
     };
@@ -133,6 +130,8 @@ export default function Snippet() {
             description: { value: snippet.description, err: false },
             language: { value: snippet.languageId, err: false },
             code: snippet.code,
+            pub: snippet.public,
+            issue: snippet.issue,
             isOpen: false
         });
     };
@@ -154,7 +153,7 @@ export default function Snippet() {
             ) : (
                 <AddSnippetForm
                     handleFormSubmit={handleFormSubmit}
-                    handleFormChange={handleFormChange}
+                    handleFormChange={formChange}
                     closeForm={closeForm}
                     className='form-newSnippet'
                     form={formState}

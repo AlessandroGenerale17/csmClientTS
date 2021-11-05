@@ -84,8 +84,10 @@ export const fetchSnippets = async (
                 code: snip.code,
                 userId: snip.userId,
                 issue: snip.issue,
+                public: snip.public,
                 language: snip.language.name,
                 languageId: snip.language.id,
+                comments: snip.comments,
                 createdAt: snip.createdAt,
                 updatedAt: snip.updatedAt
             })
@@ -121,7 +123,9 @@ export const patchSnippet =
         title: string,
         description: string,
         code: string,
-        languageId: number
+        languageId: number,
+        pub: boolean,
+        issue: boolean
     ) =>
     async (dispatch: AppDispatch, getState: () => RootState) => {
         try {
@@ -130,7 +134,9 @@ export const patchSnippet =
                 title,
                 code,
                 languageId,
-                description
+                description,
+                public: pub,
+                issue
             });
             dispatch(
                 saveSnippet({ ...res.data, language: res.data.language.name })
@@ -183,21 +189,29 @@ export const removeSnippets =
     };
 
 export const createSnippet =
-    (title: string, description: string, code: string, languageId: number) =>
+    (
+        title: string,
+        description: string,
+        code: string,
+        languageId: number,
+        pub: boolean,
+        issue: boolean
+    ) =>
     async (dispatch: AppDispatch, getState: () => RootState) => {
         try {
             dispatch(appLoading());
             // FIXME auth is missing in this route
             // FIXME missing userId
             const userId = 1;
-            const issue = false;
+            console.log('pubbbbbb action', pub);
             const res = await axios.post(`${apiUrl}/snippets/`, {
                 title,
                 description,
                 code,
                 userId,
                 languageId,
-                issue
+                issue,
+                public: pub
             });
             const newSnippet: Snippet = {
                 id: res.data.id,
@@ -206,7 +220,8 @@ export const createSnippet =
                 code: res.data.code,
                 userId: res.data.id,
                 issue: res.data.issue,
-                // FIXME THIS
+                public: res.data.public,
+                comments: res.data.comments,
                 language: res.data.language.name,
                 languageId: res.data.language.id,
                 createdAt: res.data.createdAt,

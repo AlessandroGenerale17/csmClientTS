@@ -12,6 +12,7 @@ import { Link } from 'react-router-dom';
 import './index.css';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../store/user/selectors';
+import InsertCommentIcon from '@mui/icons-material/InsertComment';
 
 type Props = {
     snippet: PopularSnippet;
@@ -28,6 +29,7 @@ export default function SnippetCard(props: Props) {
         language,
         createdAt,
         likes,
+        comments,
         issue
     } = props.snippet;
 
@@ -98,6 +100,8 @@ export default function SnippetCard(props: Props) {
                         ))}
 
                     {!issue && likes.length}
+                    {!issue && <InsertCommentIcon />}
+                    {!issue && comments.length}
                 </div>
             </CardActions>
             <div

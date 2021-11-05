@@ -21,6 +21,7 @@ const reducer = (state = initialState, action: HomeActions) => {
                 })
             };
         case 'DELETE_LIKE':
+            console.log(action);
             return {
                 ...state,
                 popularSnippets: state.popularSnippets.map((snippet) => {
