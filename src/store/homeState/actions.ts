@@ -3,12 +3,11 @@ import { AppDispatch, RootState } from '..';
 import { apiUrl } from '../../configs';
 import { Comment } from '../../Types/Comment';
 import { appDoneLoading, appLoading } from '../appState/actions';
-import { HomeActions, Like, PopularSnippet } from './types';
+import { HomeActions } from './types';
 import { configs } from '../../Lib/TokenConfigs';
+import { Snippet } from '../../Types/Snippet';
 
-export const savePopularSnippets = (
-    snippets: PopularSnippet[]
-): HomeActions => ({
+export const savePopularSnippets = (snippets: Snippet[]): HomeActions => ({
     type: 'SAVE_POPULAR_SNIPPETS',
     payload: snippets
 });
@@ -34,6 +33,21 @@ export const addComment = (comment: Comment): HomeActions => ({
     payload: comment
 });
 
+export const updateFeedPost = (snippet: Snippet): HomeActions => ({
+    type: 'UPDATE_FEED_POST',
+    payload: snippet
+});
+
+export const addFeedPost = (snippet: Snippet): HomeActions => ({
+    type: 'ADD_FEED_POST',
+    payload: snippet
+});
+
+export const deleteFeedPost = (id: number): HomeActions => ({
+    type: 'DELETE_FEED_POST',
+    payload: id
+});
+
 export const fetchPopularSnippets = async (
     dispatch: AppDispatch,
     getState: () => RootState
@@ -41,23 +55,8 @@ export const fetchPopularSnippets = async (
     try {
         dispatch(appLoading());
         const res = await axios.get(`${apiUrl}/home`);
-        const snippets: PopularSnippet[] = res.data.map(
-            (snip: any): PopularSnippet => ({
-                id: snip.id,
-                title: snip.title,
-                description: snip.description,
-                language: snip.language.name,
-                author: {
-                    id: snip.user.id,
-                    name: snip.user.name
-                },
-                likes: snip.likes,
-                comments: snip.comments,
-                issue: snip.issue,
-                createdAt: snip.createdAt,
-                updatedAt: snip.updatedAt
-            })
-        );
+        const snippets = res.data;
+        console.log('FROm dispatch ', res.data);
         dispatch(savePopularSnippets(snippets));
         dispatch(appDoneLoading());
     } catch (err) {

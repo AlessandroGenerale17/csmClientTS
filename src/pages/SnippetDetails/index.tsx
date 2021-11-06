@@ -41,7 +41,7 @@ export default function SnippetDetails() {
             <div style={{ display: 'flex' }}>
                 <div className='snippet-content'>
                     <h2 id='title'>{snippet.title}</h2>
-                    <p>{snippet.language}</p>
+                    <p>{snippet.language.name}</p>
                     <div style={{ minHeight: '305px' }}>
                         <ReactMarkdown
                             className='md'

@@ -4,7 +4,7 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
-import { Like, PopularSnippet } from '../../store/homeState/types';
+import { Like } from '../../store/homeState/types';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import moment from 'moment';
@@ -13,9 +13,10 @@ import { useSelector } from 'react-redux';
 import { selectUser } from '../../store/user/selectors';
 import InsertCommentIcon from '@mui/icons-material/InsertComment';
 import './index.css';
+import { Snippet } from '../../Types/Snippet';
 
 type Props = {
-    snippet: PopularSnippet;
+    snippet: Snippet;
     isLiked: boolean;
     performDispatch: (postId: number, likes: Like[]) => void;
 };
@@ -25,7 +26,7 @@ export default function SnippetCard(props: Props) {
         id,
         title,
         description,
-        author,
+        user,
         language,
         createdAt,
         likes,
@@ -34,7 +35,7 @@ export default function SnippetCard(props: Props) {
     } = props.snippet;
 
     const { isLiked } = props;
-    const user = useSelector(selectUser);
+    const currentUser = useSelector(selectUser);
     return (
         <Card
             style={{ marginRight: '0.4rem', marginBottom: '0.6rem' }}
@@ -48,7 +49,7 @@ export default function SnippetCard(props: Props) {
                 }}
             >
                 <Avatar style={{ marginRight: '0.5rem' }} />
-                <span>{author.name}</span>
+                <span>{user.name}</span>
             </div>
             <CardContent>
                 <Typography gutterBottom variant='h5' component='div'>
@@ -57,11 +58,11 @@ export default function SnippetCard(props: Props) {
                 <Typography variant='body2' color='text.secondary'>
                     {description}
                 </Typography>
-                <Typography>{language}</Typography>
+                <Typography>{language.name}</Typography>
             </CardContent>
             <CardActions>
                 <Button size='small'>
-                    {user?.id === author.id ? (
+                    {user.id === currentUser?.id ? (
                         <Link
                             style={{ textDecoration: 'none' }}
                             to={`/snippets/${id}`}

@@ -12,6 +12,16 @@ import {
     showMessageWithTimeout
 } from '../appState/actions';
 
+import {
+    addFeedPost,
+    deleteFeedPost,
+    updateFeedPost
+} from '../homeState/actions';
+import {
+    selectPopularSnippets,
+    selectPopularSnippetsIds
+} from '../homeState/selectors';
+
 type ConfigsAuthWithData = {
     headers: {
         Authorization: string;
@@ -121,22 +131,41 @@ export const patchSnippet =
                 public: pub,
                 issue
             });
-            dispatch(
-                saveSnippet({ ...res.data, language: res.data.language.name })
-            );
+            dispatch(saveSnippet({ ...res.data }));
             // update snippet in  list of snippets (manager)
             dispatch(
                 updateSnippet({
-                    ...res.data,
-                    language: res.data.language.name
+                    ...res.data
                 })
             );
-            // update in home()
-            // if (
-            //     !getState()
-            //         .home.issueSnippets.map((issue) => issue.id)
-            //         .includes(res.data.id)
-            // ) dispatch()
+
+            //FIXME
+
+            // if it is public then replace
+            const popularSnippets = selectPopularSnippets(getState());
+            if (popularSnippets.length > 0) {
+                const isIncluded = selectPopularSnippetsIds(
+                    getState()
+                ).includes(id);
+                console.log(isIncluded);
+                if (pub) {
+                    if (isIncluded) {
+                        // update Feed
+                        console.log('update feed');
+                        dispatch(updateFeedPost({ ...res.data }));
+                    } else {
+                        // addToFeed
+                        console.log('add feed');
+                        dispatch(addFeedPost({ ...res.data }));
+                    }
+                } else {
+                    if (isIncluded) {
+                        // delefeed
+                        console.log('deleting from feed');
+                        dispatch(deleteFeedPost({ ...res.data }));
+                    }
+                }
+            }
 
             dispatch(saveDoneLoading());
         } catch (err) {

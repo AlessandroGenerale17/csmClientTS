@@ -12,8 +12,9 @@ import {
     selectPopularSnippets
 } from '../../store/homeState/selectors';
 import Card from '../../components/Card/';
-import { Like, PopularSnippet } from '../../store/homeState/types';
+import { Like } from '../../store/homeState/types';
 import { selectUser } from '../../store/user/selectors';
+import { Snippet } from '../../Types/Snippet';
 
 export default function Home() {
     const loading = useSelector(selectAppLoading);
@@ -47,7 +48,7 @@ export default function Home() {
                         whiteSpace: 'nowrap'
                     }}
                 >
-                    {popularSnippets.map((snippet: PopularSnippet) => {
+                    {popularSnippets.map((snippet: Snippet) => {
                         const likes = snippet.likes.map((like) => like.userId);
                         return (
                             <Card
@@ -69,7 +70,7 @@ export default function Home() {
                         justifyContent: 'space-evenly'
                     }}
                 >
-                    {issueSnippets.map((snippet: PopularSnippet) => (
+                    {issueSnippets.map((snippet: Snippet) => (
                         <Card
                             key={snippet.id}
                             snippet={snippet}

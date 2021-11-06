@@ -1,14 +1,15 @@
 import { RootState } from '..';
-import { PopularSnippet } from './types';
+import { Snippet } from '../../Types/Snippet';
 
-export const selectPopularSnippets = (
-    reduxState: RootState
-): PopularSnippet[] => {
-    return reduxState.home.popularSnippets.filter((snippet) => !snippet.issue);
+export const selectPopularSnippets = (reduxState: RootState): Snippet[] => {
+    return reduxState.home.popularSnippets;
 };
 
 export const selectIssueSnippets = (
     reduxState: RootState
-): PopularSnippet[] => {
+): Snippet[] => {
     return reduxState.home.popularSnippets.filter((snippet) => snippet.issue);
 };
+
+export const selectPopularSnippetsIds = (reduxState: RootState): number[] =>
+    reduxState.home.popularSnippets.map((snippet) => snippet.id);

@@ -53,6 +53,26 @@ const reducer = (state = initialState, action: HomeActions) => {
                 ...state,
                 popularSnippets: [...state.popularSnippets, ...action.payload]
             };
+        case 'ADD_FEED_POST':
+            return {
+                ...state,
+                popularSnippets: [...state.popularSnippets, action.payload]
+            };
+        case 'DELETE_FEED_POST':
+            return {
+                ...state,
+                populatSnippets: state.popularSnippets.filter(
+                    (snippet) => snippet.id !== action.payload
+                )
+            };
+        case 'UPDATE_FEED_POST':
+            return {
+                ...state,
+                popularSnippets: state.popularSnippets.map((snippet) => {
+                    if (snippet.id === action.payload.id) return action.payload;
+                    return snippet;
+                })
+            };
         default:
             return state;
     }

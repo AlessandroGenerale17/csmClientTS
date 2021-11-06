@@ -14,15 +14,18 @@ import { Testcase } from './Testcase';
 import { Difficulty } from './Difficulty';
 import { Comment } from './Comment';
 import { Language } from './Language';
+import { User } from './User';
+import { Like } from '../store/homeState/types';
 
 export interface Snippet {
     id: number;
     title: string;
     description: string;
     code: string;
-    userId: number;
+    user: User;
     language: Language;
     comments: Comment[];
+    likes: Like[];
     public: boolean;
     issue: boolean;
     createdAt: Date;

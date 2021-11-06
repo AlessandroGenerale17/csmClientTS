@@ -1,20 +1,5 @@
 import { Comment } from '../../Types/Comment';
-
-export type PopularSnippet = {
-    id: number;
-    author: {
-        name: string;
-        id: number;
-    };
-    language: string;
-    issue: boolean;
-    title: string;
-    description: string;
-    likes: Like[];
-    comments: Comment[];
-    createdAt: Date;
-    updatedAt: Date;
-};
+import { Snippet } from '../../Types/Snippet';
 
 export type Like = {
     userId: number;
@@ -22,12 +7,27 @@ export type Like = {
 };
 
 export type HomeState = {
-    popularSnippets: PopularSnippet[];
+    popularSnippets: Snippet[];
 };
 
 export type SavePopularSnippets = {
     type: 'SAVE_POPULAR_SNIPPETS';
-    payload: PopularSnippet[];
+    payload: Snippet[];
+};
+
+export type UpdateFeedPost = {
+    type: 'UPDATE_FEED_POST';
+    payload: Snippet;
+};
+
+export type DeleteFeedPost = {
+    type: 'DELETE_FEED_POST';
+    payload: number;
+};
+
+export type AddFeedPost = {
+    type: 'ADD_FEED_POST';
+    payload: Snippet;
 };
 
 export type UpdateLike = {
@@ -49,4 +49,7 @@ export type HomeActions =
     | SavePopularSnippets
     | UpdateLike
     | DeleteLike
-    | AddComment;
+    | AddComment
+    | AddFeedPost
+    | DeleteFeedPost
+    | UpdateFeedPost;
