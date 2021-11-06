@@ -1,3 +1,4 @@
+import { Comment } from '../../Types/Comment';
 import { Snippet } from '../../Types/Snippet';
 
 export type SnippetState = {
@@ -30,9 +31,15 @@ export type AddSnippet = {
     payload: Snippet;
 };
 
+export type AddComment = {
+    type: 'ADD_COMMENT';
+    payload: Comment;
+};
+
 export type SnippetActions =
     | SaveSnippets
     | SaveSnippet
     | UpdateSnippet
     | DeleteSnippets
-    | AddSnippet;
+    | AddSnippet
+    | AddComment;

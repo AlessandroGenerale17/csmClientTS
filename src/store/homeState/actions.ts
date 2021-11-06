@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { AppDispatch, RootState } from '..';
 import { apiUrl } from '../../configs';
+import { Comment } from '../../Types/Comment';
 import { appDoneLoading, appLoading } from '../appState/actions';
 import { HomeActions, Like, PopularSnippet } from './types';
 
@@ -22,6 +23,11 @@ export const deleteLike = (toRemove: {
 }): HomeActions => ({
     type: 'DELETE_LIKE',
     payload: toRemove
+});
+
+export const addComment = (comment: Comment): HomeActions => ({
+    type: 'ADD_COMMENT',
+    payload: comment
 });
 
 export const fetchPopularSnippets = async (
@@ -82,10 +88,18 @@ export const removeLike =
     };
 
 export const createComment =
-    (postId: number, comment: string) =>
+    (snippetId: number, comment: string) =>
     async (dispatch: AppDispatch, getState: () => RootState) => {
         try {
-            console.log('dispatching comment ', comment);
+            console.log('Creating comment ', comment);
+            const userId = 1;
+            const res = await axios.post(`${apiUrl}/comments/`, {
+                userId,
+                snippetId,
+                text: comment
+            });
+            console.log(res.data);
+            dispatch(addComment(res.data));
         } catch (err) {
             if (err instanceof Error) console.log(err.message);
         }

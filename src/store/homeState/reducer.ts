@@ -36,6 +36,19 @@ const reducer = (state = initialState, action: HomeActions) => {
                     return snippet;
                 })
             };
+        case 'ADD_COMMENT':
+            return {
+                ...state,
+                popularSnippets: state.popularSnippets.map((snippet) => {
+                    if (snippet.id === action.payload.snippetId) {
+                        return {
+                            ...snippet,
+                            comments: [...snippet.comments, action.payload]
+                        };
+                    }
+                    return snippet;
+                })
+            };
         case 'SAVE_POPULAR_SNIPPETS':
             return {
                 ...state,

@@ -23,8 +23,10 @@ export default function SnippetDetails() {
     const snippet = useSelector(selectSnippet);
 
     const onCommentChange = (e: OnChange) => setComment(e.target.value);
-    const submitComment = () =>
+    const submitComment = () => {
+        setComment('');
         comment.trim().length && dispatch(createComment(parseInt(id), comment));
+    };
 
     useEffect(() => {
         dispatch(fetchSnippet(parseInt(id)));
@@ -66,6 +68,7 @@ export default function SnippetDetails() {
                         type='text'
                         placeholder='write your comment'
                         onChange={onCommentChange}
+                        value={comment}
                     />
                     <SendIcon
                         style={{ cursor: 'pointer' }}

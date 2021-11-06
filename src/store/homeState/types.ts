@@ -1,4 +1,5 @@
 import { Comment } from '../../Types/Comment';
+import { Snippet } from '../../Types/Snippet';
 
 export type PopularSnippet = {
     id: number;
@@ -42,4 +43,13 @@ export type DeleteLike = {
     payload: { userId: number; snippetId: number };
 };
 
-export type HomeActions = SavePopularSnippets | UpdateLike | DeleteLike;
+export type AddComment = {
+    type: 'ADD_COMMENT';
+    payload: Comment;
+};
+
+export type HomeActions =
+    | SavePopularSnippets
+    | UpdateLike
+    | DeleteLike
+    | AddComment;
