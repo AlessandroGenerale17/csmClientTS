@@ -13,7 +13,10 @@ export default function Comments(props: Props) {
             <div style={{ display: 'flex' }}>
                 <div style={{ flex: 7 }}>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <Avatar style={{ marginRight: '3px' }} />
+                        <Avatar
+                            style={{ marginRight: '3px' }}
+                            src={comment.user.imgUrl}
+                        />
                         {comment.user.name}
                     </div>
                     <p

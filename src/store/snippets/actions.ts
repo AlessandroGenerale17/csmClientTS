@@ -195,6 +195,7 @@ export const removeSnippets =
                         .map((id) => parseInt(id))
                 )
             );
+            dispatch(deleteFeedPost(res.data.id));
             dispatch(appDoneLoading());
         } catch (err) {
             if (err instanceof Error) console.log(err.message);
@@ -231,6 +232,7 @@ export const createSnippet =
                 ...res.data
             };
             dispatch(addSnippet(newSnippet));
+            dispatch(addFeedPost(newSnippet));
 
             dispatch(
                 showMessageWithTimeout(

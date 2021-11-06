@@ -29,6 +29,7 @@ export default function SnippetCard(props: Props) {
         user,
         language,
         createdAt,
+        updatedAt,
         likes,
         comments,
         issue
@@ -48,7 +49,7 @@ export default function SnippetCard(props: Props) {
                     padding: '0.5rem'
                 }}
             >
-                <Avatar style={{ marginRight: '0.5rem' }} />
+                <Avatar style={{ marginRight: '0.5rem' }} src={user?.imgUrl} />
                 <span>{user.name}</span>
             </div>
             <CardContent>
@@ -118,7 +119,7 @@ export default function SnippetCard(props: Props) {
                     Shared on: {moment(createdAt).format('DD-MM-YY')}
                 </span>
                 <span style={{ fontSize: '12px' }}>
-                    Last edit on: {moment(createdAt).format('DD-MM-YY')}
+                    Last edit on: {moment(updatedAt).fromNow()}
                 </span>
             </div>
         </Card>

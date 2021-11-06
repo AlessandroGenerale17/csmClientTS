@@ -7,6 +7,7 @@ import { selectToken } from '../../store/user/selectors';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, Link } from 'react-router-dom';
 import { Col } from 'react-bootstrap';
+import Login from './Login';
 
 export default function SignUp() {
     const [email, setEmail] = useState('');
@@ -68,6 +69,7 @@ export default function SignUp() {
                     Click here to sign up
                 </Link>
             </Form>
+            <Login />
         </Container>
     );
 }

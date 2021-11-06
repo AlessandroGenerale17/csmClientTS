@@ -56,7 +56,6 @@ export const fetchPopularSnippets = async (
         dispatch(appLoading());
         const res = await axios.get(`${apiUrl}/home`);
         const snippets = res.data;
-        console.log('FROm dispatch ', res.data);
         dispatch(savePopularSnippets(snippets));
         dispatch(appDoneLoading());
     } catch (err) {

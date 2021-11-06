@@ -117,17 +117,18 @@ export default function Snippet() {
 
     const saveCode = () => {
         const { title, description, code, language, pub, issue } = formState;
-        dispatch(
-            patchSnippet(
-                id,
-                title.value,
-                description.value,
-                code,
-                language.value,
-                pub,
-                issue
-            )
-        );
+        if (code !== snippet.code)
+            dispatch(
+                patchSnippet(
+                    id,
+                    title.value,
+                    description.value,
+                    code,
+                    language.value,
+                    pub,
+                    issue
+                )
+            );
     };
 
     const handleFormClick = (e: OnClickFormDiv) => {

@@ -5,6 +5,7 @@ export type Comment = {
     text: string;
     user: {
         name: string;
+        imgUrl: string;
     };
     createdAt: Date;
 };

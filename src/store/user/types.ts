@@ -11,6 +11,7 @@ type TokenStillValid = {
         name: string;
         email: string;
         id: number;
+        imgUrl: string;
     };
 };
 

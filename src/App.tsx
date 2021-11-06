@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import Home from './pages/Home/';
 import Question from './pages/Challenge';
-import Navigation from './components/Navigation';
 import Manager from './pages/Manager/';
 import Snippet from './pages/Snippet';
 import Login from './pages/Login';
@@ -17,6 +16,7 @@ import MessageBox from './components/MessageBox';
 import NewSnippet from './pages/NewSnippet';
 import './App.css';
 import SnippetDetails from './pages/SnippetDetails';
+import Navbar from './components/Navigation/Navbar';
 
 function App() {
     const dispatch = useDispatch();
@@ -28,7 +28,7 @@ function App() {
 
     return (
         <div className='App'>
-            <Navigation />
+            <Navbar />
             <MessageBox />
             {isLoading ? <Loading /> : null}
             <Switch>
