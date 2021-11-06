@@ -7,7 +7,7 @@ const initialState: HomeState = {
 
 const reducer = (state = initialState, action: HomeActions) => {
     switch (action.type) {
-        case 'UPDATE_LIKE':
+        case 'ADD_LIKE':
             return {
                 ...state,
                 popularSnippets: state.popularSnippets.map((snippet) => {

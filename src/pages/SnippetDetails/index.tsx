@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
-import CommentLine from '../../components/CommentLine';
+import CommentLine from '../../components/Comments/';
 import SendIcon from '@mui/icons-material/Send';
 import Editor from '../../components/Editor';
 import Loading from '../../components/Loading';

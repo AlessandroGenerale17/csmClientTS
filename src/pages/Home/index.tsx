@@ -65,8 +65,7 @@ export default function Home() {
                 <div
                     style={{
                         display: 'flex',
-                        flexWrap: 'wrap',
-                        flex: 1,
+                        flexWrap: 'nowrap',
                         justifyContent: 'space-evenly'
                     }}
                 >
