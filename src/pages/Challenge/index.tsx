@@ -99,6 +99,8 @@ export default function Challenge() {
         else setOutput([{ error: false, value: JSON.stringify(out) }]);
     };
 
+    console.log(challenge);
+
     if (!challenge) return <Loading />;
 
     return (
