@@ -3,7 +3,7 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import Avatar from '@mui/material/Avatar';
+import Avatar from '../Avatar/';
 import { Like } from '../../store/homeState/types';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
@@ -49,7 +49,7 @@ export default function SnippetCard(props: Props) {
                     padding: '0.5rem'
                 }}
             >
-                <Avatar style={{ marginRight: '0.5rem' }} src={user?.imgUrl} />
+                <Avatar imgUrl={user.imgUrl} alt={user.name} />
                 <span>{user.name}</span>
             </div>
             <CardContent>

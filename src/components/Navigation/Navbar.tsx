@@ -12,8 +12,15 @@ export default function Nava() {
     return (
         <Navbar collapseOnSelect expand='lg' bg='dark' variant='dark'>
             <Container>
+                <img
+                    style={{ width: '60px', marginRight: '0.5rem' }}
+                    src={
+                        'https://2019.breizhcamp.org/img/carousel/code-busters.png'
+                    }
+                    alt=''
+                />
                 <Navbar.Brand as={NavLink} to='/'>
-                    Codesqueteers
+                    CodeBuster
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls='responsive-navbar-nav' />
                 <Navbar.Collapse id='responsive-navbar-nav'>

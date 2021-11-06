@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logOut } from '../../store/user/actions';
 import { selectUser } from '../../store/user/selectors';
 import { useHistory } from 'react-router';
-import Avatar from '@mui/material/Avatar';
+import Avatar from '../Avatar/';
 
 export default function LoggedIn() {
     const dispatch = useDispatch();
@@ -20,7 +20,7 @@ export default function LoggedIn() {
                     justifyContent: 'center'
                 }}
             >
-                <Avatar src={user?.imgUrl} />
+                <Avatar imgUrl={user.imgUrl} alt={user.name} />
                 {user.name}
             </Nav.Item>
             <Button

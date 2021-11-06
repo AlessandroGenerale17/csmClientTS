@@ -1,5 +1,5 @@
-import Avatar from '@mui/material/Avatar';
 import { Comment } from '../../Types/Comment';
+import Avatar from '../Avatar/';
 import moment from 'moment';
 
 type Props = {
@@ -14,8 +14,8 @@ export default function Comments(props: Props) {
                 <div style={{ flex: 7 }}>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                         <Avatar
-                            style={{ marginRight: '3px' }}
-                            src={comment.user.imgUrl}
+                            imgUrl={comment.user.imgUrl}
+                            alt={comment.user.name}
                         />
                         {comment.user.name}
                     </div>
