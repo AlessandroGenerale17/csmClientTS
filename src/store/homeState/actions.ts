@@ -109,14 +109,15 @@ export const createComment =
     (snippetId: number, comment: string) =>
     async (dispatch: AppDispatch, getState: () => RootState) => {
         try {
-            console.log('Creating comment ', comment);
-            const userId = 1;
-            const res = await axios.post(`${apiUrl}/comments/`, {
-                userId,
-                snippetId,
-                text: comment
-            });
-            console.log(res.data);
+            const user = getState().user.state;
+            const res = await axios.post(
+                `${apiUrl}/comments/`,
+                {
+                    snippetId,
+                    text: comment
+                },
+                configs(user.token)
+            );
             dispatch(addComment(res.data));
         } catch (err) {
             if (err instanceof Error) console.log(err.message);

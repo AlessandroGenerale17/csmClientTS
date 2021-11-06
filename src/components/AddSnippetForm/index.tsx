@@ -48,7 +48,7 @@ export default function AddSnippetForm(props: Props) {
 
     const loading = useSelector(selectSaveLoading);
 
-    // FIXME should be fetched on snippet manager access
+    console.log('langId', langId);
     const fetchLanguages = async () => {
         const res = await axios.get(`${apiUrl}/languages`);
         setLanguageOptions(

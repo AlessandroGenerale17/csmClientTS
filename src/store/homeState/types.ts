@@ -23,7 +23,6 @@ export type Like = {
 
 export type HomeState = {
     popularSnippets: PopularSnippet[];
-    issueSnippets: PopularSnippet[];
 };
 
 export type SavePopularSnippets = {

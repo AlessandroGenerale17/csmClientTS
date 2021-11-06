@@ -61,7 +61,7 @@ export default function Home() {
                 </div>
             </div>
             <div>
-                <h1>Issues</h1>
+                <h1>Recent Issues</h1>
                 <div
                     style={{
                         display: 'flex',

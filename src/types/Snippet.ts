@@ -13,6 +13,7 @@ of having different parent than Person
 import { Testcase } from './Testcase';
 import { Difficulty } from './Difficulty';
 import { Comment } from './Comment';
+import { Language } from './Language';
 
 export interface Snippet {
     id: number;
@@ -20,8 +21,7 @@ export interface Snippet {
     description: string;
     code: string;
     userId: number;
-    language: string;
-    languageId: number;
+    language: Language;
     comments: Comment[];
     public: boolean;
     issue: boolean;

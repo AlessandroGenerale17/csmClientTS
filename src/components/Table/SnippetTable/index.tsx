@@ -38,7 +38,7 @@ function createData(snippet: Snippet): Data {
     return {
         id: snippet.id,
         title: snippet.title.toLowerCase(),
-        language: snippet.language,
+        language: snippet.language.name,
         createdAt: moment(snippet.createdAt).valueOf(),
         updatedAt: moment(snippet.updatedAt).valueOf(),
         status: snippet.issue ? 'Issue' : '',

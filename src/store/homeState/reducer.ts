@@ -1,8 +1,7 @@
 import { HomeActions, HomeState } from './types';
 
 const initialState: HomeState = {
-    popularSnippets: [],
-    issueSnippets: []
+    popularSnippets: []
 };
 
 const reducer = (state = initialState, action: HomeActions) => {
@@ -52,14 +51,7 @@ const reducer = (state = initialState, action: HomeActions) => {
         case 'SAVE_POPULAR_SNIPPETS':
             return {
                 ...state,
-                popularSnippets: [
-                    ...state.popularSnippets,
-                    ...action.payload.filter((snip) => !snip.issue)
-                ],
-                issueSnippets: [
-                    ...state.issueSnippets,
-                    ...action.payload.filter((snip) => snip.issue)
-                ]
+                popularSnippets: [...state.popularSnippets, ...action.payload]
             };
         default:
             return state;

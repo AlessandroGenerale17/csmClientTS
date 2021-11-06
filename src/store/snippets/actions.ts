@@ -76,22 +76,7 @@ export const fetchSnippets = async (
         if (!user) return;
         const token = user.token;
         const res = await axios.get(`${apiUrl}/snippets`, configs(token));
-        const snippets: Snippet[] = res.data.map(
-            (snip: any): Snippet => ({
-                id: snip.id,
-                title: snip.title,
-                description: snip.description,
-                code: snip.code,
-                userId: snip.userId,
-                issue: snip.issue,
-                public: snip.public,
-                language: snip.language.name,
-                languageId: snip.language.id,
-                comments: snip.comments,
-                createdAt: snip.createdAt,
-                updatedAt: snip.updatedAt
-            })
-        );
+        const snippets: Snippet[] = res.data;
         dispatch(saveSnippets(snippets));
         dispatch(appDoneLoading());
     } catch (err) {
@@ -107,9 +92,7 @@ export const fetchSnippet =
             console.log('fetching snippet');
             dispatch(appLoading());
             const res = await axios.get(`${apiUrl}/snippets/${id}`);
-            dispatch(
-                saveSnippet({ ...res.data, language: res.data.language.name })
-            );
+            dispatch(saveSnippet({ ...res.data }));
             dispatch(appDoneLoading());
         } catch (err) {
             if (err instanceof Error) console.log(err.message);
@@ -141,13 +124,20 @@ export const patchSnippet =
             dispatch(
                 saveSnippet({ ...res.data, language: res.data.language.name })
             );
-            // update snippet in  list of snippets
+            // update snippet in  list of snippets (manager)
             dispatch(
                 updateSnippet({
                     ...res.data,
                     language: res.data.language.name
                 })
             );
+            // update in home()
+            // if (
+            //     !getState()
+            //         .home.issueSnippets.map((issue) => issue.id)
+            //         .includes(res.data.id)
+            // ) dispatch()
+
             dispatch(saveDoneLoading());
         } catch (err) {
             if (err instanceof Error) console.log(err.message);
@@ -155,11 +145,6 @@ export const patchSnippet =
         }
     };
 
-/*
- * @param {readonly string[]} idsArray
- * action to delete one or more snippets
- * FIXME auth is missing for this route
- */
 export const removeSnippets =
     (idsArray: readonly string[]) =>
     async (dispatch: AppDispatch, getState: () => RootState) => {
@@ -214,20 +199,10 @@ export const createSnippet =
                 public: pub
             });
             const newSnippet: Snippet = {
-                id: res.data.id,
-                title: res.data.title,
-                description: res.data.description,
-                code: res.data.code,
-                userId: res.data.id,
-                issue: res.data.issue,
-                public: res.data.public,
-                comments: res.data.comments,
-                language: res.data.language.name,
-                languageId: res.data.language.id,
-                createdAt: res.data.createdAt,
-                updatedAt: res.data.updatedAt
+                ...res.data
             };
             dispatch(addSnippet(newSnippet));
+
             dispatch(
                 showMessageWithTimeout(
                     'success',

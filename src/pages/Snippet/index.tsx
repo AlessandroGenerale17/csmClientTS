@@ -20,11 +20,16 @@ import {
     OnSubmit
 } from '../../Types/EventListener';
 
-import './index.css';
 import { showFormAlertWithTimeout } from '../../store/appState/actions';
 import { isFormValid } from '../../Lib/Validators';
 import { FormState } from '../../Types/FormState';
 import { handleFormChange } from '../../Lib/FormChange';
+import { selectUser } from '../../store/user/selectors';
+import { Comment } from '../../Types/Comment';
+import SendIcon from '@mui/icons-material/Send';
+import CommentLine from '../../components/Comments';
+import { createComment } from '../../store/homeState/actions';
+import './index.css';
 
 // FIXME possibly export
 type ParamTypes = {
@@ -43,11 +48,13 @@ const initialFormState = {
 
 export default function Snippet() {
     const id = parseInt(useParams<ParamTypes>().id);
+    const [comment, setComment] = useState<string>('');
     const dispatch = useDispatch();
     const snippet = useSelector(selectSnippet);
     const loading = useSelector(selectAppLoading);
     const saveLoading = useSelector(selectSaveLoading);
     const [formState, setFormState] = useState<FormState>(initialFormState);
+    const user = useSelector(selectUser);
 
     useEffect(() => {
         // IMPORTANT
@@ -57,7 +64,7 @@ export default function Snippet() {
                 title: { value: snippet.title, err: false },
                 description: { value: snippet.description, err: false },
                 code: snippet.code,
-                language: { value: snippet.languageId, err: false },
+                language: { value: snippet.language.id, err: false },
                 pub: snippet.public,
                 issue: snippet.issue,
                 isOpen: false
@@ -102,6 +109,12 @@ export default function Snippet() {
             );
     };
 
+    const onCommentChange = (e: OnChange) => setComment(e.target.value);
+    const submitComment = () => {
+        setComment('');
+        comment.trim().length && dispatch(createComment(snippet.id, comment));
+    };
+
     const saveCode = () => {
         const { title, description, code, language, pub, issue } = formState;
         dispatch(
@@ -128,7 +141,7 @@ export default function Snippet() {
         setFormState({
             title: { value: snippet.title, err: false },
             description: { value: snippet.description, err: false },
-            language: { value: snippet.languageId, err: false },
+            language: { value: snippet.language.id, err: false },
             code: snippet.code,
             pub: snippet.public,
             issue: snippet.issue,
@@ -139,16 +152,63 @@ export default function Snippet() {
     return (
         <div className='snippet-page'>
             {!formState.isOpen ? (
-                <div className='snippet-content' onClick={handleFormClick}>
-                    <h2 id='title'>{snippet.title}</h2>
-                    <p>{snippet.language}</p>
-                    <div className='markdown'>
-                        <ReactMarkdown
-                            className='md'
-                            children={snippet.description}
-                        />
+                <div className='snippet-content'>
+                    <div onClick={handleFormClick}>
+                        <h2 id='title'>{snippet.title}</h2>
+                        <p>{snippet.language.name}</p>
+                        <div style={{ minHeight: '305px' }}>
+                            <ReactMarkdown
+                                className='md'
+                                children={snippet.description}
+                            />
+                        </div>
+                        <h4 style={{ textAlign: 'center' }}>
+                            Comments {snippet.comments.length}
+                        </h4>
                     </div>
-                    {/* <div>TAGS</div> */}
+                    <div
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            marginLeft: '0.85rem'
+                        }}
+                    >
+                        {user?.id && snippet.public && (
+                            <>
+                                <input
+                                    type='text'
+                                    placeholder='write your comment'
+                                    onChange={onCommentChange}
+                                    value={comment}
+                                    style={{
+                                        width: '100%',
+                                        marginBottom: '4px'
+                                    }}
+                                />
+                                <SendIcon
+                                    style={{ cursor: 'pointer' }}
+                                    onClick={submitComment}
+                                />
+                            </>
+                        )}
+                    </div>
+
+                    <ul
+                        style={{
+                            listStyle: 'none',
+                            height: '200px',
+                            paddingLeft: '0',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            overflow: 'hidden',
+                            overflowY: 'scroll'
+                        }}
+                    >
+                        {snippet.comments.map((comment: Comment) => (
+                            <CommentLine key={comment.id} comment={comment} />
+                        ))}
+                    </ul>
                 </div>
             ) : (
                 <AddSnippetForm
@@ -157,7 +217,7 @@ export default function Snippet() {
                     closeForm={closeForm}
                     className='form-newSnippet'
                     form={formState}
-                    langId={snippet.languageId}
+                    langId={snippet.language.id}
                 />
             )}
             <div className='editor-container'>

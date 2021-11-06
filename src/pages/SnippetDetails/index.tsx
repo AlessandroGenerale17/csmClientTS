@@ -11,6 +11,7 @@ import { selectSnippet } from '../../store/snippets/selectors';
 import { Comment } from '../../Types/Comment';
 import { OnChange } from '../../Types/EventListener';
 import { createComment } from '../../store/homeState/actions';
+import { selectUser } from '../../store/user/selectors';
 
 type ParamTypes = {
     id: string;
@@ -21,6 +22,7 @@ export default function SnippetDetails() {
     const dispatch = useDispatch();
     const { id } = useParams<ParamTypes>();
     const snippet = useSelector(selectSnippet);
+    const user = useSelector(selectUser);
 
     const onCommentChange = (e: OnChange) => setComment(e.target.value);
     const submitComment = () => {
@@ -56,17 +58,24 @@ export default function SnippetDetails() {
                             marginLeft: '0.85rem'
                         }}
                     >
-                        <input
-                            type='text'
-                            placeholder='write your comment'
-                            onChange={onCommentChange}
-                            value={comment}
-                            style={{ width: '100%', marginBottom: '4px' }}
-                        />
-                        <SendIcon
-                            style={{ cursor: 'pointer' }}
-                            onClick={submitComment}
-                        />
+                        {user?.id && (
+                            <>
+                                <input
+                                    type='text'
+                                    placeholder='write your comment'
+                                    onChange={onCommentChange}
+                                    value={comment}
+                                    style={{
+                                        width: '100%',
+                                        marginBottom: '4px'
+                                    }}
+                                />
+                                <SendIcon
+                                    style={{ cursor: 'pointer' }}
+                                    onClick={submitComment}
+                                />
+                            </>
+                        )}
                     </div>
 
                     <ul
@@ -92,7 +101,7 @@ export default function SnippetDetails() {
                         type='snippet'
                         className='editor-newSnippet'
                         prompt={snippet.code}
-                        language={snippet.languageId}
+                        language={snippet.language.id}
                         handleCodeChange={() => {}}
                         runCode={() => {}}
                         saveCode={() => {}}

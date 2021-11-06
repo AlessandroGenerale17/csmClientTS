@@ -38,14 +38,14 @@ function createData(snippet: Snippet | CodeSnippet): Data {
             id: snippet.id,
             // TODO check this if it sorts correctly
             title: snippet.title.toLowerCase(),
-            language: snippet.language,
+            language: snippet.language.name,
             createdAt: moment(snippet.createdAt).valueOf(),
             difficulty: snippet.difficulty.value
         };
     return {
         id: snippet.id,
         title: snippet.title.toLowerCase(),
-        language: snippet.language,
+        language: snippet.language.name,
         createdAt: moment(snippet.createdAt).valueOf(),
         difficulty: -1
     };
