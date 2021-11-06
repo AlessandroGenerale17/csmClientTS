@@ -70,7 +70,7 @@ export default function Editor(props: Props) {
                 }}
                 value={prompt}
                 extensions={languages[language]}
-                height='450px'
+                height='620px'
                 width='600'
                 tabIndex={2}
                 theme={theme ? 'light' : 'dark'}

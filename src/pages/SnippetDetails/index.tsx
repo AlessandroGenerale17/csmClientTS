@@ -36,17 +36,57 @@ export default function SnippetDetails() {
 
     return (
         <>
-            <div className='snippet-page'>
+            <div style={{ display: 'flex' }}>
                 <div className='snippet-content'>
                     <h2 id='title'>{snippet.title}</h2>
                     <p>{snippet.language}</p>
-                    <div className='markdown'>
+                    <div style={{ minHeight: '305px' }}>
                         <ReactMarkdown
                             className='md'
                             children={snippet.description}
                         />
                     </div>
+                    <h4 style={{ textAlign: 'center' }}>
+                        Comments {snippet.comments.length}
+                    </h4>
+                    <div
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            marginLeft: '0.85rem'
+                        }}
+                    >
+                        <input
+                            type='text'
+                            placeholder='write your comment'
+                            onChange={onCommentChange}
+                            value={comment}
+                            style={{ width: '100%', marginBottom: '4px' }}
+                        />
+                        <SendIcon
+                            style={{ cursor: 'pointer' }}
+                            onClick={submitComment}
+                        />
+                    </div>
+
+                    <ul
+                        style={{
+                            listStyle: 'none',
+                            height: '200px',
+                            paddingLeft: '0',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            overflow: 'hidden',
+                            overflowY: 'scroll'
+                        }}
+                    >
+                        {snippet.comments.map((comment: Comment) => (
+                            <CommentLine key={comment.id} comment={comment} />
+                        ))}
+                    </ul>
                 </div>
+
                 <div className='editor-container'>
                     <Editor
                         type='snippet'
@@ -59,28 +99,6 @@ export default function SnippetDetails() {
                         submitSolution={() => {}}
                         editable={false}
                     />
-                </div>
-            </div>
-            <div>
-                <h2>Comments</h2>
-                <div>
-                    <input
-                        type='text'
-                        placeholder='write your comment'
-                        onChange={onCommentChange}
-                        value={comment}
-                    />
-                    <SendIcon
-                        style={{ cursor: 'pointer' }}
-                        onClick={submitComment}
-                    />
-                </div>
-                <div style={{ display: 'flex' }}>
-                    <ul style={{ listStyle: 'none' }}>
-                        {snippet.comments.map((comment: Comment) => (
-                            <CommentLine key={comment.id} comment={comment} />
-                        ))}
-                    </ul>
                 </div>
             </div>
         </>
