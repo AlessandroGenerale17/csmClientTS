@@ -22,24 +22,23 @@ const loginSuccess = (userWithToken: {
     };
 };
 
-// const tokenStillValid = (userWithoutToken: {
-//     email: string;
-//     name: string;
-// }) => ({
-//     type: 'TOKEN_STILL_VALID',
-//     payload: userWithoutToken
-// });
-
 export const logOut = () => ({ type: 'LOG_OUT' });
 
-export const signUp = (name: string, email: string, password: string) => {
+export const signUp = (
+    name: string,
+    email: string,
+    password: string,
+    imgUrl: string
+) => {
     return async (dispatch: AppDispatch, getState: () => RootState) => {
         dispatch(appLoading());
         try {
+            console.log(imgUrl);
             const response = await axios.post(`${apiUrl}/signup`, {
                 name,
                 email,
-                password
+                password,
+                imgUrl
             });
 
             dispatch(

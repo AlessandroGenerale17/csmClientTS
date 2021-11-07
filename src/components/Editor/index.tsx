@@ -2,7 +2,7 @@ import { useState } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
 import { java } from '@codemirror/lang-java';
-import { cpp } from '@codemirror/lang-cpp/';
+import { cpp } from '@codemirror/lang-cpp';
 import Switch from '../Switch/';
 import PlayButton from '../Button/PlayButton';
 import SubmitSolutionButton from '../Button/SubmitSolutionButton';

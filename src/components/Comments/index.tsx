@@ -23,7 +23,7 @@ export default function Comments(props: Props) {
                         style={{
                             marginLeft: '38px',
                             marginBottom: 0,
-                            maxWidth: '100px'
+                            maxWidth: '300px'
                         }}
                     >
                         {comment.text}
