@@ -13,6 +13,8 @@ const loginSuccess = (userWithToken: {
     name: string;
     email: string;
     token: string;
+    id: number;
+    imgUrl: string;
 }) => {
     return {
         type: 'LOGIN_SUCCESS',
@@ -44,7 +46,9 @@ export const signUp = (name: string, email: string, password: string) => {
                 loginSuccess({
                     name: response.data.name,
                     email: response.data.email,
-                    token: response.data.token
+                    token: response.data.token,
+                    id: response.data.id,
+                    imgUrl: response.data.imgUrl
                 })
             );
             dispatch(
@@ -110,7 +114,9 @@ export const getUserWithStoredToken = () => {
             const user = {
                 token: token,
                 name: response.data.name,
-                email: response.data.email
+                email: response.data.email,
+                id: response.data.id,
+                imgUrl: response.data.imgUrl
             };
             dispatch(loginSuccess(user));
             dispatch(appDoneLoading());

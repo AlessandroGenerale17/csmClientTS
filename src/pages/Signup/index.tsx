@@ -1,4 +1,4 @@
-import React, { useState, useEffect, SyntheticEvent } from 'react';
+import { useState, useEffect, SyntheticEvent } from 'react';
 import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
@@ -7,11 +7,17 @@ import { selectToken } from '../../store/user/selectors';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, Link } from 'react-router-dom';
 import { Col } from 'react-bootstrap';
+import { OnChangeInput } from '../../Types/EventListener';
+import CircularProgress from '@mui/material/CircularProgress';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
 export default function SignUp() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [imgUrl, setImgUrl] = useState('');
+    const [uploadSuccess, setUploadSuccess] = useState(false);
+    const [imgLoading, setImgLoading] = useState(false);
     const dispatch = useDispatch();
     const token = useSelector(selectToken);
     const history = useHistory();
@@ -31,6 +37,27 @@ export default function SignUp() {
         setPassword('');
         setName('');
     }
+
+    const uploadImage = async (e: OnChangeInput) => {
+        const files = e.target.files;
+        const data = new FormData();
+        if (files) data.append('file', files[0]);
+        //first parameter is always upload_preset, second is the name of the preset
+        data.append('upload_preset', 'oh9s25kg');
+
+        //post request to Cloudinary, remember to change to your own link
+        const res = await fetch(
+            'https://api.cloudinary.com/v1_1/dpkg9kv62/image/upload ',
+            {
+                method: 'POST',
+                body: data
+            }
+        );
+
+        const file = await res.json();
+        console.log('file', file); //check if you are getting the url back
+        // setImage(file.url); //put the url in local state, next step you can send it to the backend
+    };
 
     return (
         <Container>
@@ -69,6 +96,14 @@ export default function SignUp() {
                         placeholder='Password'
                         required
                     />
+                </Form.Group>
+                <Form.Group controlId='formBasicPassword'>
+                    <Form.Label>Upload an image for your avatar</Form.Label>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <input type='file' onChange={uploadImage} />
+                        <CircularProgress />
+                        <CheckBoxIcon style={{ color: 'green' }} />
+                    </div>
                 </Form.Group>
                 <Form.Group className='mt-5'>
                     <Button

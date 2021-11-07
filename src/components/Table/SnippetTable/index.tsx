@@ -20,7 +20,7 @@ import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import { visuallyHidden } from '@mui/utils';
-import { CodeSnippet, Snippet } from '../../Types/Snippet';
+import { Snippet } from '../../../Types/Snippet';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 
@@ -29,25 +29,20 @@ interface Data {
     title: string;
     language: string;
     createdAt: number;
-    difficulty: number;
+    updatedAt: number;
+    status: string;
+    visibility: string;
 }
 
-function createData(snippet: Snippet | CodeSnippet): Data {
-    if ('difficulty' in snippet)
-        return {
-            id: snippet.id,
-            // TODO check this if it sorts correctly
-            title: snippet.title.toLowerCase(),
-            language: snippet.language.name,
-            createdAt: moment(snippet.createdAt).valueOf(),
-            difficulty: snippet.difficulty.value
-        };
+function createData(snippet: Snippet): Data {
     return {
         id: snippet.id,
         title: snippet.title.toLowerCase(),
         language: snippet.language.name,
         createdAt: moment(snippet.createdAt).valueOf(),
-        difficulty: -1
+        updatedAt: moment(snippet.updatedAt).valueOf(),
+        status: snippet.issue ? 'Issue' : '',
+        visibility: snippet.public ? 'Public' : 'Private'
     };
 }
 
@@ -102,46 +97,37 @@ const headCellsSnippet: readonly HeadCell[] = [
         id: 'title',
         numeric: false,
         disablePadding: true,
-        label: 'NAME'
+        label: 'TITLE'
     },
     {
         id: 'language',
-        numeric: true,
-        disablePadding: false,
-        label: 'LANGUAGE'
-    },
-    {
-        id: 'createdAt',
-        numeric: true,
-        disablePadding: false,
-        label: 'DATE'
-    }
-];
-
-const headCellsCode: readonly HeadCell[] = [
-    {
-        id: 'title',
         numeric: false,
-        disablePadding: true,
-        label: 'NAME'
-    },
-    {
-        id: 'language',
-        numeric: true,
         disablePadding: false,
         label: 'LANGUAGE'
     },
     {
-        id: 'difficulty',
+        id: 'visibility',
+        numeric: false,
+        disablePadding: false,
+        label: 'VISIBILITY'
+    },
+    {
+        id: 'status',
+        numeric: false,
+        disablePadding: false,
+        label: 'STATUS'
+    },
+    {
+        id: 'updatedAt',
         numeric: true,
         disablePadding: false,
-        label: 'DIFFICULTY'
+        label: 'UPDATED'
     },
     {
         id: 'createdAt',
         numeric: true,
         disablePadding: false,
-        label: 'DATE'
+        label: 'CREATED'
     }
 ];
 
@@ -155,7 +141,6 @@ interface EnhancedTableProps {
     order: Order;
     orderBy: string;
     rowCount: number;
-    headCellType: string;
 }
 
 function EnhancedTableHead(props: EnhancedTableProps) {
@@ -165,33 +150,29 @@ function EnhancedTableHead(props: EnhancedTableProps) {
         orderBy,
         numSelected,
         rowCount,
-        onRequestSort,
-        headCellType
+        onRequestSort
     } = props;
     const createSortHandler =
         (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
             onRequestSort(event, property);
         };
-    const headCells =
-        headCellType === 'snippet' ? headCellsSnippet : headCellsCode;
+    const headCells = headCellsSnippet;
 
     return (
         <TableHead>
             <TableRow>
                 <TableCell padding='checkbox'>
-                    {headCellType === 'snippet' && (
-                        <Checkbox
-                            color='primary'
-                            indeterminate={
-                                numSelected > 0 && numSelected < rowCount
-                            }
-                            checked={rowCount > 0 && numSelected === rowCount}
-                            onChange={onSelectAllClick}
-                            inputProps={{
-                                'aria-label': 'select all desserts'
-                            }}
-                        />
-                    )}
+                    <Checkbox
+                        color='primary'
+                        indeterminate={
+                            numSelected > 0 && numSelected < rowCount
+                        }
+                        checked={rowCount > 0 && numSelected === rowCount}
+                        onChange={onSelectAllClick}
+                        inputProps={{
+                            'aria-label': 'select all desserts'
+                        }}
+                    />
                 </TableCell>
                 {headCells.map((headCell) => (
                     <TableCell
@@ -222,17 +203,15 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 }
 
 interface EnhancedTableToolbarProps {
-    showToolbarOptions: boolean;
     numSelected: number;
     tableName: string;
     deleteSnippets: () => void;
 }
 
 const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
-    const { numSelected, showToolbarOptions, tableName, deleteSnippets } =
-        props;
+    const { numSelected, tableName, deleteSnippets } = props;
 
-    const deleteAvailable = numSelected && showToolbarOptions;
+    const deleteAvailable = numSelected > 0;
 
     return (
         <Toolbar
@@ -274,29 +253,26 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
                     </IconButton>
                 </Tooltip>
             ) : null}
-            {showToolbarOptions ? (
-                <Tooltip title='Add'>
-                    <Link
-                        to='/newSnippet'
-                        style={{
-                            fontSize: 'large'
-                        }}
-                    >
-                        <IconButton>
-                            <AddIcon />
-                        </IconButton>
-                    </Link>
-                </Tooltip>
-            ) : null}
+
+            <Tooltip title='Add'>
+                <Link
+                    to='/newSnippet'
+                    style={{
+                        fontSize: 'large'
+                    }}
+                >
+                    <IconButton>
+                        <AddIcon />
+                    </IconButton>
+                </Link>
+            </Tooltip>
         </Toolbar>
     );
 };
 
-type Props<T = Snippet | CodeSnippet> = {
-    type: string;
-    list: T[];
+type Props = {
+    list: Snippet[];
     tableName: string;
-    // TODO perform dispatch to delete
     performDispatch: (snippetsToDelete: readonly string[]) => void;
 };
 
@@ -309,11 +285,6 @@ export default function EnhancedTable(props: Props) {
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
     const rows = props.list.map((snip): Data => createData(snip));
-    const difficulty = [
-        { label: 'Easy', color: 'green' },
-        { label: 'Medium', color: 'orange' },
-        { label: 'Hard', color: 'red' }
-    ];
 
     const handleRequestSort = (
         event: React.MouseEvent<unknown>,
@@ -383,7 +354,6 @@ export default function EnhancedTable(props: Props) {
                 {/* pass down prop here */}
                 <EnhancedTableToolbar
                     numSelected={selected.length}
-                    showToolbarOptions={props.type === 'snippet' ? true : false}
                     deleteSnippets={() => props.performDispatch(selected)}
                     tableName={props.tableName}
                 />
@@ -400,7 +370,6 @@ export default function EnhancedTable(props: Props) {
                             onSelectAllClick={handleSelectAllClick}
                             onRequestSort={handleRequestSort}
                             rowCount={rows.length}
-                            headCellType={props.type}
                         />
                         <TableBody>
                             {stableSort(rows, getComparator(order, orderBy))
@@ -430,16 +399,14 @@ export default function EnhancedTable(props: Props) {
                                             selected={isItemSelected}
                                         >
                                             <TableCell padding='checkbox'>
-                                                {props.type === 'snippet' && (
-                                                    <Checkbox
-                                                        color='primary'
-                                                        checked={isItemSelected}
-                                                        inputProps={{
-                                                            'aria-labelledby':
-                                                                labelId
-                                                        }}
-                                                    />
-                                                )}
+                                                <Checkbox
+                                                    color='primary'
+                                                    checked={isItemSelected}
+                                                    inputProps={{
+                                                        'aria-labelledby':
+                                                            labelId
+                                                    }}
+                                                />
                                             </TableCell>
                                             <TableCell
                                                 component='th'
@@ -448,36 +415,33 @@ export default function EnhancedTable(props: Props) {
                                                 padding='none'
                                             >
                                                 <Link
-                                                    to={
-                                                        props.type === 'snippet'
-                                                            ? `/snippets/${row.id}`
-                                                            : `/challenges/${row.id}`
-                                                    }
+                                                    to={`/snippets/${row.id}`}
                                                 >
                                                     {row.title}
                                                 </Link>
                                             </TableCell>
-                                            <TableCell align='right'>
+                                            <TableCell>
                                                 {row.language}
                                             </TableCell>
-                                            {props.type === 'code' && (
-                                                <TableCell
-                                                    align='right'
-                                                    style={{
-                                                        color: `${
-                                                            difficulty[
-                                                                row.difficulty
-                                                            ].color
-                                                        }`
-                                                    }}
-                                                >
-                                                    {
-                                                        difficulty[
-                                                            row.difficulty
-                                                        ].label
-                                                    }
-                                                </TableCell>
-                                            )}
+                                            <TableCell>
+                                                {row.visibility}
+                                            </TableCell>
+                                            <TableCell
+                                                style={{
+                                                    color: `${
+                                                        row.status === 'Issue'
+                                                            ? 'red'
+                                                            : 'black'
+                                                    }`
+                                                }}
+                                            >
+                                                {row.status}
+                                            </TableCell>
+                                            <TableCell align='right'>
+                                                {moment(row.updatedAt).format(
+                                                    'DD-MM-YY, HH:MM:ss'
+                                                )}
+                                            </TableCell>
                                             <TableCell align='right'>
                                                 {moment(row.createdAt).format(
                                                     'DD-MM-YY, HH:MM:ss'

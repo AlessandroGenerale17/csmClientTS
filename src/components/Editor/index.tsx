@@ -14,6 +14,7 @@ type Props = {
     className: string;
     prompt: string;
     language: number;
+    editable: boolean;
     handleCodeChange: (code: string) => void;
     submitSolution: () => void;
     runCode: () => void;
@@ -29,7 +30,8 @@ export default function Editor(props: Props) {
         runCode,
         submitSolution,
         saveCode,
-        language
+        language,
+        editable
     } = props;
 
     const [theme, setTheme] = useState<boolean>(false);
@@ -63,13 +65,16 @@ export default function Editor(props: Props) {
                     handleCodeChange(value);
                 }}
                 onKeyDown={(e: Keyboard) => handleKeyDown(e)}
-                style={{ border: '1px solid black' }}
+                style={{
+                    border: '1px solid black'
+                }}
                 value={prompt}
                 extensions={languages[language]}
-                height='450px'
+                height='620px'
                 width='600'
                 tabIndex={2}
                 theme={theme ? 'light' : 'dark'}
+                editable={editable}
             />
         </div>
     );

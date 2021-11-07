@@ -12,6 +12,16 @@ import {
     showMessageWithTimeout
 } from '../appState/actions';
 
+import {
+    addFeedPost,
+    deleteFeedPost,
+    updateFeedPost
+} from '../homeState/actions';
+import {
+    selectPopularSnippets,
+    selectPopularSnippetsIds
+} from '../homeState/selectors';
+
 type ConfigsAuthWithData = {
     headers: {
         Authorization: string;
@@ -76,19 +86,7 @@ export const fetchSnippets = async (
         if (!user) return;
         const token = user.token;
         const res = await axios.get(`${apiUrl}/snippets`, configs(token));
-        const snippets: Snippet[] = res.data.map(
-            (snip: any): Snippet => ({
-                id: snip.id,
-                title: snip.title,
-                description: snip.description,
-                code: snip.code,
-                userId: snip.userId,
-                language: snip.language.name,
-                languageId: snip.language.id,
-                createdAt: snip.createdAt,
-                updatedAt: snip.updatedAt
-            })
-        );
+        const snippets: Snippet[] = res.data;
         dispatch(saveSnippets(snippets));
         dispatch(appDoneLoading());
     } catch (err) {
@@ -104,9 +102,7 @@ export const fetchSnippet =
             console.log('fetching snippet');
             dispatch(appLoading());
             const res = await axios.get(`${apiUrl}/snippets/${id}`);
-            dispatch(
-                saveSnippet({ ...res.data, language: res.data.language.name })
-            );
+            dispatch(saveSnippet({ ...res.data }));
             dispatch(appDoneLoading());
         } catch (err) {
             if (err instanceof Error) console.log(err.message);
@@ -120,7 +116,9 @@ export const patchSnippet =
         title: string,
         description: string,
         code: string,
-        languageId: number
+        languageId: number,
+        pub: boolean,
+        issue: boolean
     ) =>
     async (dispatch: AppDispatch, getState: () => RootState) => {
         try {
@@ -129,17 +127,46 @@ export const patchSnippet =
                 title,
                 code,
                 languageId,
-                description
+                description,
+                public: pub,
+                issue
             });
-            dispatch(
-                saveSnippet({ ...res.data, language: res.data.language.name })
-            );
-            // update snippet in  list of snippets
+            dispatch(saveSnippet({ ...res.data }));
+            // update snippet in  list of snippets (manager)
             dispatch(
                 updateSnippet({
-                    ...res.data, language: res.data.language.name
+                    ...res.data
                 })
             );
+
+            //FIXME
+
+            // if it is public then replace
+            const popularSnippets = selectPopularSnippets(getState());
+            if (popularSnippets.length > 0) {
+                const isIncluded = selectPopularSnippetsIds(
+                    getState()
+                ).includes(id);
+                console.log(isIncluded);
+                if (pub) {
+                    if (isIncluded) {
+                        // update Feed
+                        console.log('update feed');
+                        dispatch(updateFeedPost({ ...res.data }));
+                    } else {
+                        // addToFeed
+                        console.log('add feed');
+                        dispatch(addFeedPost({ ...res.data }));
+                    }
+                } else {
+                    if (isIncluded) {
+                        // delefeed
+                        console.log('deleting from feed');
+                        dispatch(deleteFeedPost({ ...res.data }));
+                    }
+                }
+            }
+
             dispatch(saveDoneLoading());
         } catch (err) {
             if (err instanceof Error) console.log(err.message);
@@ -147,11 +174,6 @@ export const patchSnippet =
         }
     };
 
-/*
- * @param {readonly string[]} idsArray
- * action to delete one or more snippets
- * FIXME auth is missing for this route
- */
 export const removeSnippets =
     (idsArray: readonly string[]) =>
     async (dispatch: AppDispatch, getState: () => RootState) => {
@@ -173,6 +195,7 @@ export const removeSnippets =
                         .map((id) => parseInt(id))
                 )
             );
+            dispatch(deleteFeedPost(res.data.id));
             dispatch(appDoneLoading());
         } catch (err) {
             if (err instanceof Error) console.log(err.message);
@@ -181,33 +204,36 @@ export const removeSnippets =
     };
 
 export const createSnippet =
-    (title: string, description: string, code: string, languageId: number) =>
+    (
+        title: string,
+        description: string,
+        code: string,
+        languageId: number,
+        pub: boolean,
+        issue: boolean
+    ) =>
     async (dispatch: AppDispatch, getState: () => RootState) => {
         try {
             dispatch(appLoading());
             // FIXME auth is missing in this route
             // FIXME missing userId
             const userId = 1;
+            console.log('pubbbbbb action', pub);
             const res = await axios.post(`${apiUrl}/snippets/`, {
                 title,
                 description,
                 code,
                 userId,
-                languageId
+                languageId,
+                issue,
+                public: pub
             });
             const newSnippet: Snippet = {
-                id: res.data.id,
-                title: res.data.title,
-                description: res.data.description,
-                code: res.data.code,
-                userId: res.data.id,
-                // FIXME THIS
-                language: res.data.language.name,
-                languageId: res.data.language.id,
-                createdAt: res.data.createdAt,
-                updatedAt: res.data.updatedAt
+                ...res.data
             };
             dispatch(addSnippet(newSnippet));
+            dispatch(addFeedPost(newSnippet));
+
             dispatch(
                 showMessageWithTimeout(
                     'success',

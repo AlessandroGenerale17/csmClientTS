@@ -99,6 +99,8 @@ export default function Challenge() {
         else setOutput([{ error: false, value: JSON.stringify(out) }]);
     };
 
+    console.log(challenge);
+
     if (!challenge) return <Loading />;
 
     return (
@@ -112,7 +114,8 @@ export default function Challenge() {
                     type='code'
                     className='editor-newSnippet'
                     prompt={codeChallenge}
-                    language={challenge.languageId}
+                    language={challenge.language.id}
+                    editable={true}
                     handleCodeChange={handleCodeChange}
                     submitSolution={submitSolution}
                     runCode={runCodeWithTestCase}

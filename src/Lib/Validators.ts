@@ -22,10 +22,8 @@ export const isFormValid = (
         errors.push('description');
     }
 
-    // TODO fix this for number
     console.log('validator', language.value);
     if (language.value < 0) {
-        console.log('I enter');
         setFormState((prev) => ({
             ...prev,
             language: { value: -1, err: true }

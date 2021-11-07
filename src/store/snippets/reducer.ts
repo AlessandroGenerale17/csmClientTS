@@ -43,6 +43,16 @@ const reducer = (
                 ...state,
                 list: [...state.list, action.payload]
             };
+        case 'ADD_COMMENT':
+            return {
+                ...state,
+                selected: state.selected
+                    ? {
+                          ...state.selected,
+                          comments: [action.payload, ...state.selected.comments]
+                      }
+                    : null
+            };
         default: {
             return state;
         }

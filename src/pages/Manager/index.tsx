@@ -2,11 +2,12 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchSnippets, removeSnippets } from '../../store/snippets/actions';
 import { selectSnippets } from '../../store/snippets/selectors';
-import Table from '../../components/Table';
+
 import Loading from '../../components/Loading';
 import { selectAppLoading } from '../../store/appState/selectors';
 import { selectToken } from '../../store/user/selectors';
 import './index.css';
+import Table from '../../components/Table/SnippetTable/';
 
 export default function Manager() {
     const dispatch = useDispatch();
@@ -29,7 +30,6 @@ export default function Manager() {
             </div>
             <div>
                 <Table
-                    type='snippet'
                     list={snippets}
                     performDispatch={deleteSnippets}
                     tableName='My Snippets'
