@@ -17,6 +17,7 @@ import NewSnippet from './pages/NewSnippet';
 import './App.css';
 import SnippetDetails from './pages/SnippetDetails';
 import Navbar from './components/Navigation/Navbar';
+import Chat from './pages/IssueChat/';
 
 function App() {
     const dispatch = useDispatch();
@@ -41,6 +42,7 @@ function App() {
                 <Route path='/challenges' component={Challenges} />
                 <Route path='/newSnippet' component={NewSnippet} />
                 <Route path='/snippets/:id' component={Snippet} />
+                <Route path='/chat/:id' component={Chat} />
                 <Route path='/snippetDetails/:id' component={SnippetDetails} />
             </Switch>
         </div>

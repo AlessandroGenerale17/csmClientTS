@@ -9,13 +9,18 @@ import Loading from '../../components/Loading';
 import { fetchSnippet } from '../../store/snippets/actions';
 import { selectSnippet } from '../../store/snippets/selectors';
 import { Comment } from '../../Types/Comment';
-import { OnChange } from '../../Types/EventListener';
+import { OnChange, OnClick } from '../../Types/EventListener';
 import { createComment } from '../../store/homeState/actions';
 import { selectUser } from '../../store/user/selectors';
+import Button from '@mui/material/Button';
+import { Link } from 'react-router-dom';
+import { apiUrl } from '../../configs';
+import { io } from 'socket.io-client';
 
 type ParamTypes = {
     id: string;
 };
+const socket = io(apiUrl);
 
 export default function SnippetDetails() {
     const [comment, setComment] = useState<string>('');
@@ -42,6 +47,9 @@ export default function SnippetDetails() {
                 <div className='snippet-content'>
                     <h2 id='title'>{snippet.title}</h2>
                     <p>{snippet.language.name}</p>
+                    <Button>
+                        <Link to={`/chat/${id}`}>Join Discussion</Link>
+                    </Button>
                     <div style={{ minHeight: '305px' }}>
                         <ReactMarkdown
                             className='md'

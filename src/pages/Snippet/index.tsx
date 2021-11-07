@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchSnippet } from '../../store/snippets/actions';
 import { selectSnippet } from '../../store/snippets/selectors';
@@ -19,7 +19,6 @@ import {
     OnClickFormDiv,
     OnSubmit
 } from '../../Types/EventListener';
-
 import { showFormAlertWithTimeout } from '../../store/appState/actions';
 import { isFormValid } from '../../Lib/Validators';
 import { FormState } from '../../Types/FormState';
@@ -30,6 +29,7 @@ import SendIcon from '@mui/icons-material/Send';
 import CommentLine from '../../components/Comments';
 import { createComment } from '../../store/homeState/actions';
 import './index.css';
+import { Button } from '@mui/material';
 
 // FIXME possibly export
 type ParamTypes = {
@@ -157,6 +157,9 @@ export default function Snippet() {
                     <div onClick={handleFormClick}>
                         <h2 id='title'>{snippet.title}</h2>
                         <p>{snippet.language.name}</p>
+                        <Button>
+                            <Link to={`/chat/${id}`}>Join Discussion</Link>
+                        </Button>
                         <div style={{ minHeight: '305px' }}>
                             <ReactMarkdown
                                 className='md'
