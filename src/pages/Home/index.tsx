@@ -3,11 +3,13 @@ import Loading from '../../components/Loading';
 import { selectAppLoading } from '../../store/appState/selectors';
 import { io } from 'socket.io-client';
 import { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 const socket = io('http://localhost:4000');
 
 export default function Home() {
     const loading = useSelector(selectAppLoading);
+    const history = useHistory();
     const [input, setInput] = useState('');
     const [messages, setMessages] = useState<
         { user: string; message: string }[]
@@ -33,11 +35,16 @@ export default function Home() {
             setMessages((prev) => [{ user: '1', message: msg }, ...prev]);
         });
 
+        socket.on('terminate', (msg) => {
+            console.log('terminate ', msg);
+            history.push('/manager');
+        });
+
         return () => {
-            socket.emit('disconnect');
+            socket.emit('disc');
         };
     }, []);
-    console.log(messages)
+    console.log(messages);
 
     if (loading) return <Loading />;
 
@@ -70,6 +77,11 @@ export default function Home() {
                     <li>{message.message}</li>
                 ))}
             </ul>
+            {/* only if owner of issue */}
+            <button onClick={() => {
+                console.log('resloving issue')
+                socket.emit('terminate');
+            }}>Resolve</button>
         </div>
     );
 }
