@@ -12,7 +12,7 @@ import Loading from './components/Loading';
 import SignUp from './pages/Signup';
 import Challenges from './pages/Challenges';
 import Challenge from './pages/Challenge';
-import MessageBox from './components/MessageBox';
+import Alert from './components/Alert/';
 import NewSnippet from './pages/NewSnippet';
 import './App.css';
 import SnippetDetails from './pages/SnippetDetails';
@@ -30,7 +30,7 @@ function App() {
     return (
         <div className='App'>
             <Navbar />
-            <MessageBox />
+            <Alert />
             {isLoading ? <Loading /> : null}
             <Switch>
                 <Route exact path='/' component={Home} />

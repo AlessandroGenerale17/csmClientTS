@@ -3,8 +3,7 @@ import axios from 'axios';
 import {
     appLoading,
     appDoneLoading,
-    showMessageWithTimeout,
-    setMessage
+    showAlertWithTimeout
 } from '../appState/actions';
 
 import { AppDispatch, RootState } from '..';
@@ -50,14 +49,12 @@ export const signUp = (
                     imgUrl: response.data.imgUrl
                 })
             );
-            dispatch(
-                showMessageWithTimeout('success', true, 'account created', 2000)
-            );
+            dispatch(showAlertWithTimeout('Account created', 'success'));
             dispatch(appDoneLoading());
         } catch (error) {
             if (error instanceof Error) {
                 console.log(error.message);
-                dispatch(setMessage('danger', true, error.message));
+                dispatch(showAlertWithTimeout(error.message, 'error'));
             }
             dispatch(appDoneLoading());
         }
@@ -74,14 +71,11 @@ export const login = (email: string, password: string) => {
             });
 
             dispatch(loginSuccess(response.data));
-            dispatch(
-                showMessageWithTimeout('success', false, 'welcome back!', 1500)
-            );
+            dispatch(showAlertWithTimeout('Welcome back!', 'success'));
             dispatch(appDoneLoading());
         } catch (error) {
             if (error instanceof Error) {
-                console.log(error.message);
-                dispatch(setMessage('danger', true, error.message));
+                dispatch(showAlertWithTimeout(error.message, 'error'));
             }
             dispatch(appDoneLoading());
         }

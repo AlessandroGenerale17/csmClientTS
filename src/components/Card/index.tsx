@@ -39,7 +39,11 @@ export default function SnippetCard(props: Props) {
     const currentUser = useSelector(selectUser);
     return (
         <Card
-            style={{ marginRight: '0.4rem', marginBottom: '0.6rem' }}
+            style={{
+                marginRight: '0.4rem',
+                marginBottom: '0.6rem',
+                backgroundColor: `${issue && '#e5989b'}`
+            }}
             sx={{ minWidth: 345 }}
         >
             <div
@@ -119,7 +123,7 @@ export default function SnippetCard(props: Props) {
                     Shared on: {moment(createdAt).format('DD-MM-YY')}
                 </span>
                 <span style={{ fontSize: '12px' }}>
-                    Last edit on: {moment(updatedAt).fromNow()}
+                    Last edit: {moment(updatedAt).fromNow()}
                 </span>
             </div>
         </Card>

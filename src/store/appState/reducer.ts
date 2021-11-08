@@ -3,8 +3,7 @@ import { AppState, AppStateActions } from './types';
 const initialState: AppState = {
     loading: false,
     saveLoading: false,
-    message: null,
-    formMessage: null
+    alert: null
 };
 
 const reducer = (state = initialState, action: AppStateActions): AppState => {
@@ -21,17 +20,18 @@ const reducer = (state = initialState, action: AppStateActions): AppState => {
         case 'SAVE_DONE_LOADING':
             return { ...state, saveLoading: false };
 
-        case 'SET_MESSAGE':
-            return { ...state, message: action.payload };
+        case 'SET_ALERT':
+            console.log(action);
+            return {
+                ...state,
+                alert: {
+                    severity: action.payload.severity,
+                    message: action.payload.message
+                }
+            };
 
-        case 'CLEAR_MESSAGE':
-            return { ...state, message: null };
-
-        case 'SET_FORM_ALERT':
-            return { ...state, formMessage: action.payload };
-
-        case 'CLEAR_FORM_ALERT':
-            return { ...state, formMessage: null };
+        case 'CLEAR_ALERT':
+            return { ...state, alert: null };
 
         default:
             return state;

@@ -19,7 +19,7 @@ import {
     OnClickFormDiv,
     OnSubmit
 } from '../../Types/EventListener';
-import { showFormAlertWithTimeout } from '../../store/appState/actions';
+import { showAlertWithTimeout } from '../../store/appState/actions';
 import { isFormValid } from '../../Lib/Validators';
 import { FormState } from '../../Types/FormState';
 import { handleFormChange } from '../../Lib/FormChange';
@@ -103,10 +103,11 @@ export default function Snippet() {
             );
         else
             dispatch(
-                showFormAlertWithTimeout(
+                showAlertWithTimeout(
                     `Please enter something for field${
                         validForm.length > 1 ? 's' : ''
-                    }: ${validForm.toString().split(',').join(', ')}`
+                    }: ${validForm.toString().split(',').join(', ')}`,
+                    'error'
                 )
             );
     };

@@ -9,7 +9,7 @@ import {
     appLoading,
     saveDoneLoading,
     saveLoading,
-    showMessageWithTimeout
+    showAlertWithTimeout
 } from '../appState/actions';
 
 import {
@@ -235,12 +235,7 @@ export const createSnippet =
             dispatch(addFeedPost(newSnippet));
 
             dispatch(
-                showMessageWithTimeout(
-                    'success',
-                    true,
-                    'Snippet added successfully!',
-                    2500
-                )
+                showAlertWithTimeout('Snippet added successfully!', 'success')
             );
             dispatch(appDoneLoading());
         } catch (err) {

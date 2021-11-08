@@ -7,7 +7,7 @@ import { OnChangeInput } from '../../Types/EventListener';
 import CircularProgress from '@mui/material/CircularProgress';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import Box from '@mui/material/Box';
-import FormAlert from '../../components/Alert/FormInputAlert/';
+import FormAlert from '../../components/Alert';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';

@@ -5,7 +5,7 @@ import Editor from '../../components/Editor';
 import { OnChange, OnClick, OnSubmit } from '../../Types/EventListener';
 import { createSnippet } from '../../store/snippets/actions';
 import { useHistory } from 'react-router-dom';
-import { showFormAlertWithTimeout } from '../../store/appState/actions';
+import { showAlertWithTimeout } from '../../store/appState/actions';
 import { isFormValid } from '../../Lib/Validators';
 import { FormState } from '../../Types/FormState';
 import { handleFormChange, handleCodeChange } from '../../Lib/FormChange';
@@ -49,16 +49,15 @@ export default function NewSnippet() {
             setTimeout(() => history.push('/manager'), 2000);
         } else {
             dispatch(
-                showFormAlertWithTimeout(
+                showAlertWithTimeout(
                     `Please enter something for field${
                         validForm.length > 1 ? 's' : ''
-                    }: ${validForm.toString().split(',').join(', ')}`
+                    }: ${validForm.toString().split(',').join(', ')}`,
+                    'error'
                 )
             );
         }
     };
-
-    console.log(formState);
 
     return (
         <div className='page'>

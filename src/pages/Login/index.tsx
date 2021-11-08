@@ -5,7 +5,7 @@ import { selectToken } from '../../store/user/selectors';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, Link } from 'react-router-dom';
 import Box from '@mui/material/Box';
-import FormAlert from '../../components/Alert/FormInputAlert/';
+import FormAlert from '../../components/Alert';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 
