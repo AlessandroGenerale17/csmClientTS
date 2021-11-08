@@ -6,3 +6,6 @@ export const selectSnippets = (reduxState: RootState): Snippet[] =>
 
 export const selectSnippet = (reduxState: RootState): Snippet | null =>
     reduxState.snippets.selected;
+
+export const selectSnippetCode = (reduxState: RootState): string | null =>
+    reduxState.snippets.selected ? reduxState.snippets.selected.code : null;

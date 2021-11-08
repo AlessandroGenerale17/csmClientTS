@@ -21,6 +21,8 @@ import {
     selectPopularSnippets,
     selectPopularSnippetsIds
 } from '../homeState/selectors';
+import { selectUser } from '../user/selectors';
+import { selectSnippet } from './selectors';
 
 type ConfigsAuthWithData = {
     headers: {
@@ -174,6 +176,38 @@ export const patchSnippet =
         }
     };
 
+export const patchSnippetCode =
+    (code: string) =>
+    async (dispatch: AppDispatch, getState: () => RootState) => {
+        try {
+            dispatch(saveLoading());
+            const snippet = selectSnippet(getState());
+            if (!snippet) return;
+            const res = await axios.patch(
+                `${apiUrl}/snippets/code/${snippet.id}`,
+                { code }
+            );
+            dispatch(saveSnippet({ ...res.data }));
+            dispatch(saveDoneLoading());
+        } catch (err) {
+            if (err instanceof Error) console.log(err.message);
+            dispatch(saveDoneLoading());
+        }
+    };
+
+export const remoteSnippetUpdate =
+    (updatedSnippet: Snippet) =>
+    (dispatch: AppDispatch, getState: () => RootState) => {
+        console.log('action getting triggered ');
+        dispatch(saveSnippet(updatedSnippet));
+        dispatch(
+            showAlertWithTimeout(
+                `${updatedSnippet.user.name} recently updated the snippet contents`,
+                'success'
+            )
+        );
+    };
+
 export const removeSnippets =
     (idsArray: readonly string[]) =>
     async (dispatch: AppDispatch, getState: () => RootState) => {
@@ -215,15 +249,13 @@ export const createSnippet =
     async (dispatch: AppDispatch, getState: () => RootState) => {
         try {
             dispatch(appLoading());
-            // FIXME auth is missing in this route
-            // FIXME missing userId
-            const userId = 1;
-            console.log('pubbbbbb action', pub);
+            const user = selectUser(getState());
+            if (!user) return;
             const res = await axios.post(`${apiUrl}/snippets/`, {
                 title,
                 description,
                 code,
-                userId,
+                userId: user.id,
                 languageId,
                 issue,
                 public: pub

@@ -25,7 +25,6 @@ export default function SnippetCard(props: Props) {
     const {
         id,
         title,
-        description,
         user,
         language,
         createdAt,
@@ -42,6 +41,7 @@ export default function SnippetCard(props: Props) {
             style={{
                 marginRight: '0.4rem',
                 marginBottom: '0.6rem',
+                marginTop: '0.6rem',
                 backgroundColor: `${issue && '#e5989b'}`
             }}
             sx={{ minWidth: 345 }}

@@ -7,12 +7,14 @@ import Loading from '../../components/Loading';
 import { useParams } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectSnippet } from '../../store/snippets/selectors';
-import { fetchSnippet } from '../../store/snippets/actions';
-import { OnChangeInput } from '../../Types/EventListener';
+import { fetchSnippet, patchSnippet } from '../../store/snippets/actions';
 import Editor from '../../components/Editor';
 import ChatMessage from '../../components/ChatMessage';
 import { TextField } from '@material-ui/core';
+import { remoteSnippetUpdate } from '../../store/snippets/actions';
 import SendIcon from '@mui/icons-material/Send';
+import { Snippet } from '../../Types/Snippet';
+import { OnChangeInput } from '../../Types/EventListener';
 
 type Message = {
     user: {
@@ -30,6 +32,7 @@ type ParamTypes = {
 const socket = io(apiUrl);
 
 export default function Chat() {
+    const [code, setCode] = useState('');
     const history = useHistory();
     const dispatch = useDispatch();
     const [input, setInput] = useState('');
@@ -67,16 +70,42 @@ export default function Chat() {
                 setMessages((prev) => [{ user: user, text: text }, ...prev]);
             });
 
+            socket.on('snip_update', (updatedSnippet: Snippet) => {
+                // update the current code on the editor
+                console.log('received this ', updatedSnippet);
+                dispatch(remoteSnippetUpdate(updatedSnippet));
+            });
+
             return () => {
                 socket.emit('leave_room', {
                     roomId: id,
                     user: { id: user.id, name: user.name }
                 });
-            }; 
+            };
         }
     }, [user]);
 
-    if (!issueSnippet) return <Loading />;
+    if (!issueSnippet || !user) return <Loading />;
+
+    const saveCode = () => {
+        if (!user) return;
+        if (user.id === issueSnippet.user.id && code !== issueSnippet.code) {
+            // FIXME we can move this in our reducer
+            dispatch(
+                patchSnippet(
+                    parseInt(id),
+                    issueSnippet.title,
+                    issueSnippet.description,
+                    code,
+                    issueSnippet.language.id,
+                    issueSnippet.public,
+                    issueSnippet.issue
+                )
+            );
+        }
+    };
+
+    console.log('issueSnippet', issueSnippet);
 
     return (
         <div style={{ display: 'flex' }}>
@@ -148,11 +177,11 @@ export default function Chat() {
             <Editor
                 className='editor-newSnippet'
                 type='snippet'
-                handleCodeChange={() => {}}
-                prompt={''}
-                language={1}
-                editable={true}
-                saveCode={() => {}}
+                handleCodeChange={(e) => setCode(e)}
+                prompt={issueSnippet.code}
+                language={issueSnippet.language.id}
+                editable={issueSnippet.user.id === user.id}
+                saveCode={saveCode}
                 runCode={() => {}}
                 submitSolution={() => {}}
             />
