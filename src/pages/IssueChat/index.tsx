@@ -50,30 +50,31 @@ export default function Chat() {
     useEffect(() => {
         if (!issueSnippet) dispatch(fetchSnippet(parseInt(id)));
 
-        if (user)
+        if (user) {
             socket.emit('join_room', {
                 roomId: id,
                 user: { id: user.id, name: user.name }
             });
-        // connect to chat using the current issue ID
-        // and the user ID
-        socket.on('joined_room', (prevMessages) => {
-            console.log('here ', prevMessages);
-            setMessages([...prevMessages]);
-        });
-
-        socket.on('new_message', (messageInfo) => {
-            const { user, text } = messageInfo;
-            setMessages((prev) => [{ user: user, text: text }, ...prev]);
-        });
-
-        return () => {
-            socket.emit('leave_room', {
-                roomId: id,
-                user: { id: user.id, name: user.name }
+            // connect to chat using the current issue ID
+            // and the user ID
+            socket.on('joined_room', (prevMessages) => {
+                console.log('here ', prevMessages);
+                setMessages([...prevMessages]);
             });
-        };
-    }, []);
+
+            socket.on('new_message', (messageInfo) => {
+                const { user, text } = messageInfo;
+                setMessages((prev) => [{ user: user, text: text }, ...prev]);
+            });
+
+            return () => {
+                socket.emit('leave_room', {
+                    roomId: id,
+                    user: { id: user.id, name: user.name }
+                });
+            }; 
+        }
+    }, [user]);
 
     if (!issueSnippet) return <Loading />;
 

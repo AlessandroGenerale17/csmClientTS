@@ -12,8 +12,8 @@ import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../store/user/selectors';
 import InsertCommentIcon from '@mui/icons-material/InsertComment';
-import './index.css';
 import { Snippet } from '../../Types/Snippet';
+import './index.css';
 
 type Props = {
     snippet: Snippet;
