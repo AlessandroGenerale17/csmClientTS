@@ -141,9 +141,6 @@ export const patchSnippet =
                 })
             );
 
-            //FIXME
-
-            // if it is public then replace
             const popularSnippets = selectPopularSnippets(getState());
             if (popularSnippets.length > 0) {
                 const isIncluded = selectPopularSnippetsIds(

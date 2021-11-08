@@ -43,6 +43,8 @@ export default function SnippetDetails() {
 
     if (!snippet) return <Loading />;
 
+    const showChat = snippet.issue && user;
+
     return (
         <div className='snippet-page' style={{ display: 'flex' }}>
             <div className='snippet-content'>
@@ -67,7 +69,7 @@ export default function SnippetDetails() {
                                 {snippet.user.name}
                             </div>
                         </div>
-                        {snippet.issue && (
+                        {showChat && (
                             <div>
                                 <Button>
                                     <Link to={`/chat/${id}`}>

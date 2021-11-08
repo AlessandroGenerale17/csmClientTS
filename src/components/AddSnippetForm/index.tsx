@@ -75,7 +75,6 @@ export default function AddSnippetForm(props: Props) {
             noValidate
             autoComplete='off'
         >
-            <FormAlert />
             <TextField
                 name='title'
                 id='outlined-basic'

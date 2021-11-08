@@ -1,4 +1,5 @@
 import Avatar from '../Avatar/';
+import moment from 'moment';
 
 type Props = {
     user: {
@@ -6,11 +7,12 @@ type Props = {
         imgUrl: string;
     };
     text: string;
+    timeStamp: number;
     align: 'start' | 'end';
 };
 
 export default function ChatMessage(props: Props) {
-    const { user, text, align } = props;
+    const { user, text, align, timeStamp } = props;
     return (
         <li
             style={{
@@ -46,7 +48,7 @@ export default function ChatMessage(props: Props) {
                         fontSize: '12px'
                     }}
                 >
-                    time
+                    {moment(timeStamp).format('HH:MM')}
                 </div>
             </div>
         </li>

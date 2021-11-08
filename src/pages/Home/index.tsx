@@ -71,7 +71,7 @@ export default function Home() {
                     style={{
                         display: 'flex',
                         flexWrap: 'nowrap',
-                        justifyContent: 'space-evenly'
+                        overflowX: 'auto'
                     }}
                 >
                     {issueSnippets.map((snippet: Snippet) => (

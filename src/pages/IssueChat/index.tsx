@@ -23,6 +23,7 @@ type Message = {
         imgUrl: string;
     };
     text: string;
+    timeStamp: number;
 };
 
 type ParamTypes = {
@@ -46,7 +47,8 @@ export default function Chat() {
         socket.emit('new_message', {
             roomId: id,
             user: { id: user.id, name: user.name, imgUrl: user.imgUrl },
-            text: input
+            text: input,
+            timeStamp: Date.now()
         });
         setInput('');
     };
@@ -66,8 +68,8 @@ export default function Chat() {
             });
 
             socket.on('new_message', (messageInfo) => {
-                const { user, text } = messageInfo;
-                setMessages((prev) => [{ user: user, text: text }, ...prev]);
+                const { user, text, timeStamp } = messageInfo;
+                setMessages((prev) => [{ user, text, timeStamp }, ...prev]);
             });
 
             socket.on('snip_update', (updatedSnippet: Snippet) => {
@@ -104,8 +106,6 @@ export default function Chat() {
             );
         }
     };
-
-    console.log('issueSnippet', issueSnippet);
 
     return (
         <div style={{ display: 'flex' }}>
@@ -144,7 +144,7 @@ export default function Chat() {
                 <div
                     style={{
                         padding: '0.6rem',
-                        backgroundColor: 'gray',
+                        backgroundColor: '#e9ecef',
                         borderRadius: '0.5rem'
                     }}
                 >
@@ -169,6 +169,7 @@ export default function Chat() {
                                         ? 'start'
                                         : 'end'
                                 }
+                                timeStamp={message.timeStamp}
                             />
                         ))}
                     </ul>
