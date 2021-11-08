@@ -19,7 +19,6 @@ export default function Challenges() {
     if (loading) return <Loading />;
     return (
         <div className='challenges-page'>
-            <div>some configs</div>
             <div>
                 <Table
                     performDispatch={() => []}

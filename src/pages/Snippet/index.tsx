@@ -28,8 +28,10 @@ import { Comment } from '../../Types/Comment';
 import SendIcon from '@mui/icons-material/Send';
 import CommentLine from '../../components/Comments';
 import { createComment } from '../../store/homeState/actions';
-import './index.css';
+import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
+import Avatar from '../../components/Avatar/';
+import './index.css';
 
 // FIXME possibly export
 type ParamTypes = {
@@ -109,7 +111,6 @@ export default function Snippet() {
             );
     };
 
-    const onCommentChange = (e: OnChange) => setComment(e.target.value);
     const submitComment = () => {
         setComment('');
         comment.trim().length && dispatch(createComment(snippet.id, comment));
@@ -156,19 +157,41 @@ export default function Snippet() {
                 <div className='snippet-content'>
                     <div onClick={handleFormClick}>
                         <h2 id='title'>{snippet.title}</h2>
-                        <p>{snippet.language.name}</p>
-                        <Button>
-                            <Link to={`/chat/${id}`}>Join Discussion</Link>
-                        </Button>
-                        <div style={{ minHeight: '305px' }}>
-                            <ReactMarkdown
-                                className='md'
-                                children={snippet.description}
-                            />
+                        <div className='meta-snippet'>
+                            <div>
+                                <p>
+                                    <b>Language:</b> {snippet.language.name}
+                                </p>
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        alignItems: 'center'
+                                    }}
+                                >
+                                    <b>Author:</b>{' '}
+                                    <Avatar
+                                        imgUrl={snippet.user.imgUrl}
+                                        alt={snippet.user.name}
+                                    />
+                                    {snippet.user.name}
+                                </div>
+                            </div>
+                            {snippet.issue && (
+                                <div>
+                                    <Button>
+                                        <Link to={`/chat/${id}`}>
+                                            Join Discussion
+                                        </Link>
+                                    </Button>
+                                </div>
+                            )}
                         </div>
-                        <h4 style={{ textAlign: 'center' }}>
+                        <div className='md' style={{ minHeight: '305px' }}>
+                            <ReactMarkdown children={snippet.description} />
+                        </div>
+                        <h2 style={{ textAlign: 'center' }}>
                             Comments {snippet.comments.length}
-                        </h4>
+                        </h2>
                     </div>
                     <div
                         style={{
@@ -179,15 +202,13 @@ export default function Snippet() {
                     >
                         {user?.id && snippet.public && (
                             <>
-                                <input
-                                    type='text'
-                                    placeholder='write your comment'
-                                    onChange={onCommentChange}
+                                <TextField
+                                    style={{ width: '100%' }}
+                                    label='Comment'
+                                    name='comment'
+                                    variant='outlined'
                                     value={comment}
-                                    style={{
-                                        width: '100%',
-                                        marginBottom: '4px'
-                                    }}
+                                    onChange={(e) => setComment(e.target.value)}
                                 />
                                 <SendIcon
                                     style={{ cursor: 'pointer' }}

@@ -26,7 +26,7 @@ export default function Manager() {
     return (
         <div className='manager-page'>
             <div>
-                <p>Some configs</p>
+                
             </div>
             <div>
                 <Table
