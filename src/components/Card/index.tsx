@@ -56,9 +56,9 @@ export default function SnippetCard(props: Props) {
                 <Typography gutterBottom variant='h5' component='div'>
                     {title}
                 </Typography>
-                <Typography variant='body2' color='text.secondary'>
+                {/* <Typography variant='body2' color='text.secondary'>
                     {description}
-                </Typography>
+                </Typography> */}
                 <Typography>{language.name}</Typography>
             </CardContent>
             <CardActions>
