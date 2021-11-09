@@ -1,46 +1,40 @@
-# Getting Started with Create React App
+# CodeBuster <img width='40px' src='https://2019.breizhcamp.org/img/carousel/code-busters.png' />
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+CodeBuster is a small prototype for a code snippet manager.
 
-## Available Scripts
+### Project Motivation
 
-In the project directory, you can run:
+I often find myself searching for <b>one</b> specific piece of code. I either try to remember what keywords I entered in the Google search bar or randomly search through my GitHub repos. The idea behind this prototype is to give the ability for the user to save her/his snippets of code and make them easy to retrieve for future reference.
 
-### `npm start`
+### Tech Stack
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+#### Front-end
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+<img src='https://camo.githubusercontent.com/c2cca0fe542f9c1271669790c7ebb6abed9cbd25d6b2cd4863b70c3951ea2df6/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f547970657363726970742d3331373843363f6c6f676f3d74797065736372697074266c6f676f436f6c6f723d7768697465267374796c653d666f722d7468652d6261646765' />
+<img src='https://camo.githubusercontent.com/876426d64480dd18283dc72bcf0f293d6871c746d5358168e28565efc1c0334d/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f52656163742d3631444146423f6c6f676f3d7265616374266c6f676f436f6c6f723d7768697465267374796c653d666f722d7468652d6261646765'>
+<img src='https://camo.githubusercontent.com/a3bbc59f190482c45788b1d213d1dc1b8f426691e0e6320aefe31bc6832f3491/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f52656475782d3736344142433f6c6f676f3d7265647578266c6f676f436f6c6f723d7768697465267374796c653d666f722d7468652d6261646765' />
+<img width='79px' src='https://camo.githubusercontent.com/2435c2a64789b8a71c701a1a593b4a6e6869789bfb0626e515dc2a6b6dffa6c5/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f2d435353332d3135373242363f7374796c653d666c61742d737175617265266c6f676f3d63737333'>
+<img width='75px' src='https://cdn-images-1.medium.com/max/1200/0*Ycp0d6CqDMIGWBrY.png' />
 
-### `npm test`
+#### Back-end
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+<img src='https://camo.githubusercontent.com/ba7b5a94c5934bd53128b7600332064a41d97c343ebc19e72c048daae18ea5d1/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f4e6f64652e6a732d3333393933333f6c6f676f3d6e6f64652e6a73266c6f676f436f6c6f723d7768697465267374796c653d666f722d7468652d6261646765' />
+<img src='https://camo.githubusercontent.com/54d885a39ff8ae8e17e1f9dd9286eb8e754d4c44c6ff3a31b2ba8f143f454254/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f457870726573732d3030303030303f6c6f676f3d65787072657373266c6f676f436f6c6f723d7768697465267374796c653d666f722d7468652d6261646765' />
+<img src='https://camo.githubusercontent.com/ea0a0d5491e470f09b738a5b5412dc143ffdb1018f4ead88124374ffc576dbd4/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f506f737467726553514c2d3431363945313f6c6f676f3d706f737467726573716c266c6f676f436f6c6f723d7768697465267374796c653d666f722d7468652d6261646765' />
+<img src='https://camo.githubusercontent.com/1d7814efc567041c56f7cb83654566f6be83d8b2ff4392b6c1321bfeed7d7dc1/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f53657175656c697a652d3532423045373f6c6f676f3d73657175656c697a65266c6f676f436f6c6f723d7768697465267374796c653d666f722d7468652d6261646765' />
+<img width='75px' src='https://cdn-images-1.medium.com/max/1200/0*Ycp0d6CqDMIGWBrY.png' />
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+#### UI Frameworks
+Material UI  
+<img width='70px' src='https://cdn-media-1.freecodecamp.org/images/1*FDNeKIUeUnf0XdqHmi7nsw.png' />
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+React Bootstrap
 
-### `npm run eject`
+<img width='70px' src='https://www.educative.io/v2api/editorpage/5816757605367808/image/6486746733740032' />
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Demo
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
