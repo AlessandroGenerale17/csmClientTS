@@ -23,7 +23,7 @@ export default function ChatMessage(props: Props) {
             <div
                 style={{
                     backgroundColor: `${
-                        align === 'start' ? 'white ' : 'yellow'
+                        align === 'start' ? 'white ' : '#90e0ef'
                     }`,
                     borderRadius: '0.5rem',
                     padding: '0.4rem'

@@ -9,6 +9,7 @@ import { OnChangeInput } from '../../Types/EventListener';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import Code from '../../Logic/Editor';
+import ReactMarkdown from 'react-markdown';
 import './index.css';
 
 // FIXME possibly export
@@ -38,8 +39,6 @@ export default function Challenge() {
         }
     }, [dispatch, challenge]);
 
-    // TODO here I take care of the state of stuff like test cases input
-    // submission
     const handleCodeChange = (code: string) => {
         setCodeChallenge(code);
     };
@@ -99,31 +98,18 @@ export default function Challenge() {
         else setOutput([{ error: false, value: JSON.stringify(out) }]);
     };
 
-    console.log(challenge);
-
     if (!challenge) return <Loading />;
 
     return (
         <div className='challenge-page'>
-            <div className='challenge'>
+            <div className='challenge-content'>
                 <div className='challenge-details'>
-                    <h2>Question</h2>
-                    <p>Some text about question MD formatSome text about</p>
+                    <h2>{challenge.title}</h2>
+                    <div className='md' style={{ minHeight: '305px' }}>
+                        <ReactMarkdown children={challenge.description} />
+                    </div>
                 </div>
-                <Editor
-                    type='code'
-                    className='editor-newSnippet'
-                    prompt={codeChallenge}
-                    language={challenge.language.id}
-                    editable={true}
-                    handleCodeChange={handleCodeChange}
-                    submitSolution={submitSolution}
-                    runCode={runCodeWithTestCase}
-                    saveCode={() => {}}
-                />
-            </div>
-            <div className='challenge-footer'>
-                <div className='testcase'>
+                <div className='challenge-testcase'>
                     <label htmlFor='testcase-input'>Testcase</label>
                     <input
                         id='testcase-input'
@@ -134,7 +120,7 @@ export default function Challenge() {
                         }
                     />
                 </div>
-                <div className='output'>
+                <div className='challenge-output'>
                     {output.map((out, index) => (
                         <p
                             key={index}
@@ -156,6 +142,17 @@ export default function Challenge() {
                     ))}
                 </div>
             </div>
+            <Editor
+                type='code'
+                className='editor-newSnippet'
+                prompt={codeChallenge}
+                language={challenge.language.id}
+                editable={true}
+                handleCodeChange={handleCodeChange}
+                submitSolution={submitSolution}
+                runCode={runCodeWithTestCase}
+                saveCode={() => {}}
+            />
         </div>
     );
 }

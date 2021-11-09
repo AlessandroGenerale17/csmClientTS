@@ -84,14 +84,6 @@ export const login = (email: string, password: string) => {
 
 export const getUserWithStoredToken = () => {
     return async (dispatch: AppDispatch, getState: () => RootState) => {
-        // get token from the state
-        // const rState = getState();
-        // if (!rState.user) {
-        //     return;
-        // }
-
-        // const token = selectToken(getState());
-        // console.log('token', token);
         const token = localStorage.getItem('token');
         if (!token) return;
 
