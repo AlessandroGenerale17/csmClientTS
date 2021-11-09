@@ -92,7 +92,6 @@ export default function Chat() {
     const saveCode = () => {
         if (!user) return;
         if (user.id === issueSnippet.user.id && code !== issueSnippet.code) {
-            // FIXME we can move this in our reducer
             dispatch(
                 patchSnippet(
                     parseInt(id),

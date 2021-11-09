@@ -34,7 +34,7 @@ export default function Editor(props: Props) {
         editable
     } = props;
 
-    const [theme, setTheme] = useState<boolean>(false);
+    const [theme, setTheme] = useState<boolean>(true);
 
     const changeTheme = () => setTheme(() => !theme);
 
