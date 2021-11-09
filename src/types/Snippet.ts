@@ -28,8 +28,8 @@ export interface Snippet {
     likes: Like[];
     public: boolean;
     issue: boolean;
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt: string;
+    updatedAt: string;
 }
 
 export interface CodeSnippet extends Snippet {

@@ -13,6 +13,7 @@ import { useSelector } from 'react-redux';
 import { selectUser } from '../../store/user/selectors';
 import InsertCommentIcon from '@mui/icons-material/InsertComment';
 import { Snippet } from '../../Types/Snippet';
+import ErrorIcon from '@mui/icons-material/Error';
 import './index.css';
 
 type Props = {
@@ -59,6 +60,11 @@ export default function SnippetCard(props: Props) {
             <CardContent>
                 <Typography gutterBottom variant='h5' component='div'>
                     {title}
+                    {issue && (
+                        <ErrorIcon
+                            style={{ color: 'red', marginLeft: '0.5rem' }}
+                        />
+                    )}
                 </Typography>
                 {/* <Typography variant='body2' color='text.secondary'>
                     {description}

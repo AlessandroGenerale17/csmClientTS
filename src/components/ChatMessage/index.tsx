@@ -48,7 +48,7 @@ export default function ChatMessage(props: Props) {
                         fontSize: '12px'
                     }}
                 >
-                    {moment(timeStamp).format('HH:MM')}
+                    {moment(timeStamp).format('hh:mm')}
                 </div>
             </div>
         </li>

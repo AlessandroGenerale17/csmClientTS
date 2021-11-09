@@ -1,5 +1,3 @@
-import { StateMessage } from '../../Types/Message';
-
 export type AppState = {
     loading: boolean;
     saveLoading: boolean;

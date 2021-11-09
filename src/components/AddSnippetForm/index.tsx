@@ -48,7 +48,6 @@ export default function AddSnippetForm(props: Props) {
 
     const loading = useSelector(selectSaveLoading);
 
-    console.log('langId', langId);
     const fetchLanguages = async () => {
         const res = await axios.get(`${apiUrl}/languages`);
         setLanguageOptions(

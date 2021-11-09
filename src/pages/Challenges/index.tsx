@@ -13,7 +13,7 @@ export default function Challenges() {
     const loading = useSelector(selectAppLoading);
 
     useEffect(() => {
-        dispatch(fetchChallenges);
+        if (!challenges.length) dispatch(fetchChallenges);
     }, [dispatch]);
 
     if (loading) return <Loading />;

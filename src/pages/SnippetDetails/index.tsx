@@ -9,20 +9,16 @@ import Loading from '../../components/Loading';
 import { fetchSnippet } from '../../store/snippets/actions';
 import { selectSnippet } from '../../store/snippets/selectors';
 import { Comment } from '../../Types/Comment';
-import { OnChange } from '../../Types/EventListener';
 import { createComment } from '../../store/homeState/actions';
 import { selectUser } from '../../store/user/selectors';
 import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
-import { apiUrl } from '../../configs';
-import { io } from 'socket.io-client';
 import Avatar from '../../components/Avatar';
 import { TextField } from '@mui/material';
 
 type ParamTypes = {
     id: string;
 };
-const socket = io(apiUrl);
 
 export default function SnippetDetails() {
     const [comment, setComment] = useState<string>('');
@@ -31,7 +27,6 @@ export default function SnippetDetails() {
     const snippet = useSelector(selectSnippet);
     const user = useSelector(selectUser);
 
-    const onCommentChange = (e: OnChange) => setComment(e.target.value);
     const submitComment = () => {
         setComment('');
         comment.trim().length && dispatch(createComment(parseInt(id), comment));
