@@ -40,12 +40,14 @@ export default function Home() {
     return (
         <div>
             <div>
-                <h1>Popular Snippets</h1>
+                <h1 style={{ textAlign: 'center', marginBottom: '0.5rem' }}>
+                    Popular Snippets
+                </h1>
                 <div
                     style={{
                         display: 'flex',
                         overflowX: 'auto',
-                        whiteSpace: 'nowrap'
+                        flexWrap: 'nowrap'
                     }}
                 >
                     {popularSnippets.map((snippet: Snippet) => {
@@ -62,12 +64,14 @@ export default function Home() {
                 </div>
             </div>
             <div>
-                <h1>Recent Issues</h1>
+                <h1 style={{ textAlign: 'center', marginBottom: '0.5rem' }}>
+                    Recent Issues
+                </h1>
                 <div
                     style={{
                         display: 'flex',
                         flexWrap: 'nowrap',
-                        justifyContent: 'space-evenly'
+                        overflowX: 'auto'
                     }}
                 >
                     {issueSnippets.map((snippet: Snippet) => (

@@ -58,7 +58,5 @@ export default function CustomizedSwitches(props: Props) {
     // true => light
     const { changeTheme } = props;
 
-    return (
-        <MaterialUISwitch sx={{ m: 1 }} defaultChecked onChange={changeTheme} />
-    );
+    return <MaterialUISwitch sx={{ m: 1 }} onChange={changeTheme} />;
 }

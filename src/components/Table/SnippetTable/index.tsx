@@ -307,7 +307,6 @@ export default function EnhancedTable(props: Props) {
     };
 
     const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
-        console.log(name);
         const selectedIndex = selected.indexOf(name);
         let newSelected: readonly string[] = [];
 
@@ -439,12 +438,12 @@ export default function EnhancedTable(props: Props) {
                                             </TableCell>
                                             <TableCell align='right'>
                                                 {moment(row.updatedAt).format(
-                                                    'DD-MM-YY, HH:MM:ss'
+                                                    'DD-MM-YY, hh:mm:ss'
                                                 )}
                                             </TableCell>
                                             <TableCell align='right'>
                                                 {moment(row.createdAt).format(
-                                                    'DD-MM-YY, HH:MM:ss'
+                                                    'DD-MM-YY, hh:mm:ss'
                                                 )}
                                             </TableCell>
                                         </TableRow>

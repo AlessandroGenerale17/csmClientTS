@@ -1,28 +1,30 @@
 .snippet-page {
     display: flex;
+    margin-top: 0.5rem;
 }
 
 .snippet-content {
     flex: 2;
-    padding: 0.65rem;
-}
-
-.snippet-content > h2 {
-    text-align: center;
-}
-
-.markdown {
-    background-color: rgb(234, 234, 234);
-    border-radius: 0.75rem;
-    min-height: 380px;
-    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
-        rgba(0, 0, 0, 0.3) 0px 7px 13px -3px,
-        rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
-}
-.markdown > .md {
     padding: 0.85rem;
+}
+
+#title {
+    text-align: center;
 }
 
 .editor-container {
     flex: 3;
+}
+
+.meta-snippet {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+}
+
+.md {
+    border-radius: 0.5rem;
+    background-color: #e5e5e5;
+    padding: 0.5rem;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }

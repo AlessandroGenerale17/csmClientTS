@@ -12,8 +12,9 @@ import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../store/user/selectors';
 import InsertCommentIcon from '@mui/icons-material/InsertComment';
-import './index.css';
 import { Snippet } from '../../Types/Snippet';
+import ErrorIcon from '@mui/icons-material/Error';
+import './index.css';
 
 type Props = {
     snippet: Snippet;
@@ -25,7 +26,6 @@ export default function SnippetCard(props: Props) {
     const {
         id,
         title,
-        description,
         user,
         language,
         createdAt,
@@ -39,7 +39,12 @@ export default function SnippetCard(props: Props) {
     const currentUser = useSelector(selectUser);
     return (
         <Card
-            style={{ marginRight: '0.4rem', marginBottom: '0.6rem' }}
+            style={{
+                marginRight: '0.4rem',
+                marginBottom: '0.6rem',
+                marginTop: '0.6rem',
+                backgroundColor: `${issue && '#e5989b'}`
+            }}
             sx={{ minWidth: 345 }}
         >
             <div
@@ -55,10 +60,15 @@ export default function SnippetCard(props: Props) {
             <CardContent>
                 <Typography gutterBottom variant='h5' component='div'>
                     {title}
+                    {issue && (
+                        <ErrorIcon
+                            style={{ color: 'red', marginLeft: '0.5rem' }}
+                        />
+                    )}
                 </Typography>
-                <Typography variant='body2' color='text.secondary'>
+                {/* <Typography variant='body2' color='text.secondary'>
                     {description}
-                </Typography>
+                </Typography> */}
                 <Typography>{language.name}</Typography>
             </CardContent>
             <CardActions>
@@ -119,7 +129,7 @@ export default function SnippetCard(props: Props) {
                     Shared on: {moment(createdAt).format('DD-MM-YY')}
                 </span>
                 <span style={{ fontSize: '12px' }}>
-                    Last edit on: {moment(updatedAt).fromNow()}
+                    Last edit: {moment(updatedAt).fromNow()}
                 </span>
             </div>
         </Card>

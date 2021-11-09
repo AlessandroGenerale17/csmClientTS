@@ -1,49 +1,29 @@
 .challenge-page {
     display: flex;
-    flex-direction: column;
 }
 
-.challenge {
+.challenge-content {
+    flex: 2;
+    padding: 0.85rem;
     display: flex;
+    flex-direction: column;
 }
 
 .challenge-details {
-    flex: 2;
-    padding: 0.85rem;
+    min-height: 300px;
 }
 
-.challenge-details > p {
-    max-height: 450px;
-    overflow: auto;
-}
-
-.challenge-footer {
+.challenge-testcase {
     display: flex;
-}
-
-.challenge-footer > .testcase {
-    flex: 2;
-    display: flex;
-    padding: 0.85rem;
     flex-direction: column;
 }
 
-.testcase > input {
-    flex: 1;
-    max-height: 2rem;
-}
-
-.challenge-footer > .output {
-    flex: 3;
+.challenge-output {
     background-color: black;
     margin-top: 0.5rem;
     border-radius: 0.5rem;
     min-height: 9rem;
     max-height: 10rem;
     overflow-y: auto;
-}
-
-.output > p {
     padding: 0.5rem;
-    margin: 0;
 }

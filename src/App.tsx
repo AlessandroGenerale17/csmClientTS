@@ -12,11 +12,12 @@ import Loading from './components/Loading';
 import SignUp from './pages/Signup';
 import Challenges from './pages/Challenges';
 import Challenge from './pages/Challenge';
-import MessageBox from './components/MessageBox';
+import Alert from './components/Alert/';
 import NewSnippet from './pages/NewSnippet';
 import './App.css';
 import SnippetDetails from './pages/SnippetDetails';
 import Navbar from './components/Navigation/Navbar';
+import Chat from './pages/IssueChat/';
 
 function App() {
     const dispatch = useDispatch();
@@ -29,7 +30,7 @@ function App() {
     return (
         <div className='App'>
             <Navbar />
-            <MessageBox />
+            <Alert />
             {isLoading ? <Loading /> : null}
             <Switch>
                 <Route exact path='/' component={Home} />
@@ -41,6 +42,7 @@ function App() {
                 <Route path='/challenges' component={Challenges} />
                 <Route path='/newSnippet' component={NewSnippet} />
                 <Route path='/snippets/:id' component={Snippet} />
+                <Route path='/chat/:id' component={Chat} />
                 <Route path='/snippetDetails/:id' component={SnippetDetails} />
             </Switch>
         </div>

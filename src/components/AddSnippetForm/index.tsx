@@ -9,7 +9,7 @@ import LoadingButton from '../Button/LoadingButton/';
 import { useSelector } from 'react-redux';
 import { selectSaveLoading } from '../../store/appState/selectors';
 import CloseButton from '../Button/CloseButton/';
-import FormAlert from '../../components/Alert/FormInputAlert/';
+import FormAlert from '../Alert';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import NativeSelect from '@mui/material/NativeSelect';
@@ -19,9 +19,9 @@ import { FormState } from '../../Types/FormState';
 import InputLabel from '@mui/material/InputLabel';
 import { useEffect, useState } from 'react';
 import { apiUrl } from '../../configs';
-import './index.css';
 import Loading from '../Loading';
 import Checkbox from '@mui/material/Checkbox';
+import './index.css';
 
 type Props = {
     handleFormChange: (e: OnChange) => void;
@@ -48,7 +48,6 @@ export default function AddSnippetForm(props: Props) {
 
     const loading = useSelector(selectSaveLoading);
 
-    console.log('langId', langId);
     const fetchLanguages = async () => {
         const res = await axios.get(`${apiUrl}/languages`);
         setLanguageOptions(
@@ -75,7 +74,6 @@ export default function AddSnippetForm(props: Props) {
             noValidate
             autoComplete='off'
         >
-            <FormAlert />
             <TextField
                 name='title'
                 id='outlined-basic'

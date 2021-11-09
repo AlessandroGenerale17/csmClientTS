@@ -11,6 +11,7 @@ const reducer = (
 ): SnippetState => {
     switch (action.type) {
         case 'SAVE_SNIPPET':
+            console.log('SAVE SNIPPET', action.payload);
             return {
                 ...state,
                 selected: action.payload
@@ -31,10 +32,12 @@ const reducer = (
             return {
                 ...state,
                 list: state.list.map((snip) => {
-                    if (snip.id === action.payload.id)
+                    if (snip.id === action.payload.id) {
+                        console.log('entered here ', action.payload);
                         return {
                             ...action.payload
                         };
+                    }
                     return snip;
                 })
             };

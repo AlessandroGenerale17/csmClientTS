@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchSnippet } from '../../store/snippets/actions';
 import { selectSnippet } from '../../store/snippets/selectors';
@@ -19,8 +19,7 @@ import {
     OnClickFormDiv,
     OnSubmit
 } from '../../Types/EventListener';
-
-import { showFormAlertWithTimeout } from '../../store/appState/actions';
+import { showAlertWithTimeout } from '../../store/appState/actions';
 import { isFormValid } from '../../Lib/Validators';
 import { FormState } from '../../Types/FormState';
 import { handleFormChange } from '../../Lib/FormChange';
@@ -29,6 +28,9 @@ import { Comment } from '../../Types/Comment';
 import SendIcon from '@mui/icons-material/Send';
 import CommentLine from '../../components/Comments';
 import { createComment } from '../../store/homeState/actions';
+import TextField from '@mui/material/TextField';
+import { Button } from '@mui/material';
+import Avatar from '../../components/Avatar/';
 import './index.css';
 
 // FIXME possibly export
@@ -101,15 +103,15 @@ export default function Snippet() {
             );
         else
             dispatch(
-                showFormAlertWithTimeout(
+                showAlertWithTimeout(
                     `Please enter something for field${
                         validForm.length > 1 ? 's' : ''
-                    }: ${validForm.toString().split(',').join(', ')}`
+                    }: ${validForm.toString().split(',').join(', ')}`,
+                    'error'
                 )
             );
     };
 
-    const onCommentChange = (e: OnChange) => setComment(e.target.value);
     const submitComment = () => {
         setComment('');
         comment.trim().length && dispatch(createComment(snippet.id, comment));
@@ -156,16 +158,41 @@ export default function Snippet() {
                 <div className='snippet-content'>
                     <div onClick={handleFormClick}>
                         <h2 id='title'>{snippet.title}</h2>
-                        <p>{snippet.language.name}</p>
-                        <div style={{ minHeight: '305px' }}>
-                            <ReactMarkdown
-                                className='md'
-                                children={snippet.description}
-                            />
+                        <div className='meta-snippet'>
+                            <div>
+                                <p>
+                                    <b>Language:</b> {snippet.language.name}
+                                </p>
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        alignItems: 'center'
+                                    }}
+                                >
+                                    <b>Author:</b>{' '}
+                                    <Avatar
+                                        imgUrl={snippet.user.imgUrl}
+                                        alt={snippet.user.name}
+                                    />
+                                    {snippet.user.name}
+                                </div>
+                            </div>
+                            {snippet.issue && (
+                                <div>
+                                    <Button>
+                                        <Link to={`/chat/${id}`}>
+                                            Join Discussion
+                                        </Link>
+                                    </Button>
+                                </div>
+                            )}
                         </div>
-                        <h4 style={{ textAlign: 'center' }}>
+                        <div className='md' style={{ minHeight: '305px' }}>
+                            <ReactMarkdown children={snippet.description} />
+                        </div>
+                        <h2 style={{ textAlign: 'center' }}>
                             Comments {snippet.comments.length}
-                        </h4>
+                        </h2>
                     </div>
                     <div
                         style={{
@@ -176,15 +203,13 @@ export default function Snippet() {
                     >
                         {user?.id && snippet.public && (
                             <>
-                                <input
-                                    type='text'
-                                    placeholder='write your comment'
-                                    onChange={onCommentChange}
+                                <TextField
+                                    style={{ width: '100%' }}
+                                    label='Comment'
+                                    name='comment'
+                                    variant='outlined'
                                     value={comment}
-                                    style={{
-                                        width: '100%',
-                                        marginBottom: '4px'
-                                    }}
+                                    onChange={(e) => setComment(e.target.value)}
                                 />
                                 <SendIcon
                                     style={{ cursor: 'pointer' }}
