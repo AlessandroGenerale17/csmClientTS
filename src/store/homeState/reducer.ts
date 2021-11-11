@@ -59,9 +59,10 @@ const reducer = (state = initialState, action: HomeActions) => {
                 popularSnippets: [...state.popularSnippets, action.payload]
             };
         case 'DELETE_FEED_POST':
+            console.log('delete reducer ', action.payload);
             return {
                 ...state,
-                populatSnippets: state.popularSnippets.filter(
+                popularSnippets: state.popularSnippets.filter(
                     (snippet) => snippet.id !== action.payload
                 )
             };

@@ -159,9 +159,9 @@ export const patchSnippet =
                     }
                 } else {
                     if (isIncluded) {
-                        // delefeed
+                        // deleted
                         console.log('deleting from feed');
-                        dispatch(deleteFeedPost({ ...res.data }));
+                        dispatch(deleteFeedPost(res.data.id));
                     }
                 }
             }
