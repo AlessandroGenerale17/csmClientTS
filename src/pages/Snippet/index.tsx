@@ -27,11 +27,17 @@ import { selectUser } from '../../store/user/selectors';
 import { Comment } from '../../Types/Comment';
 import SendIcon from '@mui/icons-material/Send';
 import CommentLine from '../../components/Comments';
-import { createComment } from '../../store/homeState/actions';
+import {
+    createComment,
+    createLike,
+    removeLike
+} from '../../store/homeState/actions';
 import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
 import Avatar from '../../components/Avatar/';
 import moment from 'moment';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import './index.css';
 
 // FIXME possibly export
@@ -153,6 +159,8 @@ export default function Snippet() {
         });
     };
 
+    const showLikes = snippet.public && !snippet.issue;
+    const isLiked = snippet.likes.map((like) => like.userId).includes(user?.id);
     return (
         <div className='snippet-page'>
             {!formState.isOpen ? (
@@ -188,9 +196,38 @@ export default function Snippet() {
                                         <b>Last edit: </b>
                                         {moment(snippet.updatedAt).fromNow()}
                                     </p>
-                                    {snippet.public && (
-                                        <p>{snippet.likes.length} Likes</p>
-                                    )}
+                                    {/* {showLikes && (
+                                        <div>
+                                            {!isLiked ? (
+                                                <FavoriteBorderIcon
+                                                    className='like-button'
+                                                    style={{ color: 'red' }}
+                                                    onClick={() =>
+                                                        dispatch(
+                                                            createLike(
+                                                                snippet.id
+                                                            )
+                                                        )
+                                                    }
+                                                />
+                                            ) : (
+                                                <FavoriteIcon
+                                                    className='like-button'
+                                                    style={{
+                                                        color: 'red'
+                                                    }}
+                                                    onClick={() =>
+                                                        dispatch(
+                                                            removeLike(
+                                                                snippet.id
+                                                            )
+                                                        )
+                                                    }
+                                                />
+                                            )}
+                                            {snippet.likes.length}
+                                        </div>
+                                    )} */}
                                 </div>
                             </div>
                             {snippet.issue && (

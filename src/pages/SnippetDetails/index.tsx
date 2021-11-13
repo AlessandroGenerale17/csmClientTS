@@ -46,7 +46,7 @@ export default function SnippetDetails() {
 
     const showChat = snippet.issue && user;
     const isLiked = snippet.likes.map((like) => like.userId).includes(user?.id);
-
+    const showLikes = snippet.public && !snippet.issue;
     return (
         <div className='snippet-page' style={{ display: 'flex' }}>
             <div className='snippet-content'>
@@ -78,26 +78,28 @@ export default function SnippetDetails() {
                                 />
                                 {snippet.user.name}
                             </div>
-                            <div>
-                                {!isLiked ? (
-                                    <FavoriteBorderIcon
-                                        className='like-button'
-                                        style={{ color: 'red' }}
-                                        onClick={() =>
-                                            dispatch(createLike(snippet.id))
-                                        }
-                                    />
-                                ) : (
-                                    <FavoriteIcon
-                                        className='like-button'
-                                        style={{ color: 'red' }}
-                                        onClick={() =>
-                                            dispatch(removeLike(snippet.id))
-                                        }
-                                    />
-                                )}
-                                {snippet.likes.length}
-                            </div>
+                            {showLikes && (
+                                <div>
+                                    {!isLiked ? (
+                                        <FavoriteBorderIcon
+                                            className='like-button'
+                                            style={{ color: 'red' }}
+                                            onClick={() =>
+                                                dispatch(createLike(snippet.id))
+                                            }
+                                        />
+                                    ) : (
+                                        <FavoriteIcon
+                                            className='like-button'
+                                            style={{ color: 'red' }}
+                                            onClick={() =>
+                                                dispatch(removeLike(snippet.id))
+                                            }
+                                        />
+                                    )}
+                                    {snippet.likes.length}
+                                </div>
+                            )}
                         </div>
                         {showChat && (
                             <div>

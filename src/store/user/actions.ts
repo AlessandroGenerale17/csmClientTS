@@ -75,7 +75,12 @@ export const login = (email: string, password: string) => {
             dispatch(appDoneLoading());
         } catch (error) {
             if (error instanceof Error) {
-                dispatch(showAlertWithTimeout(error.message, 'error'));
+                dispatch(
+                    showAlertWithTimeout(
+                        'Incorrect Email and Password',
+                        'error'
+                    )
+                );
             }
             dispatch(appDoneLoading());
         }

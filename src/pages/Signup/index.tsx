@@ -11,6 +11,7 @@ import FormAlert from '../../components/Alert';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
+import { showAlertWithTimeout } from '../../store/appState/actions';
 
 export default function SignUp() {
     const [name, setName] = useState('');
@@ -31,7 +32,16 @@ export default function SignUp() {
 
     function submitForm(event: SyntheticEvent) {
         event.preventDefault();
-
+        if (
+            !name.trim().length ||
+            !email.trim().length ||
+            !password.trim().length
+        ) {
+            dispatch(
+                showAlertWithTimeout('Please fill in all fields', 'error')
+            );
+            return;
+        }
         if (!imgUploading) dispatch(signUp(name, email, password, imgUrl));
 
         setEmail('');
@@ -69,7 +79,9 @@ export default function SignUp() {
             style={{
                 display: 'flex',
                 flexDirection: 'column',
-                alignItems: 'center'
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '70vh'
             }}
         >
             <h1>Sign Up</h1>
@@ -87,7 +99,6 @@ export default function SignUp() {
                 noValidate
                 autoComplete='off'
             >
-                <FormAlert />
                 <TextField
                     style={{ width: '100%' }}
                     name='name'
@@ -123,10 +134,17 @@ export default function SignUp() {
                     )}
                 </div>
 
-                <Button variant='contained' type='submit' onClick={submitForm}>
+                <Button
+                    style={{ backgroundColor: '#343A40' }}
+                    variant='contained'
+                    type='submit'
+                    onClick={submitForm}
+                >
                     Sign up
                 </Button>
-                <Link to='/login'>Click here to log in</Link>
+                <Link style={{ color: '#343A40' }} to='/login'>
+                    Click here to log in
+                </Link>
             </Box>
         </Container>
     );
