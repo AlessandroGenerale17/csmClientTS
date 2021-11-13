@@ -9,7 +9,6 @@ import LoadingButton from '../Button/LoadingButton/';
 import { useSelector } from 'react-redux';
 import { selectSaveLoading } from '../../store/appState/selectors';
 import CloseButton from '../Button/CloseButton/';
-import FormAlert from '../Alert';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import NativeSelect from '@mui/material/NativeSelect';

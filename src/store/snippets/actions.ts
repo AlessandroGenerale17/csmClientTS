@@ -108,7 +108,6 @@ export const fetchSnippet =
     (id: number) =>
     async (dispatch: AppDispatch, getState: () => RootState) => {
         try {
-            console.log('fetching snippet');
             dispatch(appLoading());
             const res = await axios.get(`${apiUrl}/snippets/${id}`);
             dispatch(saveSnippet({ ...res.data }));
@@ -215,32 +214,21 @@ export const remoteSnippetUpdate =
 export const removeSnippets =
     (idsArray: readonly string[]) =>
     async (dispatch: AppDispatch, getState: () => RootState) => {
+        const idsArrayInt = idsArray
+            .toString()
+            .split(',')
+            .map((id) => parseInt(id));
         try {
             dispatch(appLoading());
-            const res =
-                idsArray.length > 1
-                    ? await axios.delete(`${apiUrl}/snippets`, {
-                          headers: {
-                              data: idsArray.toString()
-                          }
-                      })
-                    : await axios.delete(`${apiUrl}/snippets/${idsArray[0]}`);
-            dispatch(
-                deleteSnippets(
-                    idsArray
-                        .toString()
-                        .split(',')
-                        .map((id) => parseInt(id))
-                )
-            );
-            dispatch(
-                deleteFeedPosts(
-                    idsArray
-                        .toString()
-                        .split(',')
-                        .map((id) => parseInt(id))
-                )
-            );
+            idsArray.length > 1
+                ? await axios.delete(`${apiUrl}/snippets`, {
+                      headers: {
+                          data: idsArray.toString()
+                      }
+                  })
+                : await axios.delete(`${apiUrl}/snippets/${idsArray[0]}`);
+            dispatch(deleteSnippets(idsArrayInt));
+            dispatch(deleteFeedPosts(idsArrayInt));
             dispatch(appDoneLoading());
         } catch (err) {
             if (err instanceof Error) console.log(err.message);

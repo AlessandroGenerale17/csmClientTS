@@ -109,7 +109,7 @@ export const removeLike =
             const isSnippetSelected = selectSnippet(getState());
             if (isSnippetSelected)
                 dispatch(removeLikeSelected({ userId, snippetId }));
-            const res = await axios.delete(
+            await axios.delete(
                 `${apiUrl}/likes/${snippetId}`,
                 configs(user.token)
             );
