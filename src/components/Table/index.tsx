@@ -36,7 +36,6 @@ function createData(snippet: Snippet | CodeSnippet): Data {
     if ('difficulty' in snippet)
         return {
             id: snippet.id,
-            // TODO check this if it sorts correctly
             title: snippet.title.toLowerCase(),
             language: snippet.language.name,
             createdAt: moment(snippet.createdAt).valueOf(),

@@ -38,7 +38,14 @@ export default function Home() {
     if (loading) return <Loading />;
 
     return (
-        <div>
+        <div
+            style={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-evenly',
+                height: '70vh'
+            }}
+        >
             <div>
                 <h1 style={{ textAlign: 'center', marginBottom: '0.5rem' }}>
                     Popular Snippets

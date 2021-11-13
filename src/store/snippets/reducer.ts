@@ -2,6 +2,7 @@ import { SnippetState, SnippetActions } from './types';
 
 const initialState: SnippetState = {
     list: [],
+    liked: [],
     selected: null
 };
 
@@ -20,6 +21,23 @@ const reducer = (
             return {
                 ...state,
                 list: action.payload
+            };
+        case 'SAVE_LIKED_SNIPPETS':
+            return {
+                ...state,
+                liked: action.payload
+            };
+        case 'SAVE_LIKED_SNIPPET':
+            return {
+                ...state,
+                liked: [...state.liked, action.payload]
+            };
+        case 'DELETE_LIKED_SNIPPET':
+            return {
+                ...state,
+                liked: state.liked.filter(
+                    (snippet) => snippet.id !== action.payload
+                )
             };
         case 'DELETE_SNIPPETS':
             return {

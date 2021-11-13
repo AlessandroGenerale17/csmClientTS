@@ -6,6 +6,7 @@ import { appDoneLoading, appLoading } from '../appState/actions';
 import { HomeActions } from './types';
 import { configs } from '../../Lib/TokenConfigs';
 import { Snippet } from '../../Types/Snippet';
+import { saveLikedSnippet, deleteLikedSnippet } from '../snippets/actions';
 
 export const savePopularSnippets = (snippets: Snippet[]): HomeActions => ({
     type: 'SAVE_POPULAR_SNIPPETS',
@@ -68,7 +69,6 @@ export const createLike =
     (snippetId: number) =>
     async (dispatch: AppDispatch, getState: () => RootState) => {
         try {
-            // FIXME should be auth
             const user = getState().user.state;
             if (!user) return;
             const userId = user.id;
@@ -81,6 +81,7 @@ export const createLike =
                 },
                 configs(user.token)
             );
+            dispatch(saveLikedSnippet(res.data.likedSnippet));
         } catch (err) {
             if (err instanceof Error) console.log(err.message);
         }
@@ -94,6 +95,7 @@ export const removeLike =
             if (!user) return;
             const userId = user.id;
             dispatch(deleteLike({ userId, snippetId }));
+            dispatch(deleteLikedSnippet(snippetId));
             const res = await axios.delete(
                 `${apiUrl}/likes/${snippetId}`,
                 configs(user.token)

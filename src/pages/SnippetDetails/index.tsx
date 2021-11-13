@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import moment from 'moment';
 import ReactMarkdown from 'react-markdown';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
@@ -62,6 +63,19 @@ export default function SnippetDetails() {
                                     alt={snippet.user.name}
                                 />
                                 {snippet.user.name}
+                            </div>
+                            <div>
+                                <p>
+                                    <b>Created on: </b>
+                                    {moment(snippet.createdAt).format(
+                                        'DD-MM-YY'
+                                    )}
+                                </p>
+                                <p>
+                                    <b>Last edit: </b>
+                                    {moment(snippet.updatedAt).fromNow()}
+                                </p>
+                                <p>{snippet.likes.length} Likes</p>
                             </div>
                         </div>
                         {showChat && (

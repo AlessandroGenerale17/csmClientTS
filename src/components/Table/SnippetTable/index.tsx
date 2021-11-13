@@ -141,6 +141,7 @@ interface EnhancedTableProps {
     order: Order;
     orderBy: string;
     rowCount: number;
+    tableName: string;
 }
 
 function EnhancedTableHead(props: EnhancedTableProps) {
@@ -150,6 +151,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
         orderBy,
         numSelected,
         rowCount,
+        tableName,
         onRequestSort
     } = props;
     const createSortHandler =
@@ -162,17 +164,19 @@ function EnhancedTableHead(props: EnhancedTableProps) {
         <TableHead>
             <TableRow>
                 <TableCell padding='checkbox'>
-                    <Checkbox
-                        color='primary'
-                        indeterminate={
-                            numSelected > 0 && numSelected < rowCount
-                        }
-                        checked={rowCount > 0 && numSelected === rowCount}
-                        onChange={onSelectAllClick}
-                        inputProps={{
-                            'aria-label': 'select all desserts'
-                        }}
-                    />
+                    {tableName[0] === 'M' && (
+                        <Checkbox
+                            color='primary'
+                            indeterminate={
+                                numSelected > 0 && numSelected < rowCount
+                            }
+                            checked={rowCount > 0 && numSelected === rowCount}
+                            onChange={onSelectAllClick}
+                            inputProps={{
+                                'aria-label': 'select all desserts'
+                            }}
+                        />
+                    )}
                 </TableCell>
                 {headCells.map((headCell) => (
                     <TableCell
@@ -211,7 +215,7 @@ interface EnhancedTableToolbarProps {
 const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
     const { numSelected, tableName, deleteSnippets } = props;
 
-    const deleteAvailable = numSelected > 0;
+    const deleteAvailable = numSelected > 0 && tableName[0] === 'M';
 
     return (
         <Toolbar
@@ -369,6 +373,7 @@ export default function EnhancedTable(props: Props) {
                             onSelectAllClick={handleSelectAllClick}
                             onRequestSort={handleRequestSort}
                             rowCount={rows.length}
+                            tableName={props.tableName}
                         />
                         <TableBody>
                             {stableSort(rows, getComparator(order, orderBy))
@@ -398,14 +403,16 @@ export default function EnhancedTable(props: Props) {
                                             selected={isItemSelected}
                                         >
                                             <TableCell padding='checkbox'>
-                                                <Checkbox
-                                                    color='primary'
-                                                    checked={isItemSelected}
-                                                    inputProps={{
-                                                        'aria-labelledby':
-                                                            labelId
-                                                    }}
-                                                />
+                                                {props.tableName[0] === 'M' && (
+                                                    <Checkbox
+                                                        color='primary'
+                                                        checked={isItemSelected}
+                                                        inputProps={{
+                                                            'aria-labelledby':
+                                                                labelId
+                                                        }}
+                                                    />
+                                                )}
                                             </TableCell>
                                             <TableCell
                                                 component='th'
@@ -414,7 +421,12 @@ export default function EnhancedTable(props: Props) {
                                                 padding='none'
                                             >
                                                 <Link
-                                                    to={`/snippets/${row.id}`}
+                                                    to={
+                                                        props.tableName[0] ===
+                                                        'M'
+                                                            ? `/snippets/${row.id}`
+                                                            : `/snippetDetails/${row.id}`
+                                                    }
                                                 >
                                                     {row.title}
                                                 </Link>
@@ -438,12 +450,12 @@ export default function EnhancedTable(props: Props) {
                                             </TableCell>
                                             <TableCell align='right'>
                                                 {moment(row.updatedAt).format(
-                                                    'DD-MM-YY, hh:mm:ss'
+                                                    'DD-MM-YY, HH:MM:ss'
                                                 )}
                                             </TableCell>
                                             <TableCell align='right'>
                                                 {moment(row.createdAt).format(
-                                                    'DD-MM-YY, hh:mm:ss'
+                                                    'DD-MM-YY, HH:MM:ss'
                                                 )}
                                             </TableCell>
                                         </TableRow>

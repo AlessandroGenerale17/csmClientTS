@@ -23,43 +23,25 @@ import {
 } from '../homeState/selectors';
 import { selectUser } from '../user/selectors';
 import { selectSnippet } from './selectors';
-
-type ConfigsAuthWithData = {
-    headers: {
-        Authorization: string;
-        Data: string;
-    };
-};
-
-type ConfigsAuth = {
-    headers: {
-        Authorization: string;
-    };
-};
-
-type Configs = ConfigsAuth | ConfigsAuthWithData;
-
-const configs = (token: string, data?: readonly string[]): Configs =>
-    data
-        ? {
-              headers: {
-                  Authorization: `Bearer ${token}`,
-                  Data: data.toString()
-              }
-          }
-        : {
-              headers: {
-                  Authorization: `Bearer ${token}`
-              }
-          };
+import { configs } from '../../Lib/TokenConfigs';
 
 const saveSnippets = (snippets: Snippet[]): SnippetActions => ({
     type: 'SAVE_SNIPPETS',
     payload: snippets
 });
 
+const saveLikedSnippets = (snippets: Snippet[]): SnippetActions => ({
+    type: 'SAVE_LIKED_SNIPPETS',
+    payload: snippets
+});
+
 const saveSnippet = (snippet: Snippet): SnippetActions => ({
     type: 'SAVE_SNIPPET',
+    payload: snippet
+});
+
+export const saveLikedSnippet = (snippet: Snippet): SnippetActions => ({
+    type: 'SAVE_LIKED_SNIPPET',
     payload: snippet
 });
 
@@ -71,6 +53,11 @@ const updateSnippet = (snippet: Snippet): SnippetActions => ({
 const deleteSnippets = (idsArray: number[]): SnippetActions => ({
     type: 'DELETE_SNIPPETS',
     payload: idsArray
+});
+
+export const deleteLikedSnippet = (id: number): SnippetActions => ({
+    type: 'DELETE_LIKED_SNIPPET',
+    payload: id
 });
 
 const addSnippet = (snippet: Snippet): SnippetActions => ({
@@ -88,8 +75,10 @@ export const fetchSnippets = async (
         if (!user) return;
         const token = user.token;
         const res = await axios.get(`${apiUrl}/snippets`, configs(token));
-        const snippets: Snippet[] = res.data;
+        const snippets: Snippet[] = res.data.snippets;
+        const likedSnippets: Snippet[] = res.data.likedSnippets;
         dispatch(saveSnippets(snippets));
+        dispatch(saveLikedSnippets(likedSnippets));
         dispatch(appDoneLoading());
     } catch (err) {
         if (err instanceof Error) console.log(err.message);
