@@ -6,7 +6,13 @@ import { appDoneLoading, appLoading } from '../appState/actions';
 import { HomeActions } from './types';
 import { configs } from '../../Lib/TokenConfigs';
 import { Snippet } from '../../Types/Snippet';
-import { saveLikedSnippet, deleteLikedSnippet } from '../snippets/actions';
+import {
+    saveLikedSnippet,
+    deleteLikedSnippet,
+    addLikeSelected,
+    removeLikeSelected
+} from '../snippets/actions';
+import { selectSnippet } from '../snippets/selectors';
 
 export const savePopularSnippets = (snippets: Snippet[]): HomeActions => ({
     type: 'SAVE_POPULAR_SNIPPETS',
@@ -73,6 +79,9 @@ export const createLike =
             if (!user) return;
             const userId = user.id;
             dispatch(updateLike({ userId, snippetId }));
+            const isSnippetSelected = selectSnippet(getState());
+            if (isSnippetSelected)
+                dispatch(addLikeSelected({ userId, snippetId }));
             const res = await axios.post(
                 `${apiUrl}/likes/${snippetId}`,
                 {
@@ -96,6 +105,9 @@ export const removeLike =
             const userId = user.id;
             dispatch(deleteLike({ userId, snippetId }));
             dispatch(deleteLikedSnippet(snippetId));
+            const isSnippetSelected = selectSnippet(getState());
+            if (isSnippetSelected)
+                dispatch(removeLikeSelected({ userId, snippetId }));
             const res = await axios.delete(
                 `${apiUrl}/likes/${snippetId}`,
                 configs(user.token)

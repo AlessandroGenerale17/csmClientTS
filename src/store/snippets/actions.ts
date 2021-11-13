@@ -50,6 +50,22 @@ const updateSnippet = (snippet: Snippet): SnippetActions => ({
     payload: snippet
 });
 
+export const addLikeSelected = (toAdd: {
+    userId: number;
+    snippetId: number;
+}): SnippetActions => ({
+    type: 'ADD_LIKE_SELECTED',
+    payload: toAdd
+});
+
+export const removeLikeSelected = (toRemove: {
+    userId: number;
+    snippetId: number;
+}): SnippetActions => ({
+    type: 'REMOVE_LIKE_SELECTED',
+    payload: toRemove
+});
+
 const deleteSnippets = (idsArray: number[]): SnippetActions => ({
     type: 'DELETE_SNIPPETS',
     payload: idsArray

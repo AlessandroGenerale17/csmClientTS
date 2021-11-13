@@ -22,7 +22,6 @@ export const isFormValid = (
         errors.push('description');
     }
 
-    console.log('validator', language.value);
     if (language.value < 0) {
         setFormState((prev) => ({
             ...prev,

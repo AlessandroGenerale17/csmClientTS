@@ -12,7 +12,6 @@ const reducer = (
 ): SnippetState => {
     switch (action.type) {
         case 'SAVE_SNIPPET':
-            console.log('SAVE SNIPPET', action.payload);
             return {
                 ...state,
                 selected: action.payload
@@ -51,13 +50,34 @@ const reducer = (
                 ...state,
                 list: state.list.map((snip) => {
                     if (snip.id === action.payload.id) {
-                        console.log('entered here ', action.payload);
                         return {
                             ...action.payload
                         };
                     }
                     return snip;
                 })
+            };
+        case 'ADD_LIKE_SELECTED':
+            return {
+                ...state,
+                selected: state.selected
+                    ? {
+                          ...state.selected,
+                          likes: [...state.selected.likes, action.payload]
+                      }
+                    : null
+            };
+        case 'REMOVE_LIKE_SELECTED':
+            return {
+                ...state,
+                selected: state.selected
+                    ? {
+                          ...state.selected,
+                          likes: state.selected.likes.filter(
+                              (like) => like.userId !== action.payload.userId
+                          )
+                      }
+                    : null
             };
         case 'ADD_SNIPPET':
             return {

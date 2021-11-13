@@ -31,6 +31,7 @@ import { createComment } from '../../store/homeState/actions';
 import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
 import Avatar from '../../components/Avatar/';
+import moment from 'moment';
 import './index.css';
 
 // FIXME possibly export
@@ -176,6 +177,21 @@ export default function Snippet() {
                                     />
                                     {snippet.user.name}
                                 </div>
+                                <div>
+                                    <p>
+                                        <b>Created on: </b>
+                                        {moment(snippet.createdAt).format(
+                                            'DD-MM-YY'
+                                        )}
+                                    </p>
+                                    <p>
+                                        <b>Last edit: </b>
+                                        {moment(snippet.updatedAt).fromNow()}
+                                    </p>
+                                    {snippet.public && (
+                                        <p>{snippet.likes.length} Likes</p>
+                                    )}
+                                </div>
                             </div>
                             {snippet.issue && (
                                 <div>
@@ -190,9 +206,11 @@ export default function Snippet() {
                         <div className='md' style={{ minHeight: '305px' }}>
                             <ReactMarkdown children={snippet.description} />
                         </div>
-                        <h2 style={{ textAlign: 'center' }}>
-                            Comments {snippet.comments.length}
-                        </h2>
+                        {snippet.public && (
+                            <h2 style={{ textAlign: 'center' }}>
+                                Comments {snippet.comments.length}
+                            </h2>
+                        )}
                     </div>
                     <div
                         style={{

@@ -10,13 +10,18 @@ import Loading from '../../components/Loading';
 import { fetchSnippet } from '../../store/snippets/actions';
 import { selectSnippet } from '../../store/snippets/selectors';
 import { Comment } from '../../Types/Comment';
-import { createComment } from '../../store/homeState/actions';
+import {
+    createComment,
+    createLike,
+    removeLike
+} from '../../store/homeState/actions';
 import { selectUser } from '../../store/user/selectors';
 import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
 import Avatar from '../../components/Avatar';
 import { TextField } from '@mui/material';
-
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 type ParamTypes = {
     id: string;
 };
@@ -40,6 +45,7 @@ export default function SnippetDetails() {
     if (!snippet) return <Loading />;
 
     const showChat = snippet.issue && user;
+    const isLiked = snippet.likes.map((like) => like.userId).includes(user?.id);
 
     return (
         <div className='snippet-page' style={{ display: 'flex' }}>
@@ -50,6 +56,14 @@ export default function SnippetDetails() {
                         <div>
                             <p>
                                 <b>Language:</b> {snippet.language.name}
+                            </p>
+                            <p>
+                                <b>Created on: </b>
+                                {moment(snippet.createdAt).format('DD-MM-YY')}
+                            </p>
+                            <p>
+                                <b>Last edit: </b>
+                                {moment(snippet.updatedAt).fromNow()}
                             </p>
                             <div
                                 style={{
@@ -65,17 +79,24 @@ export default function SnippetDetails() {
                                 {snippet.user.name}
                             </div>
                             <div>
-                                <p>
-                                    <b>Created on: </b>
-                                    {moment(snippet.createdAt).format(
-                                        'DD-MM-YY'
-                                    )}
-                                </p>
-                                <p>
-                                    <b>Last edit: </b>
-                                    {moment(snippet.updatedAt).fromNow()}
-                                </p>
-                                <p>{snippet.likes.length} Likes</p>
+                                {!isLiked ? (
+                                    <FavoriteBorderIcon
+                                        className='like-button'
+                                        style={{ color: 'red' }}
+                                        onClick={() =>
+                                            dispatch(createLike(snippet.id))
+                                        }
+                                    />
+                                ) : (
+                                    <FavoriteIcon
+                                        className='like-button'
+                                        style={{ color: 'red' }}
+                                        onClick={() =>
+                                            dispatch(removeLike(snippet.id))
+                                        }
+                                    />
+                                )}
+                                {snippet.likes.length}
                             </div>
                         </div>
                         {showChat && (

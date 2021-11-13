@@ -20,7 +20,6 @@ const reducer = (state = initialState, action: HomeActions) => {
                 })
             };
         case 'DELETE_LIKE':
-            console.log(action);
             return {
                 ...state,
                 popularSnippets: state.popularSnippets.map((snippet) => {
@@ -59,7 +58,6 @@ const reducer = (state = initialState, action: HomeActions) => {
                 popularSnippets: [...state.popularSnippets, action.payload]
             };
         case 'DELETE_FEED_POST':
-            console.log('delete reducer ', action.payload);
             return {
                 ...state,
                 popularSnippets: state.popularSnippets.filter(

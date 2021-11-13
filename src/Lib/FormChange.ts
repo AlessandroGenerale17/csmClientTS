@@ -7,7 +7,7 @@ export const handleFormChange = (
     setFormState: Dispatch<SetStateAction<FormState>>
 ) => {
     if (e.target.name === 'public') {
-        console.log('hello');
+
         setFormState((prev) => ({
             ...prev,
             pub: !prev.pub

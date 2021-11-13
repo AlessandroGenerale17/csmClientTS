@@ -1,5 +1,6 @@
 import { Comment } from '../../Types/Comment';
 import { Snippet } from '../../Types/Snippet';
+import { Like } from '../homeState/types';
 
 export type SnippetState = {
     list: Snippet[];
@@ -52,6 +53,16 @@ export type AddComment = {
     payload: Comment;
 };
 
+export type AddLikeSelected = {
+    type: 'ADD_LIKE_SELECTED';
+    payload: Like;
+};
+
+export type RemoveLikeSelected = {
+    type: 'REMOVE_LIKE_SELECTED';
+    payload: Like;
+};
+
 export type SnippetActions =
     | SaveSnippets
     | SaveSnippet
@@ -61,4 +72,6 @@ export type SnippetActions =
     | UpdateSnippet
     | DeleteSnippets
     | AddSnippet
-    | AddComment;
+    | AddComment
+    | AddLikeSelected
+    | RemoveLikeSelected;
