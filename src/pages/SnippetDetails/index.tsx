@@ -134,7 +134,7 @@ export default function SnippetDetails() {
                                 onChange={(e) => setComment(e.target.value)}
                             />
                             <SendIcon
-                                style={{ cursor: 'pointer' }}
+                                style={{ cursor: 'pointer', fontSize: '50px' }}
                                 onClick={submitComment}
                             />
                         </>

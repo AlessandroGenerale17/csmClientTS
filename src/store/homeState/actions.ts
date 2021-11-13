@@ -90,7 +90,8 @@ export const createLike =
                 },
                 configs(user.token)
             );
-            dispatch(saveLikedSnippet(res.data.likedSnippet));
+            if (res.data.likedSnippet.userId !== userId)
+                dispatch(saveLikedSnippet(res.data.likedSnippet));
         } catch (err) {
             if (err instanceof Error) console.log(err.message);
         }

@@ -92,7 +92,9 @@ export const fetchSnippets = async (
         const token = user.token;
         const res = await axios.get(`${apiUrl}/snippets`, configs(token));
         const snippets: Snippet[] = res.data.snippets;
-        const likedSnippets: Snippet[] = res.data.likedSnippets;
+        const likedSnippets: Snippet[] = res.data.likedSnippets.filter(
+            (snippet: Snippet) => snippet.user.id !== user.id
+        );
         dispatch(saveSnippets(snippets));
         dispatch(saveLikedSnippets(likedSnippets));
         dispatch(appDoneLoading());
