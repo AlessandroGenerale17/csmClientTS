@@ -57,11 +57,11 @@ const reducer = (state = initialState, action: HomeActions) => {
                 ...state,
                 popularSnippets: [...state.popularSnippets, action.payload]
             };
-        case 'DELETE_FEED_POST':
+        case 'DELETE_FEED_POSTS':
             return {
                 ...state,
                 popularSnippets: state.popularSnippets.filter(
-                    (snippet) => snippet.id !== action.payload
+                    (snippet) => !action.payload.includes(snippet.id)
                 )
             };
         case 'UPDATE_FEED_POST':

@@ -50,9 +50,9 @@ export const addFeedPost = (snippet: Snippet): HomeActions => ({
     payload: snippet
 });
 
-export const deleteFeedPost = (id: number): HomeActions => ({
-    type: 'DELETE_FEED_POST',
-    payload: id
+export const deleteFeedPosts = (ids: number[]): HomeActions => ({
+    type: 'DELETE_FEED_POSTS',
+    payload: ids
 });
 
 export const fetchPopularSnippets = async (

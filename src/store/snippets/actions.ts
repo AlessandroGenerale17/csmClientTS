@@ -14,7 +14,7 @@ import {
 
 import {
     addFeedPost,
-    deleteFeedPost,
+    deleteFeedPosts,
     updateFeedPost
 } from '../homeState/actions';
 import {
@@ -168,7 +168,7 @@ export const patchSnippet =
                     if (isIncluded) {
                         // deleted
                         console.log('deleting from feed');
-                        dispatch(deleteFeedPost(res.data.id));
+                        dispatch(deleteFeedPosts([res.data.id]));
                     }
                 }
             }
@@ -233,7 +233,14 @@ export const removeSnippets =
                         .map((id) => parseInt(id))
                 )
             );
-            dispatch(deleteFeedPost(res.data.id));
+            dispatch(
+                deleteFeedPosts(
+                    idsArray
+                        .toString()
+                        .split(',')
+                        .map((id) => parseInt(id))
+                )
+            );
             dispatch(appDoneLoading());
         } catch (err) {
             if (err instanceof Error) console.log(err.message);
