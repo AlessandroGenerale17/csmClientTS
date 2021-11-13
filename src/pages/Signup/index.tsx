@@ -7,7 +7,6 @@ import { OnChangeInput } from '../../Types/EventListener';
 import CircularProgress from '@mui/material/CircularProgress';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import Box from '@mui/material/Box';
-import FormAlert from '../../components/Alert';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
@@ -68,7 +67,7 @@ export default function SignUp() {
         );
 
         const file = await res.json();
-        console.log('file', file); //check if you are getting the url back
+        //console.log('file', file); //check if you are getting the url back
         setImgUrl(file.url); //put the url in local state, next step you can send it to the backend
         setImgUploading(false);
         setUploadSuccess(true);

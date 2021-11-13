@@ -71,7 +71,13 @@ export const login = (email: string, password: string) => {
             });
 
             dispatch(loginSuccess(response.data));
-            dispatch(showAlertWithTimeout('Welcome back!', 'success'));
+
+            dispatch(
+                showAlertWithTimeout(
+                    `Welcome back ${response.data.name}! 😄`,
+                    'success'
+                )
+            );
             dispatch(appDoneLoading());
         } catch (error) {
             if (error instanceof Error) {
