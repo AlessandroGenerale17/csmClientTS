@@ -43,7 +43,10 @@ export default function SnippetCard(props: Props) {
                 marginRight: '0.4rem',
                 marginBottom: '0.6rem',
                 marginTop: '0.6rem',
-                backgroundColor: `${issue && '#e5989b'}`
+                backgroundColor: '#dee2e6',
+                color: `${issue ? 'black' : '#343a40'}`,
+                borderRadius: '1rem',
+                padding: '0.5rem'
             }}
             sx={{ minWidth: 345 }}
         >
@@ -55,7 +58,7 @@ export default function SnippetCard(props: Props) {
                 }}
             >
                 <Avatar imgUrl={user.imgUrl} alt={user.name} />
-                <span>{user.name}</span>
+                <span style={{ marginLeft: '0.3rem' }}>{user.name}</span>
             </div>
             <CardContent>
                 <Typography gutterBottom variant='h5' component='div'>
@@ -66,9 +69,6 @@ export default function SnippetCard(props: Props) {
                         />
                     )}
                 </Typography>
-                {/* <Typography variant='body2' color='text.secondary'>
-                    {description}
-                </Typography> */}
                 <Typography>{language.name}</Typography>
             </CardContent>
             <CardActions>
@@ -100,13 +100,13 @@ export default function SnippetCard(props: Props) {
                         (!isLiked ? (
                             <FavoriteBorderIcon
                                 className='like-button'
-                                style={{ color: 'red' }}
+                                style={{ color: '#d00000' }}
                                 onClick={() => props.performDispatch(id, likes)}
                             />
                         ) : (
                             <FavoriteIcon
                                 className='like-button'
-                                style={{ color: 'red' }}
+                                style={{ color: '#d00000' }}
                                 onClick={() => props.performDispatch(id, likes)}
                             />
                         ))}
