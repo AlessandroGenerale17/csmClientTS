@@ -43,7 +43,7 @@ export default function Home() {
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-evenly',
-                height: '70vh'
+                height: '85vh'
             }}
         >
             <div>

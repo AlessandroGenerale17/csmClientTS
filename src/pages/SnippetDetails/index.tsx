@@ -22,6 +22,7 @@ import Avatar from '../../components/Avatar';
 import { TextField } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import { OnSubmit } from '../../Types/EventListener';
 type ParamTypes = {
     id: string;
 };
@@ -33,7 +34,8 @@ export default function SnippetDetails() {
     const snippet = useSelector(selectSnippet);
     const user = useSelector(selectUser);
 
-    const submitComment = () => {
+    const submitComment = (e: OnSubmit) => {
+        e.preventDefault();
         setComment('');
         comment.trim().length && dispatch(createComment(parseInt(id), comment));
     };
@@ -126,7 +128,14 @@ export default function SnippetDetails() {
                     }}
                 >
                     {user?.id && snippet.public && (
-                        <>
+                        <form
+                            style={{
+                                display: 'flex',
+                                width: '100%',
+                                alignItems: 'center'
+                            }}
+                            onSubmit={submitComment}
+                        >
                             <TextField
                                 style={{ width: '100%' }}
                                 label='Comment'
@@ -139,7 +148,7 @@ export default function SnippetDetails() {
                                 style={{ cursor: 'pointer', fontSize: '50px' }}
                                 onClick={submitComment}
                             />
-                        </>
+                        </form>
                     )}
                 </div>
 

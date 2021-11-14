@@ -27,9 +27,7 @@ import { selectUser } from '../../store/user/selectors';
 import { Comment } from '../../Types/Comment';
 import SendIcon from '@mui/icons-material/Send';
 import CommentLine from '../../components/Comments';
-import {
-    createComment
-} from '../../store/homeState/actions';
+import { createComment } from '../../store/homeState/actions';
 import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
 import Avatar from '../../components/Avatar/';
@@ -117,7 +115,8 @@ export default function Snippet() {
             );
     };
 
-    const submitComment = () => {
+    const submitComment = (e: OnSubmit) => {
+        e.preventDefault();
         setComment('');
         comment.trim().length && dispatch(createComment(snippet.id, comment));
     };
@@ -255,7 +254,14 @@ export default function Snippet() {
                         }}
                     >
                         {user?.id && snippet.public && (
-                            <>
+                            <form
+                                style={{
+                                    display: 'flex',
+                                    width: '100%',
+                                    alignItems: 'center'
+                                }}
+                                onSubmit={submitComment}
+                            >
                                 <TextField
                                     style={{ width: '100%' }}
                                     label='Comment'
@@ -265,10 +271,13 @@ export default function Snippet() {
                                     onChange={(e) => setComment(e.target.value)}
                                 />
                                 <SendIcon
-                                    style={{ cursor: 'pointer' }}
-                                    onClick={submitComment}
+                                    style={{
+                                        cursor: 'pointer',
+                                        fontSize: '50px'
+                                    }}
+                                    type='submit'
                                 />
-                            </>
+                            </form>
                         )}
                     </div>
 
