@@ -48,7 +48,7 @@ export default function SnippetCard(props: Props) {
                 borderRadius: '1rem',
                 padding: '0.5rem'
             }}
-            sx={{ minWidth: 345 }}
+            sx={{ minWidth: 360 }}
         >
             <div
                 style={{

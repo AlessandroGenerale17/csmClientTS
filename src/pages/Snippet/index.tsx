@@ -158,6 +158,7 @@ export default function Snippet() {
 
     // const showLikes = snippet.public && !snippet.issue;
     // const isLiked = snippet.likes.map((like) => like.userId).includes(user?.id);
+    console.log('snippet description ', snippet.description);
     return (
         <div className='snippet-page'>
             {!formState.isOpen ? (
