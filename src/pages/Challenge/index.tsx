@@ -12,7 +12,6 @@ import Code from '../../logic/Editor';
 import ReactMarkdown from 'react-markdown';
 import './index.css';
 
-// FIXME possibly export
 type ParamTypes = {
     id: string;
 };
@@ -49,8 +48,7 @@ export default function Challenge() {
             challenge.testcases.forEach((testcase, index) => {
                 const solution = JSON.parse(testcase.solution);
                 const out = runCode(testcase.args);
-                if (out !== solution || typeof out !== typeof solution) {
-                    console.log('failed ');
+                if (!code.equal(out, solution)) {
                     submitOutput.push({
                         error: true,
                         value: `Testcase ${index + 1} failed`
@@ -69,6 +67,7 @@ export default function Challenge() {
     const runCode = (stringArgs: string) => {
         try {
             const args = JSON.parse(stringArgs);
+
             if (challenge !== null) {
                 if (args.length !== 2)
                     return {
@@ -81,7 +80,7 @@ export default function Challenge() {
                     hiddenCode,
                     codeChallenge,
                     challenge.fName,
-                    args
+                    stringArgs
                 );
                 const output = code.runFn();
                 return output;

@@ -31,6 +31,9 @@ import { createComment } from '../../store/homeState/actions';
 import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
 import Avatar from '../../components/Avatar/';
+import moment from 'moment';
+// import FavoriteIcon from '@mui/icons-material/Favorite';
+// import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import './index.css';
 
 // FIXME possibly export
@@ -112,7 +115,8 @@ export default function Snippet() {
             );
     };
 
-    const submitComment = () => {
+    const submitComment = (e: OnSubmit) => {
+        e.preventDefault();
         setComment('');
         comment.trim().length && dispatch(createComment(snippet.id, comment));
     };
@@ -152,6 +156,9 @@ export default function Snippet() {
         });
     };
 
+    // const showLikes = snippet.public && !snippet.issue;
+    // const isLiked = snippet.likes.map((like) => like.userId).includes(user?.id);
+    console.log('snippet description ', snippet.description);
     return (
         <div className='snippet-page'>
             {!formState.isOpen ? (
@@ -176,6 +183,50 @@ export default function Snippet() {
                                     />
                                     {snippet.user.name}
                                 </div>
+                                <div>
+                                    <p>
+                                        <b>Created on: </b>
+                                        {moment(snippet.createdAt).format(
+                                            'DD-MM-YY'
+                                        )}
+                                    </p>
+                                    <p>
+                                        <b>Last edit: </b>
+                                        {moment(snippet.updatedAt).fromNow()}
+                                    </p>
+                                    {/* {showLikes && (
+                                        <div>
+                                            {!isLiked ? (
+                                                <FavoriteBorderIcon
+                                                    className='like-button'
+                                                    style={{ color: 'red' }}
+                                                    onClick={() =>
+                                                        dispatch(
+                                                            createLike(
+                                                                snippet.id
+                                                            )
+                                                        )
+                                                    }
+                                                />
+                                            ) : (
+                                                <FavoriteIcon
+                                                    className='like-button'
+                                                    style={{
+                                                        color: 'red'
+                                                    }}
+                                                    onClick={() =>
+                                                        dispatch(
+                                                            removeLike(
+                                                                snippet.id
+                                                            )
+                                                        )
+                                                    }
+                                                />
+                                            )}
+                                            {snippet.likes.length}
+                                        </div>
+                                    )} */}
+                                </div>
                             </div>
                             {snippet.issue && (
                                 <div>
@@ -190,9 +241,11 @@ export default function Snippet() {
                         <div className='md' style={{ minHeight: '305px' }}>
                             <ReactMarkdown children={snippet.description} />
                         </div>
-                        <h2 style={{ textAlign: 'center' }}>
-                            Comments {snippet.comments.length}
-                        </h2>
+                        {snippet.public && (
+                            <h2 style={{ textAlign: 'center' }}>
+                                Comments {snippet.comments.length}
+                            </h2>
+                        )}
                     </div>
                     <div
                         style={{
@@ -202,7 +255,14 @@ export default function Snippet() {
                         }}
                     >
                         {user?.id && snippet.public && (
-                            <>
+                            <form
+                                style={{
+                                    display: 'flex',
+                                    width: '100%',
+                                    alignItems: 'center'
+                                }}
+                                onSubmit={submitComment}
+                            >
                                 <TextField
                                     style={{ width: '100%' }}
                                     label='Comment'
@@ -212,10 +272,13 @@ export default function Snippet() {
                                     onChange={(e) => setComment(e.target.value)}
                                 />
                                 <SendIcon
-                                    style={{ cursor: 'pointer' }}
-                                    onClick={submitComment}
+                                    style={{
+                                        cursor: 'pointer',
+                                        fontSize: '50px'
+                                    }}
+                                    type='submit'
                                 />
-                            </>
+                            </form>
                         )}
                     </div>
 

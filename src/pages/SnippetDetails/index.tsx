@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import moment from 'moment';
 import ReactMarkdown from 'react-markdown';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
@@ -9,25 +10,32 @@ import Loading from '../../components/Loading';
 import { fetchSnippet } from '../../store/snippets/actions';
 import { selectSnippet } from '../../store/snippets/selectors';
 import { Comment } from '../../types/Comment';
-import { createComment } ../../Types/CommentomeState/actions';
+import {
+    createComment,
+    createLike,
+    removeLike
+} from '../../store/homeState/actions';
 import { selectUser } from '../../store/user/selectors';
 import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
 import Avatar from '../../components/Avatar';
 import { TextField } from '@mui/material';
-
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import { OnSubmit } from '../../types/EventListener';
 type ParamTypes = {
     id: string;
 };
 
 export default function SnippetDetails() {
     const [comment, setComment] = useState<string>('');
-    const dispatch = useDi../../Types/EventListener
+    const dispatch = useDispatch();
     const { id } = useParams<ParamTypes>();
     const snippet = useSelector(selectSnippet);
     const user = useSelector(selectUser);
 
-    const submitComment = () => {
+    const submitComment = (e: OnSubmit) => {
+        e.preventDefault();
         setComment('');
         comment.trim().length && dispatch(createComment(parseInt(id), comment));
     };
@@ -39,7 +47,8 @@ export default function SnippetDetails() {
     if (!snippet) return <Loading />;
 
     const showChat = snippet.issue && user;
-
+    const isLiked = snippet.likes.map((like) => like.userId).includes(user?.id);
+    const showLikes = snippet.public && !snippet.issue;
     return (
         <div className='snippet-page' style={{ display: 'flex' }}>
             <div className='snippet-content'>
@@ -49,6 +58,14 @@ export default function SnippetDetails() {
                         <div>
                             <p>
                                 <b>Language:</b> {snippet.language.name}
+                            </p>
+                            <p>
+                                <b>Created on: </b>
+                                {moment(snippet.createdAt).format('DD-MM-YY')}
+                            </p>
+                            <p>
+                                <b>Last edit: </b>
+                                {moment(snippet.updatedAt).fromNow()}
                             </p>
                             <div
                                 style={{
@@ -63,6 +80,28 @@ export default function SnippetDetails() {
                                 />
                                 {snippet.user.name}
                             </div>
+                            {showLikes && (
+                                <div>
+                                    {!isLiked ? (
+                                        <FavoriteBorderIcon
+                                            className='like-button'
+                                            style={{ color: 'red' }}
+                                            onClick={() =>
+                                                dispatch(createLike(snippet.id))
+                                            }
+                                        />
+                                    ) : (
+                                        <FavoriteIcon
+                                            className='like-button'
+                                            style={{ color: 'red' }}
+                                            onClick={() =>
+                                                dispatch(removeLike(snippet.id))
+                                            }
+                                        />
+                                    )}
+                                    {snippet.likes.length}
+                                </div>
+                            )}
                         </div>
                         {showChat && (
                             <div>
@@ -89,7 +128,14 @@ export default function SnippetDetails() {
                     }}
                 >
                     {user?.id && snippet.public && (
-                        <>
+                        <form
+                            style={{
+                                display: 'flex',
+                                width: '100%',
+                                alignItems: 'center'
+                            }}
+                            onSubmit={submitComment}
+                        >
                             <TextField
                                 style={{ width: '100%' }}
                                 label='Comment'
@@ -99,10 +145,10 @@ export default function SnippetDetails() {
                                 onChange={(e) => setComment(e.target.value)}
                             />
                             <SendIcon
-                                style={{ cursor: 'pointer' }}
+                                style={{ cursor: 'pointer', fontSize: '50px' }}
                                 onClick={submitComment}
                             />
-                        </>
+                        </form>
                     )}
                 </div>
 

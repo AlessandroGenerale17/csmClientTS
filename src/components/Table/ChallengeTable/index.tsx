@@ -20,7 +20,11 @@ import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import { visuallyHidden } from '@mui/utils';
+<<<<<<< HEAD:src/components/Table/index.tsx
 import { CodeSnippet, Snippet } from '../../types/Snippet';
+=======
+import { CodeSnippet, Snippet } from '../../../Types/Snippet';
+>>>>>>> 764d4e550e22116e841de73d5f99224c2837fbc2:src/components/Table/ChallengeTable/index.tsx
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 
@@ -36,7 +40,6 @@ function createData(snippet: Snippet | CodeSnippet): Data {
     if ('difficulty' in snippet)
         return {
             id: snippet.id,
-            // TODO check this if it sorts correctly
             title: snippet.title.toLowerCase(),
             language: snippet.language.name,
             createdAt: moment(snippet.createdAt).valueOf(),

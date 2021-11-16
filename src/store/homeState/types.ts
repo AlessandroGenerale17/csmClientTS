@@ -20,9 +20,9 @@ export type UpdateFeedPost = {
     payload: Snippet;
 };
 
-export type DeleteFeedPost = {
-    type: 'DELETE_FEED_POST';
-    payload: number;
+export type DeleteFeedPosts = {
+    type: 'DELETE_FEED_POSTS';
+    payload: number[];
 };
 
 export type AddFeedPost = {
@@ -51,5 +51,5 @@ export type HomeActions =
     | DeleteLike
     | AddComment
     | AddFeedPost
-    | DeleteFeedPost
+    | DeleteFeedPosts
     | UpdateFeedPost;
