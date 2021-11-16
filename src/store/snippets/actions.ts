@@ -23,7 +23,7 @@ import {
 } from '../homeState/selectors';
 import { selectUser } from '../user/selectors';
 import { selectSnippet } from './selectors';
-import { configs } from '../../Lib/TokenConfigs';
+import { configs } from '../../lib/TokenConfigs';
 
 const saveSnippets = (snippets: Snippet[]): SnippetActions => ({
     type: 'SAVE_SNIPPETS',
