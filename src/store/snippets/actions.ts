@@ -2,7 +2,7 @@ import { AppDispatch, RootState } from '..';
 import axios from 'axios';
 
 import { apiUrl } from '../../configs';
-import { Snippet } from '../../Types/Snippet';
+import { Snippet } from '../../types/Snippet';
 import { SnippetActions } from './types';
 import {
     appDoneLoading,
@@ -23,7 +23,7 @@ import {
 } from '../homeState/selectors';
 import { selectUser } from '../user/selectors';
 import { selectSnippet } from './selectors';
-import { configs } from '../../Lib/TokenConfigs';
+import { configs } from '../../lib/TokenConfigs';
 
 const saveSnippets = (snippets: Snippet[]): SnippetActions => ({
     type: 'SAVE_SNIPPETS',

@@ -5,7 +5,7 @@ import { useParams } from 'react-router';
 import { selectChallenge } from '../../store/challenges/selectors';
 import { fetchChallenge } from '../../store/challenges/actions';
 import Loading from '../../components/Loading';
-import { OnChangeInput } from '../../Types/EventListener';
+import { OnChangeInput } from '../../types/EventListener';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import Code from '../../logic/Editor';

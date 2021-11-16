@@ -20,7 +20,7 @@ import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import { visuallyHidden } from '@mui/utils';
-import { Snippet } from '../../../Types/Snippet';
+import { Snippet } from '../../../types/Snippet';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 

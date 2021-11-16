@@ -1,11 +1,11 @@
 import axios from 'axios';
 import { AppDispatch, RootState } from '..';
 import { apiUrl } from '../../configs';
-import { Comment } from '../../Types/Comment';
+import { Comment } from '../../types/Comment';
 import { appDoneLoading, appLoading } from '../appState/actions';
 import { HomeActions } from './types';
-import { configs } from '../../Lib/TokenConfigs';
-import { Snippet } from '../../Types/Snippet';
+import { configs } from '../../lib/TokenConfigs';
+import { Snippet } from '../../types/Snippet';
 import {
     saveLikedSnippet,
     deleteLikedSnippet,

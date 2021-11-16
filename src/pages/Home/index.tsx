@@ -14,7 +14,7 @@ import {
 import Card from '../../components/Card/';
 import { Like } from '../../store/homeState/types';
 import { selectUser } from '../../store/user/selectors';
-import { Snippet } from '../../Types/Snippet';
+import { Snippet } from '../../types/Snippet';
 
 export default function Home() {
     const loading = useSelector(selectAppLoading);

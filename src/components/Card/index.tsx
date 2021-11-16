@@ -12,7 +12,7 @@ import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../store/user/selectors';
 import InsertCommentIcon from '@mui/icons-material/InsertComment';
-import { Snippet } from '../../Types/Snippet';
+import { Snippet } from '../../types/Snippet';
 import ErrorIcon from '@mui/icons-material/Error';
 import './index.css';
 

@@ -1,6 +1,6 @@
 import { AppDispatch, RootState } from '..';
 import { ChallengeActions } from './types';
-import { CodeSnippet } from '../../Types/Snippet';
+import { CodeSnippet } from '../../types/Snippet';
 import axios from 'axios';
 import { apiUrl } from '../../configs';
 import { appDoneLoading, appLoading } from '../appState/actions';

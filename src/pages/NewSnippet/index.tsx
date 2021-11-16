@@ -2,13 +2,13 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import AddSnippetForm from '../../components/AddSnippetForm';
 import Editor from '../../components/Editor';
-import { OnChange, OnClick, OnSubmit } from '../../Types/EventListener';
+import { OnChange, OnClick, OnSubmit } from '../../types/EventListener';
 import { createSnippet } from '../../store/snippets/actions';
 import { useHistory } from 'react-router-dom';
 import { showAlertWithTimeout } from '../../store/appState/actions';
-import { isFormValid } from '../../Lib/Validators';
-import { FormState } from '../../Types/FormState';
-import { handleFormChange, handleCodeChange } from '../../Lib/FormChange';
+import { isFormValid } from '../../lib/Validators';
+import { FormState } from '../../types/FormState';
+import { handleFormChange, handleCodeChange } from '../../lib/FormChange';
 import './index.css';
 
 const initialFormState = {

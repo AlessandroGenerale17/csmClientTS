@@ -9,7 +9,7 @@ import Editor from '../../components/Editor';
 import Loading from '../../components/Loading';
 import { fetchSnippet } from '../../store/snippets/actions';
 import { selectSnippet } from '../../store/snippets/selectors';
-import { Comment } from '../../Types/Comment';
+import { Comment } from '../../types/Comment';
 import {
     createComment,
     createLike,
@@ -22,7 +22,7 @@ import Avatar from '../../components/Avatar';
 import { TextField } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import { OnSubmit } from '../../Types/EventListener';
+import { OnSubmit } from '../../types/EventListener';
 type ParamTypes = {
     id: string;
 };

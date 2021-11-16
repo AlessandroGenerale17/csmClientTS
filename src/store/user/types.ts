@@ -1,4 +1,4 @@
-import { User } from '../../Types/User';
+import { User } from '../../types/User';
 
 type LoginSuccess = {
     type: 'LOGIN_SUCCESS';

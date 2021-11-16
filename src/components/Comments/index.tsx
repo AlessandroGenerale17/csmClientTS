@@ -1,4 +1,4 @@
-import { Comment } from '../../Types/Comment';
+import { Comment } from '../../types/Comment';
 import Avatar from '../Avatar/';
 import moment from 'moment';
 

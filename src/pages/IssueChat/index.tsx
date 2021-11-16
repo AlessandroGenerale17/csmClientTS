@@ -13,8 +13,8 @@ import ChatMessage from '../../components/ChatMessage';
 import { TextField } from '@material-ui/core';
 import { remoteSnippetUpdate } from '../../store/snippets/actions';
 import SendIcon from '@mui/icons-material/Send';
-import { Snippet } from '../../Types/Snippet';
-import { OnChangeInput } from '../../Types/EventListener';
+import { Snippet } from '../../types/Snippet';
+import { OnChangeInput } from '../../types/EventListener';
 
 type Message = {
     user: {

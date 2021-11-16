@@ -1,6 +1,6 @@
 import LoadingButton from '@mui/lab/LoadingButton';
 import SaveIcon from '@mui/icons-material/Save';
-import { OnSubmit } from '../../../Types/EventListener';
+import { OnSubmit } from '../../../types/EventListener';
 
 type Props = {
     handleClick: (e: OnSubmit) => void;
