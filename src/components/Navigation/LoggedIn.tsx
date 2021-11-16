@@ -21,7 +21,7 @@ export default function LoggedIn() {
                 }}
             >
                 <Avatar imgUrl={user.imgUrl} alt={user.name} />
-                {user.name}
+                <span style={{ marginLeft: '0.5rem' }}>{user.name}</span>
             </Nav.Item>
             <Button
                 style={{ color: 'white', borderColor: 'white' }}

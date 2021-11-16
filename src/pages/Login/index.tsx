@@ -5,7 +5,6 @@ import { selectToken } from '../../store/user/selectors';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, Link } from 'react-router-dom';
 import Box from '@mui/material/Box';
-import FormAlert from '../../components/Alert';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 
@@ -36,7 +35,9 @@ export default function SignUp() {
             style={{
                 display: 'flex',
                 flexDirection: 'column',
-                alignItems: 'center'
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '70vh'
             }}
         >
             <h1>Login</h1>
@@ -54,7 +55,6 @@ export default function SignUp() {
                 noValidate
                 autoComplete='off'
             >
-                <FormAlert />
                 <TextField
                     style={{ width: '100%' }}
                     name='email'
@@ -73,10 +73,17 @@ export default function SignUp() {
                     value={password}
                     onChange={(event) => setPassword(event.target.value)}
                 />
-                <Button variant='contained' type='submit' onClick={submitForm}>
+                <Button
+                    style={{ backgroundColor: '#343A40' }}
+                    variant='contained'
+                    type='submit'
+                    onClick={submitForm}
+                >
                     Login
                 </Button>
-                <Link to='/signup'>Click here to sign up</Link>
+                <Link style={{ color: '#343A40' }} to='/signup'>
+                    Click here to sign up
+                </Link>
             </Box>
         </Container>
     );

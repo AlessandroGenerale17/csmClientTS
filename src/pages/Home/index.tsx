@@ -38,9 +38,23 @@ export default function Home() {
     if (loading) return <Loading />;
 
     return (
-        <div>
+        <div
+            style={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-evenly',
+                height: '85vh'
+            }}
+        >
             <div>
-                <h1 style={{ textAlign: 'center', marginBottom: '0.5rem' }}>
+                <h1
+                    style={{
+                        textAlign: 'center',
+                        marginBottom: '0.5rem',
+                        marginTop: '1.5rem',
+                        fontSize: '40px'
+                    }}
+                >
                     Popular Snippets
                 </h1>
                 <div
@@ -64,7 +78,14 @@ export default function Home() {
                 </div>
             </div>
             <div>
-                <h1 style={{ textAlign: 'center', marginBottom: '0.5rem' }}>
+                <h1
+                    style={{
+                        textAlign: 'center',
+                        marginBottom: '0.5rem',
+                        marginTop: '1rem',
+                        fontSize: '40px'
+                    }}
+                >
                     Recent Issues
                 </h1>
                 <div

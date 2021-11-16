@@ -14,7 +14,7 @@ import {
 
 import {
     addFeedPost,
-    deleteFeedPost,
+    deleteFeedPosts,
     updateFeedPost
 } from '../homeState/actions';
 import {
@@ -23,38 +23,15 @@ import {
 } from '../homeState/selectors';
 import { selectUser } from '../user/selectors';
 import { selectSnippet } from './selectors';
-
-type ConfigsAuthWithData = {
-    headers: {
-        Authorization: string;
-        Data: string;
-    };
-};
-
-type ConfigsAuth = {
-    headers: {
-        Authorization: string;
-    };
-};
-
-type Configs = ConfigsAuth | ConfigsAuthWithData;
-
-const configs = (token: string, data?: readonly string[]): Configs =>
-    data
-        ? {
-              headers: {
-                  Authorization: `Bearer ${token}`,
-                  Data: data.toString()
-              }
-          }
-        : {
-              headers: {
-                  Authorization: `Bearer ${token}`
-              }
-          };
+import { configs } from '../../Lib/TokenConfigs';
 
 const saveSnippets = (snippets: Snippet[]): SnippetActions => ({
     type: 'SAVE_SNIPPETS',
+    payload: snippets
+});
+
+const saveLikedSnippets = (snippets: Snippet[]): SnippetActions => ({
+    type: 'SAVE_LIKED_SNIPPETS',
     payload: snippets
 });
 
@@ -63,14 +40,40 @@ const saveSnippet = (snippet: Snippet): SnippetActions => ({
     payload: snippet
 });
 
+export const saveLikedSnippet = (snippet: Snippet): SnippetActions => ({
+    type: 'SAVE_LIKED_SNIPPET',
+    payload: snippet
+});
+
 const updateSnippet = (snippet: Snippet): SnippetActions => ({
     type: 'UPDATE_SNIPPET',
     payload: snippet
 });
 
+export const addLikeSelected = (toAdd: {
+    userId: number;
+    snippetId: number;
+}): SnippetActions => ({
+    type: 'ADD_LIKE_SELECTED',
+    payload: toAdd
+});
+
+export const removeLikeSelected = (toRemove: {
+    userId: number;
+    snippetId: number;
+}): SnippetActions => ({
+    type: 'REMOVE_LIKE_SELECTED',
+    payload: toRemove
+});
+
 const deleteSnippets = (idsArray: number[]): SnippetActions => ({
     type: 'DELETE_SNIPPETS',
     payload: idsArray
+});
+
+export const deleteLikedSnippet = (id: number): SnippetActions => ({
+    type: 'DELETE_LIKED_SNIPPET',
+    payload: id
 });
 
 const addSnippet = (snippet: Snippet): SnippetActions => ({
@@ -88,8 +91,12 @@ export const fetchSnippets = async (
         if (!user) return;
         const token = user.token;
         const res = await axios.get(`${apiUrl}/snippets`, configs(token));
-        const snippets: Snippet[] = res.data;
+        const snippets: Snippet[] = res.data.snippets;
+        const likedSnippets: Snippet[] = res.data.likedSnippets.filter(
+            (snippet: Snippet) => snippet.user.id !== user.id
+        );
         dispatch(saveSnippets(snippets));
+        dispatch(saveLikedSnippets(likedSnippets));
         dispatch(appDoneLoading());
     } catch (err) {
         if (err instanceof Error) console.log(err.message);
@@ -101,7 +108,6 @@ export const fetchSnippet =
     (id: number) =>
     async (dispatch: AppDispatch, getState: () => RootState) => {
         try {
-            console.log('fetching snippet');
             dispatch(appLoading());
             const res = await axios.get(`${apiUrl}/snippets/${id}`);
             dispatch(saveSnippet({ ...res.data }));
@@ -159,9 +165,9 @@ export const patchSnippet =
                     }
                 } else {
                     if (isIncluded) {
-                        // delefeed
+                        // deleted
                         console.log('deleting from feed');
-                        dispatch(deleteFeedPost({ ...res.data }));
+                        dispatch(deleteFeedPosts([res.data.id]));
                     }
                 }
             }
@@ -208,25 +214,21 @@ export const remoteSnippetUpdate =
 export const removeSnippets =
     (idsArray: readonly string[]) =>
     async (dispatch: AppDispatch, getState: () => RootState) => {
+        const idsArrayInt = idsArray
+            .toString()
+            .split(',')
+            .map((id) => parseInt(id));
         try {
             dispatch(appLoading());
-            const res =
-                idsArray.length > 1
-                    ? await axios.delete(`${apiUrl}/snippets`, {
-                          headers: {
-                              data: idsArray.toString()
-                          }
-                      })
-                    : await axios.delete(`${apiUrl}/snippets/${idsArray[0]}`);
-            dispatch(
-                deleteSnippets(
-                    idsArray
-                        .toString()
-                        .split(',')
-                        .map((id) => parseInt(id))
-                )
-            );
-            dispatch(deleteFeedPost(res.data.id));
+            idsArray.length > 1
+                ? await axios.delete(`${apiUrl}/snippets`, {
+                      headers: {
+                          data: idsArray.toString()
+                      }
+                  })
+                : await axios.delete(`${apiUrl}/snippets/${idsArray[0]}`);
+            dispatch(deleteSnippets(idsArrayInt));
+            dispatch(deleteFeedPosts(idsArrayInt));
             dispatch(appDoneLoading());
         } catch (err) {
             if (err instanceof Error) console.log(err.message);

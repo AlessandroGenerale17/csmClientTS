@@ -5,7 +5,7 @@ export const isFormValid = (
     formState: FormState,
     setFormState: Dispatch<SetStateAction<FormState>>
 ): string[] => {
-    const { title, description, language, code } = formState;
+    const { title, description, language } = formState;
     const errors = [];
     if (!title.value.trim().length) {
         setFormState((prev) => ({
@@ -22,7 +22,6 @@ export const isFormValid = (
         errors.push('description');
     }
 
-    console.log('validator', language.value);
     if (language.value < 0) {
         setFormState((prev) => ({
             ...prev,

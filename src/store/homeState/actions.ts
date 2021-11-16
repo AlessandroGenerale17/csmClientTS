@@ -6,6 +6,13 @@ import { appDoneLoading, appLoading } from '../appState/actions';
 import { HomeActions } from './types';
 import { configs } from '../../Lib/TokenConfigs';
 import { Snippet } from '../../Types/Snippet';
+import {
+    saveLikedSnippet,
+    deleteLikedSnippet,
+    addLikeSelected,
+    removeLikeSelected
+} from '../snippets/actions';
+import { selectSnippet } from '../snippets/selectors';
 
 export const savePopularSnippets = (snippets: Snippet[]): HomeActions => ({
     type: 'SAVE_POPULAR_SNIPPETS',
@@ -43,9 +50,9 @@ export const addFeedPost = (snippet: Snippet): HomeActions => ({
     payload: snippet
 });
 
-export const deleteFeedPost = (id: number): HomeActions => ({
-    type: 'DELETE_FEED_POST',
-    payload: id
+export const deleteFeedPosts = (ids: number[]): HomeActions => ({
+    type: 'DELETE_FEED_POSTS',
+    payload: ids
 });
 
 export const fetchPopularSnippets = async (
@@ -68,11 +75,13 @@ export const createLike =
     (snippetId: number) =>
     async (dispatch: AppDispatch, getState: () => RootState) => {
         try {
-            // FIXME should be auth
             const user = getState().user.state;
             if (!user) return;
             const userId = user.id;
             dispatch(updateLike({ userId, snippetId }));
+            const isSnippetSelected = selectSnippet(getState());
+            if (isSnippetSelected)
+                dispatch(addLikeSelected({ userId, snippetId }));
             const res = await axios.post(
                 `${apiUrl}/likes/${snippetId}`,
                 {
@@ -81,6 +90,8 @@ export const createLike =
                 },
                 configs(user.token)
             );
+            if (res.data.likedSnippet.userId !== userId)
+                dispatch(saveLikedSnippet(res.data.likedSnippet));
         } catch (err) {
             if (err instanceof Error) console.log(err.message);
         }
@@ -94,7 +105,11 @@ export const removeLike =
             if (!user) return;
             const userId = user.id;
             dispatch(deleteLike({ userId, snippetId }));
-            const res = await axios.delete(
+            dispatch(deleteLikedSnippet(snippetId));
+            const isSnippetSelected = selectSnippet(getState());
+            if (isSnippetSelected)
+                dispatch(removeLikeSelected({ userId, snippetId }));
+            await axios.delete(
                 `${apiUrl}/likes/${snippetId}`,
                 configs(user.token)
             );
