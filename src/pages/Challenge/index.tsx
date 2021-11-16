@@ -8,7 +8,7 @@ import Loading from '../../components/Loading';
 import { OnChangeInput } from '../../Types/EventListener';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
-import Code from '../../Logic/Editor';
+import Code from '../../logic/Editor';
 import ReactMarkdown from 'react-markdown';
 import './index.css';
 
