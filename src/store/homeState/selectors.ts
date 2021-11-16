@@ -9,8 +9,8 @@ export const selectPopularSnippets = (reduxState: RootState): Snippet[] => {
                 snippetB.likes.length +
                 snippetB.comments.length -
                 (snippetA.likes.length + snippetA.comments.length)
-        )
-        .slice(0, 5);
+        );
+    // .slice(0, 5);
 };
 
 export const selectIssueSnippets = (reduxState: RootState): Snippet[] => {

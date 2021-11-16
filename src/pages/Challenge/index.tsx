@@ -12,7 +12,6 @@ import Code from '../../Logic/Editor';
 import ReactMarkdown from 'react-markdown';
 import './index.css';
 
-// FIXME possibly export
 type ParamTypes = {
     id: string;
 };
