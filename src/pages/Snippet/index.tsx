@@ -20,9 +20,9 @@ import {
     OnSubmit
 } from '../../types/EventListener';
 import { showAlertWithTimeout } from '../../store/appState/actions';
-import { isFormValid } from '../../lib/Validators';
+import { isFormValid } from '../../Lib/Validators';
 import { FormState } from '../../types/FormState';
-import { handleFormChange } from '../../lib/FormChange';
+import { handleFormChange } from '../../Lib/FormChange';
 import { selectUser } from '../../store/user/selectors';
 import { Comment } from '../../types/Comment';
 import SendIcon from '@mui/icons-material/Send';

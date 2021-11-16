@@ -4,7 +4,7 @@ import { apiUrl } from '../../configs';
 import { Comment } from '../../types/Comment';
 import { appDoneLoading, appLoading } from '../appState/actions';
 import { HomeActions } from './types';
-import { configs } from '../../lib/TokenConfigs';
+import { configs } from '../../Lib/TokenConfigs';
 import { Snippet } from '../../types/Snippet';
 import {
     saveLikedSnippet,
