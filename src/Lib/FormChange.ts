@@ -1,0 +1,36 @@
+import { Dispatch, SetStateAction } from 'react';
+import { FormState } from '../Types/FormState';
+import { OnChange } from '../Types/EventListener';
+
+export const handleFormChange = (
+    e: OnChange,
+    setFormState: Dispatch<SetStateAction<FormState>>
+) => {
+    if (e.target.name === 'public') {
+
+        setFormState((prev) => ({
+            ...prev,
+            pub: !prev.pub
+        }));
+    } else if (e.target.name === 'issue') {
+        setFormState((prev) => ({
+            ...prev,
+            [e.target.name]: !prev.issue
+        }));
+    } else {
+        setFormState((prev) => ({
+            ...prev,
+            [e.target.name]: { value: e.target.value, err: false }
+        }));
+    }
+};
+
+export const handleCodeChange = (
+    code: string,
+    setFormState: Dispatch<SetStateAction<FormState>>
+) => {
+    setFormState((prev) => ({
+        ...prev,
+        code: code
+    }));
+};

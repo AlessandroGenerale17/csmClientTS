@@ -2,9 +2,8 @@ import { AppState, AppStateActions } from './types';
 
 const initialState: AppState = {
     loading: false,
-    //snippetLoading: false,TODO 
-    // theme: TODO 
-    message: null
+    saveLoading: false,
+    alert: null
 };
 
 const reducer = (state = initialState, action: AppStateActions): AppState => {
@@ -15,11 +14,24 @@ const reducer = (state = initialState, action: AppStateActions): AppState => {
         case 'APP_DONE_LOADING':
             return { ...state, loading: false };
 
-        case 'SET_MESSAGE':
-            return { ...state, message: action.payload };
+        case 'SAVE_LOADING':
+            return { ...state, saveLoading: true };
 
-        case 'CLEAR_MESSAGE':
-            return { ...state, message: null };
+        case 'SAVE_DONE_LOADING':
+            return { ...state, saveLoading: false };
+
+        case 'SET_ALERT':
+            console.log(action);
+            return {
+                ...state,
+                alert: {
+                    severity: action.payload.severity,
+                    message: action.payload.message
+                }
+            };
+
+        case 'CLEAR_ALERT':
+            return { ...state, alert: null };
 
         default:
             return state;

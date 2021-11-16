@@ -20,7 +20,7 @@ import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import { visuallyHidden } from '@mui/utils';
-import { CodeSnippet, Snippet } from '../../Types/Snippet';
+import { CodeSnippet, Snippet } from '../../../Types/Snippet';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 
@@ -36,16 +36,15 @@ function createData(snippet: Snippet | CodeSnippet): Data {
     if ('difficulty' in snippet)
         return {
             id: snippet.id,
-            // TODO check this if it sorts correctly
             title: snippet.title.toLowerCase(),
-            language: snippet.language,
+            language: snippet.language.name,
             createdAt: moment(snippet.createdAt).valueOf(),
             difficulty: snippet.difficulty.value
         };
     return {
         id: snippet.id,
         title: snippet.title.toLowerCase(),
-        language: snippet.language,
+        language: snippet.language.name,
         createdAt: moment(snippet.createdAt).valueOf(),
         difficulty: -1
     };
@@ -276,16 +275,16 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
             ) : null}
             {showToolbarOptions ? (
                 <Tooltip title='Add'>
-                    <IconButton>
-                        <Link
-                            to='/newSnippet'
-                            style={{
-                                fontSize: 'large'
-                            }}
-                        >
+                    <Link
+                        to='/newSnippet'
+                        style={{
+                            fontSize: 'large'
+                        }}
+                    >
+                        <IconButton>
                             <AddIcon />
-                        </Link>
-                    </IconButton>
+                        </IconButton>
+                    </Link>
                 </Tooltip>
             ) : null}
         </Toolbar>
@@ -309,7 +308,11 @@ export default function EnhancedTable(props: Props) {
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
     const rows = props.list.map((snip): Data => createData(snip));
-    const difficulty = ['Easy', 'Medium', 'Hard'];
+    const difficulty = [
+        { label: 'Easy', color: 'green' },
+        { label: 'Medium', color: 'orange' },
+        { label: 'Hard', color: 'red' }
+    ];
 
     const handleRequestSort = (
         event: React.MouseEvent<unknown>,
@@ -457,13 +460,26 @@ export default function EnhancedTable(props: Props) {
                                                 {row.language}
                                             </TableCell>
                                             {props.type === 'code' && (
-                                                <TableCell align='right'>
-                                                    {difficulty[row.difficulty]}
+                                                <TableCell
+                                                    align='right'
+                                                    style={{
+                                                        color: `${
+                                                            difficulty[
+                                                                row.difficulty
+                                                            ].color
+                                                        }`
+                                                    }}
+                                                >
+                                                    {
+                                                        difficulty[
+                                                            row.difficulty
+                                                        ].label
+                                                    }
                                                 </TableCell>
                                             )}
                                             <TableCell align='right'>
                                                 {moment(row.createdAt).format(
-                                                    'DD-MM-YY, HH:MM:SS'
+                                                    'DD-MM-YY, HH:MM:ss'
                                                 )}
                                             </TableCell>
                                         </TableRow>

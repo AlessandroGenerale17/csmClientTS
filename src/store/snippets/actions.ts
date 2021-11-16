@@ -1,4 +1,3 @@
-import { Dispatch } from 'redux';
 import { AppDispatch, RootState } from '..';
 import axios from 'axios';
 
@@ -8,40 +7,31 @@ import { SnippetActions } from './types';
 import {
     appDoneLoading,
     appLoading,
-    showMessageWithTimeout
+    saveDoneLoading,
+    saveLoading,
+    showAlertWithTimeout
 } from '../appState/actions';
 
-type ConfigsAuthWithData = {
-    headers: {
-        Authorization: string;
-        Data: string;
-    };
-};
-
-type ConfigsAuth = {
-    headers: {
-        Authorization: string;
-    };
-};
-
-type Configs = ConfigsAuth | ConfigsAuthWithData;
-
-const configs = (token: string, data?: readonly string[]): Configs =>
-    data
-        ? {
-              headers: {
-                  Authorization: `Bearer ${token}`,
-                  Data: data.toString()
-              }
-          }
-        : {
-              headers: {
-                  Authorization: `Bearer ${token}`
-              }
-          };
+import {
+    addFeedPost,
+    deleteFeedPosts,
+    updateFeedPost
+} from '../homeState/actions';
+import {
+    selectPopularSnippets,
+    selectPopularSnippetsIds
+} from '../homeState/selectors';
+import { selectUser } from '../user/selectors';
+import { selectSnippet } from './selectors';
+import { configs } from '../../Lib/TokenConfigs';
 
 const saveSnippets = (snippets: Snippet[]): SnippetActions => ({
     type: 'SAVE_SNIPPETS',
+    payload: snippets
+});
+
+const saveLikedSnippets = (snippets: Snippet[]): SnippetActions => ({
+    type: 'SAVE_LIKED_SNIPPETS',
     payload: snippets
 });
 
@@ -50,14 +40,40 @@ const saveSnippet = (snippet: Snippet): SnippetActions => ({
     payload: snippet
 });
 
+export const saveLikedSnippet = (snippet: Snippet): SnippetActions => ({
+    type: 'SAVE_LIKED_SNIPPET',
+    payload: snippet
+});
+
 const updateSnippet = (snippet: Snippet): SnippetActions => ({
     type: 'UPDATE_SNIPPET',
     payload: snippet
 });
 
+export const addLikeSelected = (toAdd: {
+    userId: number;
+    snippetId: number;
+}): SnippetActions => ({
+    type: 'ADD_LIKE_SELECTED',
+    payload: toAdd
+});
+
+export const removeLikeSelected = (toRemove: {
+    userId: number;
+    snippetId: number;
+}): SnippetActions => ({
+    type: 'REMOVE_LIKE_SELECTED',
+    payload: toRemove
+});
+
 const deleteSnippets = (idsArray: number[]): SnippetActions => ({
     type: 'DELETE_SNIPPETS',
     payload: idsArray
+});
+
+export const deleteLikedSnippet = (id: number): SnippetActions => ({
+    type: 'DELETE_LIKED_SNIPPET',
+    payload: id
 });
 
 const addSnippet = (snippet: Snippet): SnippetActions => ({
@@ -75,19 +91,12 @@ export const fetchSnippets = async (
         if (!user) return;
         const token = user.token;
         const res = await axios.get(`${apiUrl}/snippets`, configs(token));
-        const snippets: Snippet[] = res.data.map(
-            (snip: any): Snippet => ({
-                id: snip.id,
-                title: snip.title,
-                description: snip.description,
-                code: snip.code,
-                userId: snip.userId,
-                language: snip.language.name,
-                createdAt: snip.createdAt,
-                updatedAt: snip.updatedAt
-            })
+        const snippets: Snippet[] = res.data.snippets;
+        const likedSnippets: Snippet[] = res.data.likedSnippets.filter(
+            (snippet: Snippet) => snippet.user.id !== user.id
         );
         dispatch(saveSnippets(snippets));
+        dispatch(saveLikedSnippets(likedSnippets));
         dispatch(appDoneLoading());
     } catch (err) {
         if (err instanceof Error) console.log(err.message);
@@ -99,7 +108,6 @@ export const fetchSnippet =
     (id: number) =>
     async (dispatch: AppDispatch, getState: () => RootState) => {
         try {
-            console.log('fetching snippet');
             dispatch(appLoading());
             const res = await axios.get(`${apiUrl}/snippets/${id}`);
             dispatch(saveSnippet({ ...res.data }));
@@ -111,53 +119,116 @@ export const fetchSnippet =
     };
 
 export const patchSnippet =
-    (id: number, title: string, description: string, code: string) =>
+    (
+        id: number,
+        title: string,
+        description: string,
+        code: string,
+        languageId: number,
+        pub: boolean,
+        issue: boolean
+    ) =>
     async (dispatch: AppDispatch, getState: () => RootState) => {
         try {
-            dispatch(appLoading());
+            dispatch(saveLoading());
             const res = await axios.patch(`${apiUrl}/snippets/${id}`, {
                 title,
                 code,
-                description
+                languageId,
+                description,
+                public: pub,
+                issue
             });
             dispatch(saveSnippet({ ...res.data }));
-            // update snippet in  list of snippets
-            dispatch(updateSnippet({ ...res.data }));
-            dispatch(appDoneLoading());
+            // update snippet in  list of snippets (manager)
+            dispatch(
+                updateSnippet({
+                    ...res.data
+                })
+            );
+
+            const popularSnippets = selectPopularSnippets(getState());
+            if (popularSnippets.length > 0) {
+                const isIncluded = selectPopularSnippetsIds(
+                    getState()
+                ).includes(id);
+                console.log(isIncluded);
+                if (pub) {
+                    if (isIncluded) {
+                        // update Feed
+                        console.log('update feed');
+                        dispatch(updateFeedPost({ ...res.data }));
+                    } else {
+                        // addToFeed
+                        console.log('add feed');
+                        dispatch(addFeedPost({ ...res.data }));
+                    }
+                } else {
+                    if (isIncluded) {
+                        // deleted
+                        console.log('deleting from feed');
+                        dispatch(deleteFeedPosts([res.data.id]));
+                    }
+                }
+            }
+
+            dispatch(saveDoneLoading());
         } catch (err) {
             if (err instanceof Error) console.log(err.message);
-            dispatch(appDoneLoading());
+            dispatch(saveDoneLoading());
         }
     };
 
-/*
- * @param {readonly string[]} idsArray
- * action to delete one or more snippets
- * FIXME auth is missing for this route
- */
+export const patchSnippetCode =
+    (code: string) =>
+    async (dispatch: AppDispatch, getState: () => RootState) => {
+        try {
+            dispatch(saveLoading());
+            const snippet = selectSnippet(getState());
+            if (!snippet) return;
+            const res = await axios.patch(
+                `${apiUrl}/snippets/code/${snippet.id}`,
+                { code }
+            );
+            dispatch(saveSnippet({ ...res.data }));
+            dispatch(saveDoneLoading());
+        } catch (err) {
+            if (err instanceof Error) console.log(err.message);
+            dispatch(saveDoneLoading());
+        }
+    };
+
+export const remoteSnippetUpdate =
+    (updatedSnippet: Snippet) =>
+    (dispatch: AppDispatch, getState: () => RootState) => {
+        console.log('action getting triggered ');
+        dispatch(saveSnippet(updatedSnippet));
+        dispatch(
+            showAlertWithTimeout(
+                `${updatedSnippet.user.name} recently updated the snippet contents`,
+                'success'
+            )
+        );
+    };
+
 export const removeSnippets =
     (idsArray: readonly string[]) =>
     async (dispatch: AppDispatch, getState: () => RootState) => {
+        const idsArrayInt = idsArray
+            .toString()
+            .split(',')
+            .map((id) => parseInt(id));
         try {
             dispatch(appLoading());
-            const res =
-                idsArray.length > 1
-                    ? await axios.delete(`${apiUrl}/snippets`, {
-                          headers: {
-                              data: idsArray.toString()
-                          }
-                      })
-                    : await axios.delete(`${apiUrl}/snippets/${idsArray[0]}`);
-            // TODO Dispatch to reducer the deleted stuff
-            // FIXME
-            dispatch(
-                deleteSnippets(
-                    idsArray
-                        .toString()
-                        .split(',')
-                        .map((id) => parseInt(id))
-                )
-            );
+            idsArray.length > 1
+                ? await axios.delete(`${apiUrl}/snippets`, {
+                      headers: {
+                          data: idsArray.toString()
+                      }
+                  })
+                : await axios.delete(`${apiUrl}/snippets/${idsArray[0]}`);
+            dispatch(deleteSnippets(idsArrayInt));
+            dispatch(deleteFeedPosts(idsArrayInt));
             dispatch(appDoneLoading());
         } catch (err) {
             if (err instanceof Error) console.log(err.message);
@@ -166,38 +237,36 @@ export const removeSnippets =
     };
 
 export const createSnippet =
-    (title: string, description: string, code: string) =>
+    (
+        title: string,
+        description: string,
+        code: string,
+        languageId: number,
+        pub: boolean,
+        issue: boolean
+    ) =>
     async (dispatch: AppDispatch, getState: () => RootState) => {
         try {
             dispatch(appLoading());
-            // FIXME auth is missing in this route
-            // FIXME missing userId
-            const userId = 1;
+            const user = selectUser(getState());
+            if (!user) return;
             const res = await axios.post(`${apiUrl}/snippets/`, {
                 title,
                 description,
                 code,
-                userId,
-                languageId: 1
+                userId: user.id,
+                languageId,
+                issue,
+                public: pub
             });
             const newSnippet: Snippet = {
-                id: res.data.id,
-                title: res.data.title,
-                description: res.data.description,
-                code: res.data.code,
-                userId: res.data.id,
-                language: res.data.language.name,
-                createdAt: res.data.createdAt,
-                updatedAt: res.data.updatedAt
+                ...res.data
             };
             dispatch(addSnippet(newSnippet));
+            dispatch(addFeedPost(newSnippet));
+
             dispatch(
-                showMessageWithTimeout(
-                    'success',
-                    true,
-                    'Snippet added successfully!',
-                    2500
-                )
+                showAlertWithTimeout('Snippet added successfully!', 'success')
             );
             dispatch(appDoneLoading());
         } catch (err) {

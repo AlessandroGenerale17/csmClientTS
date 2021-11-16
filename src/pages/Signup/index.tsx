@@ -1,17 +1,24 @@
-import React, { useState, useEffect, SyntheticEvent } from 'react';
-import Form from 'react-bootstrap/Form';
-import Container from 'react-bootstrap/Container';
-import Button from 'react-bootstrap/Button';
+import { useState, useEffect, SyntheticEvent } from 'react';
 import { signUp } from '../../store/user/actions';
 import { selectToken } from '../../store/user/selectors';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, Link } from 'react-router-dom';
-import { Col } from 'react-bootstrap';
+import { OnChangeInput } from '../../Types/EventListener';
+import CircularProgress from '@mui/material/CircularProgress';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import { showAlertWithTimeout } from '../../store/appState/actions';
 
 export default function SignUp() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [imgUrl, setImgUrl] = useState('');
+    const [uploadSuccess, setUploadSuccess] = useState(false);
+    const [imgUploading, setImgUploading] = useState(false);
     const dispatch = useDispatch();
     const token = useSelector(selectToken);
     const history = useHistory();
@@ -24,63 +31,120 @@ export default function SignUp() {
 
     function submitForm(event: SyntheticEvent) {
         event.preventDefault();
-
-        dispatch(signUp(name, email, password));
+        if (
+            !name.trim().length ||
+            !email.trim().length ||
+            !password.trim().length
+        ) {
+            dispatch(
+                showAlertWithTimeout('Please fill in all fields', 'error')
+            );
+            return;
+        }
+        if (!imgUploading) dispatch(signUp(name, email, password, imgUrl));
 
         setEmail('');
         setPassword('');
         setName('');
+        setImgUrl('');
     }
 
-    return (
-        <Container>
-            <Form as={Col} md={{ span: 6, offset: 3 }} className='mt-5'>
-                <h1 className='mt-5 mb-5'>Signup</h1>
-                <Form.Group controlId='formBasicName'>
-                    <Form.Label>Name</Form.Label>
-                    <Form.Control
-                        value={name}
-                        onChange={(event) => setName(event.target.value)}
-                        type='text'
-                        placeholder='Enter name'
-                        required
-                    />
-                </Form.Group>
-                <Form.Group controlId='formBasicEmail'>
-                    <Form.Label>Email address</Form.Label>
-                    <Form.Control
-                        value={email}
-                        onChange={(event) => setEmail(event.target.value)}
-                        type='email'
-                        placeholder='Enter email'
-                        required
-                    />
-                    <Form.Text className='text-muted'>
-                        We'll never share your email with anyone else.
-                    </Form.Text>
-                </Form.Group>
+    const uploadImage = async (e: OnChangeInput) => {
+        setImgUploading(true);
+        const files = e.target.files;
+        const data = new FormData();
+        if (files) data.append('file', files[0]);
+        //first parameter is always upload_preset, second is the name of the preset
+        data.append('upload_preset', 'oh9s25kg');
 
-                <Form.Group controlId='formBasicPassword'>
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control
-                        value={password}
-                        onChange={(event) => setPassword(event.target.value)}
-                        type='password'
-                        placeholder='Password'
-                        required
-                    />
-                </Form.Group>
-                <Form.Group className='mt-5'>
-                    <Button
-                        variant='primary'
-                        type='submit'
-                        onClick={submitForm}
-                    >
-                        Sign up
-                    </Button>
-                </Form.Group>
-                <Link to='/login'>Click here to log in</Link>
-            </Form>
+        //post request to Cloudinary, remember to change to your own link
+        const res = await fetch(
+            'https://api.cloudinary.com/v1_1/dpkg9kv62/image/upload ',
+            {
+                method: 'POST',
+                body: data
+            }
+        );
+
+        const file = await res.json();
+        //console.log('file', file); //check if you are getting the url back
+        setImgUrl(file.url); //put the url in local state, next step you can send it to the backend
+        setImgUploading(false);
+        setUploadSuccess(true);
+    };
+
+    return (
+        <Container
+            style={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '70vh'
+            }}
+        >
+            <h1>Sign Up</h1>
+            <Box
+                component='form'
+                style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    minWidth: '400px'
+                }}
+                sx={{
+                    '& > :not(style)': { m: 1 }
+                }}
+                noValidate
+                autoComplete='off'
+            >
+                <TextField
+                    style={{ width: '100%' }}
+                    name='name'
+                    id='outlined-basic'
+                    label='Name'
+                    variant='outlined'
+                    value={name}
+                    onChange={(event) => setName(event.target.value)}
+                />
+                <TextField
+                    style={{ width: '100%' }}
+                    name='email'
+                    id='outlined-basic'
+                    label='Email'
+                    variant='outlined'
+                    value={email}
+                    onChange={(event) => setEmail(event.target.value)}
+                />
+                <TextField
+                    style={{ width: '100%' }}
+                    name='password'
+                    id='outlined-multiline'
+                    label='Password'
+                    type='password'
+                    value={password}
+                    onChange={(event) => setPassword(event.target.value)}
+                />
+                <div style={{ display: 'flex' }}>
+                    <input type='file' onChange={uploadImage} />
+                    {imgUploading && <CircularProgress />}
+                    {uploadSuccess && (
+                        <CheckBoxIcon style={{ color: 'green' }} />
+                    )}
+                </div>
+
+                <Button
+                    style={{ backgroundColor: '#343A40' }}
+                    variant='contained'
+                    type='submit'
+                    onClick={submitForm}
+                >
+                    Sign up
+                </Button>
+                <Link style={{ color: '#343A40' }} to='/login'>
+                    Click here to log in
+                </Link>
+            </Box>
         </Container>
     );
 }

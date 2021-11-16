@@ -1,25 +1,38 @@
-import { StateMessage } from '../../Types/Message';
-
 export type AppState = {
     loading: boolean;
-    message: StateMessage | null;
+    saveLoading: boolean;
+    alert: { severity: string; message: string } | null;
 };
 
 type Loading = {
     type: 'APP_LOADING';
 };
 
+type SaveLoading = {
+    type: 'SAVE_LOADING';
+};
+
 type DoneLoading = {
     type: 'APP_DONE_LOADING';
 };
 
-type SetMessage = {
-    type: 'SET_MESSAGE';
-    payload: StateMessage;
+type SaveDoneLoading = {
+    type: 'SAVE_DONE_LOADING';
 };
 
-type ClearMessage = {
-    type: 'CLEAR_MESSAGE';
+type SetAlert = {
+    type: 'SET_ALERT';
+    payload: { severity: string; message: string };
 };
 
-export type AppStateActions = SetMessage | Loading | DoneLoading | ClearMessage;
+type ClearAlert = {
+    type: 'CLEAR_ALERT';
+};
+
+export type AppStateActions =
+    | Loading
+    | DoneLoading
+    | SaveLoading
+    | SaveDoneLoading
+    | SetAlert
+    | ClearAlert;

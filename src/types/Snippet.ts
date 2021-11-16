@@ -12,23 +12,32 @@ of having different parent than Person
 
 import { Testcase } from './Testcase';
 import { Difficulty } from './Difficulty';
+import { Comment } from './Comment';
+import { Language } from './Language';
+import { User } from './User';
+import { Like } from '../store/homeState/types';
 
 export interface Snippet {
     id: number;
     title: string;
     description: string;
     code: string;
-    userId: number;
-    language: string;
-    createdAt: Date;
-    updatedAt: Date;
+    user: User;
+    language: Language;
+    comments: Comment[];
+    likes: Like[];
+    public: boolean;
+    issue: boolean;
+    createdAt: string;
+    updatedAt: string;
 }
 
 export interface CodeSnippet extends Snippet {
     prompt: string;
     hiddenPrompt: string;
     fName: string;
-    // testCases: Testcase[];
+    numArgs: number;
+    testcases: Testcase[];
     // 0 easy 1 medium 2 hard
     difficulty: Difficulty;
 }

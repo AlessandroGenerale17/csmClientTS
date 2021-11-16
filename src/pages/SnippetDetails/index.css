@@ -1,0 +1,28 @@
+.page-snippet {
+    display: flex;
+    flex-direction: row;
+}
+
+.snippet-content {
+    padding: 0.65rem;
+    flex: 2;
+}
+
+.snippet-content > h2 {
+    text-align: center;
+}
+
+.markdown {
+    background-color: rgb(234, 234, 234);
+    border-radius: 0.75rem;
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
+        rgba(0, 0, 0, 0.3) 0px 7px 13px -3px,
+        rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+}
+.markdown > .md {
+    padding: 0.85rem;
+}
+
+.editor-container {
+    flex: 3;
+}

@@ -3,8 +3,7 @@ import axios from 'axios';
 import {
     appLoading,
     appDoneLoading,
-    showMessageWithTimeout,
-    setMessage
+    showAlertWithTimeout
 } from '../appState/actions';
 
 import { AppDispatch, RootState } from '..';
@@ -13,6 +12,8 @@ const loginSuccess = (userWithToken: {
     name: string;
     email: string;
     token: string;
+    id: number;
+    imgUrl: string;
 }) => {
     return {
         type: 'LOGIN_SUCCESS',
@@ -20,41 +21,40 @@ const loginSuccess = (userWithToken: {
     };
 };
 
-// const tokenStillValid = (userWithoutToken: {
-//     email: string;
-//     name: string;
-// }) => ({
-//     type: 'TOKEN_STILL_VALID',
-//     payload: userWithoutToken
-// });
-
 export const logOut = () => ({ type: 'LOG_OUT' });
 
-export const signUp = (name: string, email: string, password: string) => {
+export const signUp = (
+    name: string,
+    email: string,
+    password: string,
+    imgUrl: string
+) => {
     return async (dispatch: AppDispatch, getState: () => RootState) => {
         dispatch(appLoading());
         try {
+            console.log(imgUrl);
             const response = await axios.post(`${apiUrl}/signup`, {
                 name,
                 email,
-                password
+                password,
+                imgUrl
             });
 
             dispatch(
                 loginSuccess({
                     name: response.data.name,
                     email: response.data.email,
-                    token: response.data.token
+                    token: response.data.token,
+                    id: response.data.id,
+                    imgUrl: response.data.imgUrl
                 })
             );
-            dispatch(
-                showMessageWithTimeout('success', true, 'account created', 2000)
-            );
+            dispatch(showAlertWithTimeout('Account created', 'success'));
             dispatch(appDoneLoading());
         } catch (error) {
             if (error instanceof Error) {
                 console.log(error.message);
-                dispatch(setMessage('danger', true, error.message));
+                dispatch(showAlertWithTimeout(error.message, 'error'));
             }
             dispatch(appDoneLoading());
         }
@@ -71,14 +71,22 @@ export const login = (email: string, password: string) => {
             });
 
             dispatch(loginSuccess(response.data));
+
             dispatch(
-                showMessageWithTimeout('success', false, 'welcome back!', 1500)
+                showAlertWithTimeout(
+                    `Welcome back ${response.data.name}! 😄`,
+                    'success'
+                )
             );
             dispatch(appDoneLoading());
         } catch (error) {
             if (error instanceof Error) {
-                console.log(error.message);
-                dispatch(setMessage('danger', true, error.message));
+                dispatch(
+                    showAlertWithTimeout(
+                        'Incorrect Email and Password',
+                        'error'
+                    )
+                );
             }
             dispatch(appDoneLoading());
         }
@@ -87,14 +95,6 @@ export const login = (email: string, password: string) => {
 
 export const getUserWithStoredToken = () => {
     return async (dispatch: AppDispatch, getState: () => RootState) => {
-        // get token from the state
-        // const rState = getState();
-        // if (!rState.user) {
-        //     return;
-        // }
-
-        // const token = selectToken(getState());
-        // console.log('token', token);
         const token = localStorage.getItem('token');
         if (!token) return;
 
@@ -110,7 +110,9 @@ export const getUserWithStoredToken = () => {
             const user = {
                 token: token,
                 name: response.data.name,
-                email: response.data.email
+                email: response.data.email,
+                id: response.data.id,
+                imgUrl: response.data.imgUrl
             };
             dispatch(loginSuccess(user));
             dispatch(appDoneLoading());
