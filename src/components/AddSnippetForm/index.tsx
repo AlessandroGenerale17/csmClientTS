@@ -4,7 +4,7 @@ import {
     OnClick,
     OnSubmit,
     OnChangeSelect
-} from '../../Types/EventListener';
+} from '../../types/EventListener';
 import LoadingButton from '../Button/LoadingButton/';
 import { useSelector } from 'react-redux';
 import { selectSaveLoading } from '../../store/appState/selectors';
@@ -13,13 +13,13 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import NativeSelect from '@mui/material/NativeSelect';
 import axios from 'axios';
-import FormControl from '@mui/material/FormControl';
-import { FormState } from '../../Types/FormState';
+import { FormState } from '../../types/FormState';
 import InputLabel from '@mui/material/InputLabel';
 import { useEffect, useState } from 'react';
 import { apiUrl } from '../../configs';
 import Loading from '../Loading';
 import Checkbox from '@mui/material/Checkbox';
+import { FormControl } from '@mui/material';
 import './index.css';
 
 type Props = {

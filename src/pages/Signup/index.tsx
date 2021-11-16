@@ -3,7 +3,7 @@ import { signUp } from '../../store/user/actions';
 import { selectToken } from '../../store/user/selectors';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, Link } from 'react-router-dom';
-import { OnChangeInput } from '../../Types/EventListener';
+import { OnChangeInput } from '../../types/EventListener';
 import CircularProgress from '@mui/material/CircularProgress';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import Box from '@mui/material/Box';

@@ -1,5 +1,5 @@
 import { RootState } from '..';
-import { CodeSnippet } from '../../Types/Snippet';
+import { CodeSnippet } from '../../types/Snippet';
 
 export const selectChallenges = (reduxState: RootState): CodeSnippet[] =>
     reduxState.challenges.list;

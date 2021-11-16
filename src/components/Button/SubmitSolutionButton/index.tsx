@@ -1,5 +1,5 @@
 import Button from '@mui/material/Button';
-import { OnClick } from '../../../Types/EventListener';
+import { OnClick } from '../../../types/EventListener';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 type Props = {

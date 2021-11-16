@@ -18,13 +18,13 @@ import {
     OnClick,
     OnClickFormDiv,
     OnSubmit
-} from '../../Types/EventListener';
+} from '../../types/EventListener';
 import { showAlertWithTimeout } from '../../store/appState/actions';
-import { isFormValid } from '../../Lib/Validators';
-import { FormState } from '../../Types/FormState';
-import { handleFormChange } from '../../Lib/FormChange';
+import { isFormValid } from '../../lib/Validators';
+import { FormState } from '../../types/FormState';
+import { handleFormChange } from '../../lib/FormChange';
 import { selectUser } from '../../store/user/selectors';
-import { Comment } from '../../Types/Comment';
+import { Comment } from '../../types/Comment';
 import SendIcon from '@mui/icons-material/Send';
 import CommentLine from '../../components/Comments';
 import { createComment } from '../../store/homeState/actions';
