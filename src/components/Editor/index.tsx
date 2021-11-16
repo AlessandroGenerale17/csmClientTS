@@ -6,7 +6,7 @@ import { cpp } from '@codemirror/lang-cpp';
 import Switch from '../Switch/';
 import PlayButton from '../Button/PlayButton';
 import SubmitSolutionButton from '../Button/SubmitSolutionButton';
-import { Keyboard } from '../../Types/EventListener';
+import { Keyboard } from '../../types/EventListener';
 import './index.css';
 
 type Props = {

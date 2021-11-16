@@ -8,8 +8,8 @@ import Editor from '../../components/Editor';
 import Loading from '../../components/Loading';
 import { fetchSnippet } from '../../store/snippets/actions';
 import { selectSnippet } from '../../store/snippets/selectors';
-import { Comment } from '../../Types/Comment';
-import { createComment } from '../../store/homeState/actions';
+import { Comment } from '../../types/Comment';
+import { createComment } ../../Types/CommentomeState/actions';
 import { selectUser } from '../../store/user/selectors';
 import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
@@ -22,7 +22,7 @@ type ParamTypes = {
 
 export default function SnippetDetails() {
     const [comment, setComment] = useState<string>('');
-    const dispatch = useDispatch();
+    const dispatch = useDi../../Types/EventListener
     const { id } = useParams<ParamTypes>();
     const snippet = useSelector(selectSnippet);
     const user = useSelector(selectUser);

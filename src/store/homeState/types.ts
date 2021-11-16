@@ -1,5 +1,5 @@
-import { Comment } from '../../Types/Comment';
-import { Snippet } from '../../Types/Snippet';
+import { Comment } from '../../types/Comment';
+import { Snippet } from '../../types/Snippet';
 
 export type Like = {
     userId: number;

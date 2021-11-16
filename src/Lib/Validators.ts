@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
-import { FormState } from '../Types/FormState';
+import { FormState } from '../types/FormState';
 
 export const isFormValid = (
     formState: FormState,

@@ -1,6 +1,6 @@
 import Button from '@mui/material/Button';
 import CancelIcon from '@mui/icons-material/Cancel';
-import { OnClick } from '../../../Types/EventListener';
+import { OnClick } from '../../../types/EventListener';
 
 type Props = {
     handleClick: (e: OnClick) => void;

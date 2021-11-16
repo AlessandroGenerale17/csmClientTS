@@ -1,5 +1,5 @@
 import { RootState } from '..';
-import { Snippet } from '../../Types/Snippet';
+import { Snippet } from '../../types/Snippet';
 
 export const selectPopularSnippets = (reduxState: RootState): Snippet[] => {
     return reduxState.home.popularSnippets.filter((snippet) => !snippet.issue);

@@ -1,4 +1,4 @@
-import { CodeSnippet } from '../../Types/Snippet';
+import { CodeSnippet } from '../../types/Snippet';
 
 export type ChallengeState = {
     list: CodeSnippet[];

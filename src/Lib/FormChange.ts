@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
-import { FormState } from '../Types/FormState';
-import { OnChange } from '../Types/EventListener';
+import { FormState } from '../types/FormState';
+import { OnChange } from '../types/EventListener';
 
 export const handleFormChange = (
     e: OnChange,
