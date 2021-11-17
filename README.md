@@ -4,7 +4,14 @@ CodeBuster is a small prototype for a code snippet manager.
 
 ### Project Motivation
 
-I often find myself searching for <b>one</b> specific piece of code. I either try to remember what keywords I entered in the Google search bar or randomly search through my GitHub repos. The idea behind this prototype is to give the ability for the user to save her/his snippets of code and make them easy to retrieve for future reference.
+I often find myself searching for <b>one</b> specific piece of code. I either try to remember what keywords I entered in the Google search bar or randomly search through my GitHub repos. The idea behind this prototype for a snippet manager  is to give the ability to a user to save her / his snippets of code and make them easy to retrieve for future reference. 
+
+I wanted to extend upon this feature to allow users to also share snippets of code that is not working. A user can create an issue snippet that is either private or public. If public, the snippet is shown in the home feed. Other users can see the issue snippet and comment giving suggestions or enter the live discussion. The live discussion is a simple chat room where users can exchange messages in order to offer solutions to the owner of the snippet. The owner of the snippet can update the content of the snippet at any time and the changes will be reflected to all connected users in the live discussion. 
+
+As a final **WIP** feature, I created a `challenges` section where users can <b>only</b> (for now) practice their  **JavaScript** skills. I wanted to try and emulate the logic behind existing sites like <a href='https://leetcode.com/'>LeetCode</a> and <a href='https://www.hackerrank.com/'>HackerRank</a>. There are different challenges displayed in a similar table to the one of the snippets. A user can select a challenge and run a local test case (always the first of the list of testcases that is used to test the submission). A user can edit the local testcase with their own to check their code. When the user submits the solution, all cases are tested. 
+
+
+
 
 ### Tech Stack
 
@@ -36,4 +43,15 @@ React Bootstrap
 
 ### Demo
 
+#### Home Feed
+<img src='https://media.giphy.com/media/YMIAJPRc9shVNol0UI/giphy.gif' alt='homeFeed'>
 
+#### Snippet Manager
+<img src='https://media.giphy.com/media/9HtL8xxS5kZMzJeWRc/giphy.gif' alt='snippetManager'>
+
+#### Add a snippet
+<img src='https://media.giphy.com/media/Tj3v5117QTy0QV4xmf/giphy.gif' alt='addSnippet'>
+
+#### Issue snippet
+<img src='https://media.giphy.com/media/HGqkzP5SNXG1as7lkD/giphy.gif' alt='livechat'>
+<img src='https://media.giphy.com/media/caLLuzXhlf0Fy0Ah4C/giphy.gif' alt='livechat2'>
