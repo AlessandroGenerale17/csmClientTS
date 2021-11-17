@@ -1,11 +1,12 @@
 .snippet-page {
     display: flex;
-    margin-top: 0.5rem;
 }
 
 .snippet-content {
     flex: 2;
     padding: 0.85rem;
+    height: 92vh;
+    overflow-y: scroll;
 }
 
 #title {

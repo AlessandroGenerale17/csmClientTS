@@ -71,7 +71,7 @@ export default function Editor(props: Props) {
                 value={prompt}
                 extensions={languages[language]}
                 height='620px'
-                width='600'
+                width='60vw'
                 tabIndex={2}
                 theme={theme ? 'light' : 'dark'}
                 editable={editable}

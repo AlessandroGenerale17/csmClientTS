@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useHistory } from 'react-router';
 import { selectUser } from '../../store/user/selectors';
 import { io } from 'socket.io-client';
 import { apiUrl } from '../../configs';
@@ -14,7 +13,7 @@ import { TextField } from '@material-ui/core';
 import { remoteSnippetUpdate } from '../../store/snippets/actions';
 import SendIcon from '@mui/icons-material/Send';
 import { Snippet } from '../../types/Snippet';
-import { OnChangeInput } from '../../types/EventListener';
+import { OnChangeInput, OnSubmit } from '../../types/EventListener';
 
 type Message = {
     user: {
@@ -34,7 +33,6 @@ const socket = io(apiUrl);
 
 export default function Chat() {
     const [code, setCode] = useState('');
-    const history = useHistory();
     const dispatch = useDispatch();
     const [input, setInput] = useState('');
     const [messages, setMessages] = useState<Message[]>([]);
@@ -43,7 +41,8 @@ export default function Chat() {
     const user = useSelector(selectUser);
     const issueSnippet = useSelector(selectSnippet);
 
-    const sendMessage = () => {
+    const sendMessage = (e: OnSubmit) => {
+        e.preventDefault();
         socket.emit('new_message', {
             roomId: id,
             user: { id: user.id, name: user.name, imgUrl: user.imgUrl },
@@ -123,22 +122,30 @@ export default function Chat() {
                         justifyContent: 'center'
                     }}
                 >
-                    <TextField
-                        style={{ width: '80%' }}
-                        name='name'
-                        id='outlined-basic'
-                        variant='outlined'
-                        value={input}
-                        placeholder='Type a new message'
-                        onChange={(e: OnChangeInput) =>
-                            setInput(e.target.value)
-                        }
-                    />
-                    <SendIcon
-                        style={{ fontSize: '2.5rem' }}
-                        onClick={sendMessage}
-                        type='submit'
-                    />
+                    <form
+                        onSubmit={sendMessage}
+                        style={{
+                            width: '80%',
+                            display: 'flex',
+                            alignItems: 'center'
+                        }}
+                    >
+                        <TextField
+                            style={{ width: '80%' }}
+                            name='name'
+                            id='outlined-basic'
+                            variant='outlined'
+                            value={input}
+                            placeholder='Type a new message'
+                            onChange={(e: OnChangeInput) =>
+                                setInput(e.target.value)
+                            }
+                        />
+                        <SendIcon
+                            style={{ fontSize: '2.5rem' }}
+                            type='submit'
+                        />
+                    </form>
                 </div>
                 <div
                     style={{
