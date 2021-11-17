@@ -34,7 +34,6 @@ import Avatar from '../../components/Avatar/';
 import moment from 'moment';
 import './index.css';
 
-// FIXME possibly export
 type ParamTypes = {
     id: string;
 };
