@@ -1,6 +1,5 @@
 .page-snippet {
     display: flex;
-    flex-direction: row;
 }
 
 .snippet-content {

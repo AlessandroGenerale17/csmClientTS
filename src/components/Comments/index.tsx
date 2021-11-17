@@ -17,7 +17,9 @@ export default function Comments(props: Props) {
                             imgUrl={comment.user.imgUrl}
                             alt={comment.user.name}
                         />
-                        {comment.user.name}
+                        <span style={{ marginLeft: '0.5rem' }}>
+                            {comment.user.name}
+                        </span>
                     </div>
                     <p
                         style={{

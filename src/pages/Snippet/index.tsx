@@ -32,11 +32,8 @@ import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
 import Avatar from '../../components/Avatar/';
 import moment from 'moment';
-// import FavoriteIcon from '@mui/icons-material/Favorite';
-// import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import './index.css';
 
-// FIXME possibly export
 type ParamTypes = {
     id: string;
 };
@@ -194,38 +191,6 @@ export default function Snippet() {
                                         <b>Last edit: </b>
                                         {moment(snippet.updatedAt).fromNow()}
                                     </p>
-                                    {/* {showLikes && (
-                                        <div>
-                                            {!isLiked ? (
-                                                <FavoriteBorderIcon
-                                                    className='like-button'
-                                                    style={{ color: 'red' }}
-                                                    onClick={() =>
-                                                        dispatch(
-                                                            createLike(
-                                                                snippet.id
-                                                            )
-                                                        )
-                                                    }
-                                                />
-                                            ) : (
-                                                <FavoriteIcon
-                                                    className='like-button'
-                                                    style={{
-                                                        color: 'red'
-                                                    }}
-                                                    onClick={() =>
-                                                        dispatch(
-                                                            removeLike(
-                                                                snippet.id
-                                                            )
-                                                        )
-                                                    }
-                                                />
-                                            )}
-                                            {snippet.likes.length}
-                                        </div>
-                                    )} */}
                                 </div>
                             </div>
                             {snippet.issue && (
@@ -238,7 +203,7 @@ export default function Snippet() {
                                 </div>
                             )}
                         </div>
-                        <div className='md' style={{ minHeight: '305px' }}>
+                        <div className='md' style={{ minHeight: '300px' }}>
                             <ReactMarkdown children={snippet.description} />
                         </div>
                         {snippet.public && (
