@@ -83,7 +83,9 @@ export default function Challenge() {
                     stringArgs
                 );
                 const output = code.runFn();
-                return output;
+                return output !== undefined && output !== null
+                    ? output
+                    : { error: `No return statement found` };
             }
         } catch (err) {
             if (err instanceof Error) return { error: `${err}` };
